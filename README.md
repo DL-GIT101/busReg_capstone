@@ -6,6 +6,8 @@ This is our capstone project about Business Registration on Tarlac City
 
 - We recently graduated and continue this system for the requirements
 
+- This is a complete rework of the system
+
 
     This system allow business owners to register their business to get their permit online. 
     By creating an account and input their information then submitting the required documents.
