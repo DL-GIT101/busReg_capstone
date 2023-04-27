@@ -52,13 +52,19 @@ body {
 #content {
     display: flex;
     justify-content: center;
-
+    align-items: center;
+    height: 740px;
 }
 
 #map {
     background-color: aliceblue;
     height: 500px;
     width: 1200px;
-    margin: 50px;
+}
+
+#content > .form {
+    background-color: whitesmoke;
+    height: 500px;
+    width: 500px;
 }
 
