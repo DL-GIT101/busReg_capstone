@@ -1,9 +1,16 @@
+/* 
+color: rgb(29, 29, 31); - for black 
+color: rgb(245, 245, 247); - for white
+*/
+
 * {
     margin: 0;
 }
 
 body {
     background-color: rgb(216, 220, 231);
+    color: rgb(29, 29, 31);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 #navbar {
@@ -12,7 +19,6 @@ body {
     height: 60px;
     justify-content: space-between;
     align-content: center;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 #logo > a {
@@ -21,7 +27,7 @@ body {
 }
 
 #logo > a > p {
-    color: rgb(255, 255, 255);
+    color: rgb(245, 245, 247);
     font-size: 24px;
     padding: 15px 0px;
 }
@@ -38,7 +44,7 @@ body {
 #user > a {
     padding: 20px 15px;
     text-decoration: none;
-    color: rgb(255, 255, 255);
+    color: rgb(245, 245, 247);
     font-size: 18px;
 }
 
@@ -62,9 +68,30 @@ body {
     width: 1200px;
 }
 
-#content > .form {
-    background-color: whitesmoke;
+#content > .container {
+    background-color: rgb(245, 245, 247);
     height: 500px;
     width: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
 }
 
+.title {
+    font-weight: bold;
+    font-size: 24px;
+    color: rgb(29, 29, 31);
+    text-align: center;
+    margin: 10px;
+}
+
+.sentence {
+    color: rgb(66,66,69);
+    text-align: center;
+}
+
+.container > .intro {
+    margin-bottom: 50px;
+}

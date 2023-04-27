@@ -22,13 +22,24 @@
      </nav>
     
      <div id="content">
-        <div class="form">
+        
+        <div class="container">
+            <div class="intro">
+                <p class="title">Create an Account</p>
+                <p class="sentence">Please enter your email and password to create an account.</p>
+            </div>
             <form action="/php/register.php" method="post">
                 <label for="email">Email</label><br>
-                <input type="text" id="email" name="email"><br>
+                <input type="email" id="email" name="email"><br>
 
                 <label for="password">Password</label><br>
-                <input type="text" id="password" name="password">
+                <input type="password" id="password" name="password"><br>
+
+                <label for="cPassword">Confirm Password</label><br>
+                <input type="password" id="cPassword" name="cPassword"><br>
+
+                <input type="submit" value="Submit"><br>
+                <a href="login.php">Have an account?</a>
             </form>
         </div>
      </div>
