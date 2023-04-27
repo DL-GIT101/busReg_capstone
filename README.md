@@ -13,3 +13,5 @@ This is our capstone project about Business Registration on Tarlac City
     By creating an account and input their information then submitting the required documents.
     The LGU can then check the information and the documents then schedule the users for an 
     appointment to get their permit.
+
+- Credits for Boundary.Now for the coordinates and geoJSON file

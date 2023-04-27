@@ -40,7 +40,13 @@ body {
     text-decoration: none;
     color: rgb(255, 255, 255);
     font-size: 18px;
+}
 
+#user > a:hover {
+    color: rgb(0, 195, 255);
+    font-size: 20px;
+    text-shadow: 2px 2px 5px rgb(65, 65, 65);
+        
 }
 
 #content {
