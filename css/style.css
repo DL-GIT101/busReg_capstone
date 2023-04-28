@@ -3,24 +3,29 @@ color: rgb(29, 29, 31); - for black
 color: rgb(245, 245, 247); - for white
 color: rgb(66, 66, 69); - for gray
 
+color: rgb(0, 59, 179); - for blue
+color: rgb(255, 204, 0); - for yellow
 */
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@700&family=Noto+Serif&display=swap');
+
 
 * {
     margin: 0;
 }
 
 body {
-    background-color: rgb(216, 220, 231);
+    background-color: rgb(245, 245, 247);
     color: rgb(29, 29, 31);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 #navbar {
-    background-color: rgb(177, 196, 214);
+    background-color: rgb(0, 59, 179);
     display: flex;
     height: 60px;
     justify-content: space-between;
     align-content: center;
+    font-family: 'Jost', sans-serif;
 }
 
 #logo > a {
@@ -51,7 +56,7 @@ body {
 }
 
 #user > a:hover {
-    color: rgb(0, 195, 255);
+    color: rgb(255, 204, 0);
     font-size: 20px;
     text-shadow: 2px 2px 5px rgb(65, 65, 65);
         
@@ -71,7 +76,7 @@ body {
 }
 
 #content > .container {
-    background-color: rgb(245, 245, 247);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     height: 400px;
     width: 500px;
     display: flex;
@@ -115,4 +120,8 @@ form > input {
 form > input:focus {
     outline: none;
     box-shadow: 0 0 7px rgb(2, 94, 231);
-  }
+}
+
+form > input[type=submit] {
+    background-color:rgb(255, 204, 0);
+}
