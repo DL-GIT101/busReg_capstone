@@ -1,6 +1,8 @@
 /* 
 color: rgb(29, 29, 31); - for black 
 color: rgb(245, 245, 247); - for white
+color: rgb(66, 66, 69); - for gray
+
 */
 
 * {
@@ -70,13 +72,15 @@ body {
 
 #content > .container {
     background-color: rgb(245, 245, 247);
-    height: 500px;
+    height: 400px;
     width: 500px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
+    padding: 50px;
+}
+
+.container > .intro {
+    margin-bottom: 30px;
 }
 
 .title {
@@ -84,7 +88,7 @@ body {
     font-size: 24px;
     color: rgb(29, 29, 31);
     text-align: center;
-    margin: 10px;
+    margin-bottom: 10px;
 }
 
 .sentence {
@@ -92,6 +96,23 @@ body {
     text-align: center;
 }
 
-.container > .intro {
-    margin-bottom: 50px;
+form {
+    display: flex;
+    flex-direction: column;
 }
+
+form > label {
+    color: rgb(66, 66, 69);
+}
+
+form > input {
+    margin: 10px 0px 15px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid rgb(133, 133, 133);
+}
+
+form > input:focus {
+    outline: none;
+    box-shadow: 0 0 7px rgb(2, 94, 231);
+  }
