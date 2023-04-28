@@ -5,6 +5,9 @@ color: rgb(66, 66, 69); - for gray
 
 color: rgb(0, 59, 179); - for blue
 color: rgb(255, 204, 0); - for yellow
+
+font-family: 'Noto Serif', serif; for sentence
+font-family: 'Jost', sans-serif; - for title
 */
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@700&family=Noto+Serif&display=swap');
 
@@ -16,7 +19,7 @@ color: rgb(255, 204, 0); - for yellow
 body {
     background-color: rgb(245, 245, 247);
     color: rgb(29, 29, 31);
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Noto Serif', serif;
 }
 
 #navbar {
@@ -124,4 +127,20 @@ form > input:focus {
 
 form > input[type=submit] {
     background-color:rgb(255, 204, 0);
+    border: none;
+    width: 25%;
+    align-self: center;
+    color: rgb(245, 245, 247);
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    padding: 5px;
+}
+
+form > input[type=submit]:hover {
+    background-color:rgb(207, 166, 1);
+}
+
+form > a {
+    text-align: center;
+    color: rgb(66, 66, 69);
 }
