@@ -18,14 +18,14 @@
 <body>
     <nav id="navbar">
        <div id="logo">
-        <a href="index.html">
+        <a href="index.php">
             <img src="img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
             <p>Business Permit & Licensing</p>  
         </a>
        </div>
 
        <div id="user">
-            <a href="user/register.html">Register</a>
+            <a href="user/register.php">Register</a>
             <a href="">Login</a>
        </div>
     </nav>
