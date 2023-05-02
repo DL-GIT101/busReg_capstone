@@ -1,5 +1,7 @@
 <?php
 
+require_once "../php/config.php";
+
 $email = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -11,11 +13,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
                 $email_error = "Invalid Email";
             }else{ 
-               /* $emailSQL = "SELECT * FROM user WHERE email = '$email'";
+                $emailSQL = "SELECT * FROM user WHERE email = '$email'";
                 $emailRESULT = $conn->query($emailSQL);
                     if($emailRESULT->num_rows==1){
                         $email_error = "Email was already taken";
-                    } */
+                    }
             }
         }
 }
@@ -61,7 +63,7 @@ function validate($data) {
             </div>
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Email Address" value="asds" <?php echo $email; ?>>
+                <input type="email" id="email" name="email" placeholder="Email Address" value=<?php echo $email; ?>>
                 <div class="error"></div>
 
                 <label for="password">Password</label>
