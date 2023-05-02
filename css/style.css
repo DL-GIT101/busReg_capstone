@@ -111,6 +111,7 @@ form {
 
 form > label {
     color: rgb(66, 66, 69);
+    margin-top: 5px;
 }
 
 form > input {
@@ -144,3 +145,8 @@ form > a {
     color: rgb(66, 66, 69);
 }
 
+form > .error {
+    color: red;
+    font-size: smaller;
+    padding: 0px 10px;
+}

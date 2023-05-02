@@ -61,14 +61,16 @@ function validate($data) {
             </div>
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Email Address" value=<?php echo $email; ?>>
-                <div class="error">error</div>
+                <input type="email" id="email" name="email" placeholder="Email Address" value="asds" <?php echo $email; ?>>
+                <div class="error"></div>
 
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Password">
+                <div class="error"></div>
 
                 <label for="cPassword">Confirm Password</label>
                 <input type="password" id="cPassword" name="cPassword" placeholder="Confirm Password">
+                <div class="error"></div>
 
                 <input type="submit" value="Sign up">
                 <a href="login.php">Have an account? Click Here</a>
