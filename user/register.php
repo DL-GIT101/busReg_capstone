@@ -107,6 +107,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $id = $id_prefix . $id_suffix; 
     }    
+
+    if(!empty($id)){
+
+        $sql = "INSERT INTO users (id, email, password) VALUES (?, ?, ?)";
+
+        if($stmt = $mysqli->prepare($sql)){
+
+            $stmt->bind_param("sss",$param_id, $param_email, $param_pword);
+
+            $param_id = $id;
+            $param_email = $email;
+            $param_pword = password_hash($password, PASSWORD_DEFAULT);
+
+            if($stmt->execute()){
+                header("location: login.php");
+            } else{
+                echo "error in insertion";
+            }
+
+            $stmt->close();
+        }
+    }
         $mysqli->close();
 }
 
