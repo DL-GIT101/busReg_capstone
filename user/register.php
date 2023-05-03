@@ -79,19 +79,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 //id  ex. US20230503001
- /*   $id_sql = "SELECT MAX(id) as max_id FROM user";
-    $id_result = $mysqli->query($id_sql);
-    $id_row = $id_result->fetch_assoc();
-    $last_id = $id_row['max_id'] ?? 0;
 
-    $id_suffix = substr($last_id, 10) + 1;
-    $id_suffix = str_pad($id_suffix, 3, '0', STR_PAD_LEFT);
+    if(empty($email_err) && empty($pword_error) && empty($cPassword_error)){
 
-    $id_prefix = 'US' . date('Ymd');
+        $sql = "SELECT MAX(id) as max_id FROM users";
+        
+        $stmt = $mysqli->prepare($sql);
 
-    $id = $id_prefix . $id_suffix; */
+        if($stmt){
 
-    $mysqli->close();
+            $stmt->execute();
+            $stmt->bind_result($max_id);
+
+            if($stmt->fetch()){
+                $last_id = $max_id;
+            }
+
+            $stmt->close();
+        }
+
+        if($last_id){
+            $id_suffix = substr($last_id, 10) + 1;
+        }
+
+        $id_suffix = str_pad($id_suffix, 3, '0', STR_PAD_LEFT);
+        $id_prefix = 'US' . date('Ymd');
+
+        $id = $id_prefix . $id_suffix; 
+    }    
+        $mysqli->close();
 }
 
 function validate($data) {
@@ -127,7 +143,6 @@ function validate($data) {
      </nav>
     
      <div id="content">
-        
         <div class="container">
             <div class="intro">
                 <p class="title">Create an Account</p>
@@ -151,5 +166,6 @@ function validate($data) {
             </form>
         </div>
      </div>
+
 </body>
 </html>
