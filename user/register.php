@@ -160,12 +160,12 @@ function validate($data) {
         </div>
  
         <div id="user">
-             <a href="">Login</a>
+             <a href="login.php">Login</a>
         </div>
      </nav>
-    
-     <div id="content">
-        <div class="container">
+     
+     <div id="content"> 
+        <div class="container">      
             <div class="intro">
                 <p class="title">Create an Account</p>
                 <p class="sentence">Please enter your email and password to create an account.</p>
