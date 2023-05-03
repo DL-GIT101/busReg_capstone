@@ -10,3 +10,10 @@ errors.forEach(error => {
   }
     i+=1;
 });
+
+const alerts = document.querySelectorAll('form > .alert');
+alerts.forEach(alert => {
+    if(alert.textContent.trim().length > 0){
+      alert.style.display = "block";
+    }
+});

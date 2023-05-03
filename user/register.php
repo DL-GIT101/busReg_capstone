@@ -161,6 +161,7 @@ function validate($data) {
  
         <div id="user">
              <a href="login.php">Login</a>
+
         </div>
      </nav>
      

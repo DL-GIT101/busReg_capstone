@@ -3,7 +3,12 @@ color: rgb(29, 29, 31); - for black
 color: rgb(245, 245, 247); - for white
 color: rgb(66, 66, 69); - for gray
 
-color: rgb(0, 59, 179); - for blue
+color: rgb(220, 53, 69); for - dark red
+color: rgb(248, 215, 218); for - light red
+color: rgb(241, 174, 181); for - medyo red
+
+
+color: rgb(, 0, 59, 179); - for blue
 color: rgb(255, 204, 0); - for yellow
 
 font-family: 'Noto Serif', serif; for sentence
@@ -84,6 +89,7 @@ body {
     display: flex;
     flex-direction: column;
     padding: 50px;
+    border-radius: 4px;
 }
 
 .container > .intro {
@@ -145,7 +151,16 @@ form > a {
 }
 
 form > .error {
-    color: red;
+    color: rgb(220, 53, 69);
     font-size: smaller;
     padding: 0px 10px;
+}
+
+form > .alert {
+    display: none;
+    color: rgb(220, 53, 69);
+    border: 1px solid rgb(241, 174, 181);
+    border-radius: 4px;
+    background-color: rgb(248, 215, 218);
+    padding: 5px;
 }

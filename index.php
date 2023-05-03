@@ -26,7 +26,7 @@
 
        <div id="user">
             <a href="user/register.php">Register</a>
-            <a href="">Login</a>
+            <a href="user/login.php">Login</a>
        </div>
     </nav>
 
