@@ -2,24 +2,96 @@
 
 require_once "../php/config.php";
 
-$email = "";
+$email = $email_err = $password = $pword_error = $cPassword = $cPassword_error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // email
     $email = validate($_POST["email"]);
         if(empty($email)){
-            $email_error = "Enter Email";
-        }else{
-            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                $email_error = "Invalid Email";
-            }else{ 
-                $emailSQL = "SELECT * FROM user WHERE email = '$email'";
-                $emailRESULT = $conn->query($emailSQL);
-                    if($emailRESULT->num_rows==1){
-                        $email_error = "Email was already taken";
+            $email_err = "Enter Email";
+        } elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            $email_err = "Invalid Email";
+        } else{
+
+                $sql = "SELECT email FROM users WHERE email = ?";
+
+                if($stmt = $mysqli->prepare($sql)){
+                    $stmt->bind_param("s", $param_email);
+
+                    $param_email = validate($_POST["email"]);
+
+                    if($stmt->execute()){
+
+                        $stmt->store_result();
+
+                        if($stmt->num_rows() == 1){
+                            $email_err = "Email was already taken";
+                        }else {
+                            $email = validate($_POST["email"]);
+                        }
+                    }else {
+                        echo "email error";
                     }
+
+                    $stmt->close();
+                }
+            }
+
+//password
+    $password = validate($_POST["password"]);
+    if(empty($password)){
+        $pword_error = "Enter Password";
+    }else{
+        if(!preg_match('@[A-Z]@', $password)){
+            $pword_error .= "Password must include at least one uppercase letter <br>";
+        }
+        if(!preg_match('@[a-z]@', $password)){
+            $pword_error .= "Password must include at least one lowercase letter  <br>";
+        }
+        if(!preg_match('@[0-9]@', $password)){
+            $pword_error .= "Password must include at least one number  <br>";
+        }
+        if(!preg_match('@[^\w]@', $password)){
+            $pword_error .= "Password must include at least one special character  <br>";
+        }
+        if(strlen($password)<8){
+            $pword_error .= "Password must be at least 8 characters in length  <br>";
+        }
+        if(empty($pword_error)){
+            $pwordHash = password_hash($password, PASSWORD_DEFAULT);
+        }
+    }
+//confirm password
+    $cPassword = validate($_POST["cPassword"]);
+    if(empty($cPassword)){
+        $cPassword_error = "Enter confirm password";
+        if(empty($pword_error)){
+            $pword_error = "Confirm password is empty";
+        }
+    }else{
+        if(!empty($pword_error)){
+            $cPassword_error = "Invalid Password";
+        }else{
+            if($password!==$cPassword){
+                $cPassword_error = "Password and Confirm Password do not match";
             }
         }
+    }
+
+//id  ex. US20230503001
+ /*   $id_sql = "SELECT MAX(id) as max_id FROM user";
+    $id_result = $mysqli->query($id_sql);
+    $id_row = $id_result->fetch_assoc();
+    $last_id = $id_row['max_id'] ?? 0;
+
+    $id_suffix = substr($last_id, 10) + 1;
+    $id_suffix = str_pad($id_suffix, 3, '0', STR_PAD_LEFT);
+
+    $id_prefix = 'US' . date('Ymd');
+
+    $id = $id_prefix . $id_suffix; */
+
+    $mysqli->close();
 }
 
 function validate($data) {
@@ -64,15 +136,15 @@ function validate($data) {
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email Address" value=<?php echo $email; ?>>
-                <div class="error"></div>
+                <div class="error"><?php echo $email_err; ?></div>
 
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Password">
-                <div class="error"></div>
+                <input type="password" id="password" name="password" placeholder="Password" value=<?php echo $password; ?>>
+                <div class="error"><?php echo $pword_error; ?></div>
 
                 <label for="cPassword">Confirm Password</label>
-                <input type="password" id="cPassword" name="cPassword" placeholder="Confirm Password">
-                <div class="error"></div>
+                <input type="password" id="cPassword" name="cPassword" placeholder="Confirm Password" value=<?php echo $cPassword; ?>>
+                <div class="error"><?php echo $cPassword_error; ?></div>
 
                 <input type="submit" value="Sign up">
                 <a href="login.php">Have an account? Click Here</a>
