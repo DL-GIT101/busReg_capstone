@@ -1,8 +1,15 @@
+const southWest = L.latLng(15.5777,120.7113);
+const northEast = L.latLng(15.3974,120.5136);
+const bounds = L.latLngBounds(southWest, northEast);
 
-let map = L.map('map').setView([15.480288, 120.588008], 11);
+
+let map = L.map('map', {
+    maxBounds: bounds,
+    minZoom: 11,
+    maxZoom: 18
+}).setView([15.480288, 120.588008], 11);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 

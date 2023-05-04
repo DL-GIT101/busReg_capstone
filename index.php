@@ -12,7 +12,7 @@
      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
      crossorigin=""></script>
     <script src="js/script.js" defer></script>
-    <script src="js/city_hall.js" defer></script>
+    <script src="js/map.js" defer></script>
     <title>Business Registration</title>
 </head>
 <body>
