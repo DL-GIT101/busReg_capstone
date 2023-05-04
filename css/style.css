@@ -41,6 +41,10 @@ body {
     text-decoration: none;
 }
 
+img {
+    height: 150px;
+}
+
 #logo > a > p {
     color: rgb(245, 245, 247);
     font-size: 24px;
@@ -95,13 +99,6 @@ body {
     flex-direction: row;
     background-color: rgb(133, 133, 133);
     padding: 30px;
-}
-
-.container.inside {
-    background-color: rgb(245, 245, 247);
-    box-shadow: none;
-    margin: 20px;
-    padding: 10px;
 }
 
 .container > .intro {
@@ -175,4 +172,20 @@ form > .alert {
     border-radius: 4px;
     background-color: rgb(248, 215, 218);
     padding: 5px;
+}
+
+.container.inside {
+    background-color: rgb(245, 245, 247);
+    box-shadow: none;
+    margin: 20px;
+    padding: 10px;
+}
+
+.container.inside > .sentence {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.container.inside > .title {
+    margin: 10px 0;
 }

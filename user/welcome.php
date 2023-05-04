@@ -25,7 +25,10 @@
     <div id="content">
         <div class="container row">      
             <div class="container inside" >
-
+                <p class="sentence">Business Profile</p>
+                <img src="../img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
+                <p class="title">Store Name</p>
+                <p class="sentence">Name of Owner</p>
             </div>
             <div class="container inside">
 
