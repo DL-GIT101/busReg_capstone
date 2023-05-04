@@ -23,8 +23,13 @@
     </nav>
 
     <div id="content">
-        <div class="container">      
-            
+        <div class="container row">      
+            <div class="container inside" >
+
+            </div>
+            <div class="container inside">
+
+            </div>
         </div>
     </div>
 </body>

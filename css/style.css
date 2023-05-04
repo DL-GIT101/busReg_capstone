@@ -70,6 +70,12 @@ body {
         
 }
 
+#map {
+    background-color: aliceblue;
+    height: 500px;
+    width: 1200px;
+}
+
 #content {
     display: flex;
     justify-content: center;
@@ -77,19 +83,25 @@ body {
     height: 740px;
 }
 
-#map {
-    background-color: aliceblue;
-    height: 500px;
-    width: 1200px;
-}
-
-#content > .container {
+.container {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    width: 500px;
     display: flex;
     flex-direction: column;
     padding: 50px;
     border-radius: 4px;
+}
+
+.container.row {
+    flex-direction: row;
+    background-color: rgb(133, 133, 133);
+    padding: 30px;
+}
+
+.container.inside {
+    background-color: rgb(245, 245, 247);
+    box-shadow: none;
+    margin: 20px;
+    padding: 10px;
 }
 
 .container > .intro {

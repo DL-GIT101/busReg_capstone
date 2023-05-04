@@ -37,7 +37,7 @@
     <?php 
         if(isset($log)){
             echo '<a href="user/welcome.php">Hi, '.$_SESSION['email'].'</a> 
-                  <a href="../php/logout.php">Logout</a>';
+                  <a href="php/logout.php">Logout</a>';
         } else {
             echo '<a href="user/register.php">Register</a>
                   <a href="user/login.php">Login</a>';
