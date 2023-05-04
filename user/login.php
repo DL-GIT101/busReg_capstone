@@ -51,7 +51,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
-                            $_SESSION["email"] = $email;
+                            // the name before @ as a substitute for username
+                            $_SESSION["email"] = substr($email, 0, strpos($email, '@'));
 
                             header("location: welcome.php");
                         }else{

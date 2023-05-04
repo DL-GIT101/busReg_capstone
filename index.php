@@ -1,3 +1,12 @@
+<?php 
+    session_start();
+
+    if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+        $log = true;
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,8 +34,16 @@
        </div>
 
        <div id="user">
-            <a href="user/register.php">Register</a>
-            <a href="user/login.php">Login</a>
+    <?php 
+        if(isset($log)){
+            echo '<a href="user/welcome.php">Hi, '.$_SESSION['email'].'</a> 
+                  <a href="../php/logout.php">Logout</a>';
+        } else {
+            echo '<a href="user/register.php">Register</a>
+                  <a href="user/login.php">Login</a>';
+        }
+    ?>
+            
        </div>
     </nav>
 

@@ -1,5 +1,12 @@
 <?php
 
+session_start();
+
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    header("location: welcome.php");
+    exit;
+}
+
 require_once "../php/config.php";
 
 $email = $email_err = $password = $pword_error = $cPassword = $cPassword_error = "";
