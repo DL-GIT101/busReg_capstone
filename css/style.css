@@ -185,6 +185,7 @@ form > .alert {
 .frame {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     background-color: rgb(248, 249, 250);
     border: 1px solid rgb(233, 236, 239);
     border-radius: 4px;
@@ -196,7 +197,7 @@ form > .alert {
 
 .frame > .sentence {
     text-align: left;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 }
 
 .frame > img {
@@ -207,7 +208,7 @@ form > .alert {
 .frame > .item {
     background-color: rgb(255, 204, 0);
     border-radius: 4px;
-    padding: 5px;
+    padding: 10px;
     font-size: smaller;
 }
 
@@ -231,6 +232,7 @@ form > .alert {
     background-color: rgb(0, 59, 179);
     color: rgb(245, 245, 247);
     text-decoration: none;
+    padding: 10px 0px;
 }
 
 .item.services:hover {
@@ -246,3 +248,10 @@ form > .alert {
     display: flex;
 }
 
+.frame.location {
+    width: 600px;
+}
+
+.frame.location > #map {
+    width: auto;
+}
