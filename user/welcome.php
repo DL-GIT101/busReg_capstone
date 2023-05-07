@@ -25,6 +25,7 @@
        </div>
 
        <div id="user">
+            <a href="profile.php">Profile</a>
             <a href="../php/logout.php">Logout</a>
        </div>
     </nav>
