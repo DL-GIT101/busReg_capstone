@@ -185,8 +185,8 @@ form > .alert {
 .frame {
     display: flex;
     flex-direction: column;
-    background-color: rgb(245, 245, 247);
-    border: 1px solid rgb(204, 204, 204);
+    background-color: rgb(248, 249, 250);
+    border: 1px solid rgb(233, 236, 239);
     border-radius: 4px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     padding: 10px;
@@ -226,3 +226,23 @@ form > .alert {
 .item.expired {
     background-color: rgb(206, 212, 218);
 }
+
+.item.services {
+    background-color: rgb(0, 59, 179);
+    color: rgb(245, 245, 247);
+    text-decoration: none;
+}
+
+.item.services:hover {
+    background-color: rgb(0, 39, 116);
+}
+
+.item.services:hover .emphasize {
+    text-decoration: underline;
+    text-transform: uppercase;
+}
+
+.service {
+    display: flex;
+}
+

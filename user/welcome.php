@@ -36,7 +36,7 @@
                 <div class="frame">
                     <p class="sentence">Business Activity</p> 
                     <div class="item title">
-                        Sample
+                        Money Laundering
                     </div>
                 </div>
                 <div class="frame">
@@ -47,8 +47,17 @@
                 </div>
             </div>
             
-            <div class="frame">
-
+            <div class="service">
+                <div class="frame">
+                    <p class="title">Services</p>
+                    <a href="" class="item title services">
+                      <span class="emphasize">New</span> Business Permit
+                    </a>
+                    <div class="item title services">
+                      <span class="emphasize">Renew</span> Business Permit
+                    </div>
+                </div>
+                <div class="frame"></div>
             </div>
         </div>
     </div>
