@@ -95,10 +95,8 @@ img {
     border-radius: 4px;
 }
 
-.container.row {
+.row {
     flex-direction: row;
-    background-color: rgb(133, 133, 133);
-    padding: 30px;
 }
 
 .container > .intro {
@@ -108,6 +106,7 @@ img {
 .title {
     font-weight: bold;
     font-size: 24px;
+    font-family: 'Jost', sans-serif;
     color: rgb(29, 29, 31);
     text-align: center;
     margin-bottom: 5px;
@@ -115,6 +114,7 @@ img {
 
 .sentence {
     color: rgb(66,66,69);
+    font-size: 14px;
     text-align: center;
 }
 
@@ -174,23 +174,6 @@ form > .alert {
     padding: 5px;
 }
 
-.container.inside {
-    background-color: rgb(245, 245, 247);
-    box-shadow: none;
-    padding: 10px;
-}
-
-.container.inside > .sentence {
-    text-align: left;
-    margin-bottom: 10px;
-}
-
-hr.rounded{
-    border-top: 3px solid rgb(125, 125, 131);
-    border-radius: 4px;
-    margin: 10px 0px;
-}
-
 .profile {
     display: flex;
     flex-direction: column;
@@ -199,20 +182,47 @@ hr.rounded{
     margin-right: 20px;
 }
 
-.profile > .container.inside {
+.frame {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(245, 245, 247);
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 4px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    padding: 10px;
     margin: 1px;
     width: 200px;
 }
 
-.container.inside > img {
+.frame > .sentence {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.frame > img {
     width: 150px;
     align-self: center;
 }
 
-.activity {
-    color: rgb(245, 245, 247);
-    background-color: rgb(0, 59, 179);
+.frame > .item {
+    background-color: rgb(255, 204, 0);
     border-radius: 4px;
     padding: 5px;
     font-size: smaller;
+}
+
+.item.approved {
+    background-color: rgb(71, 159, 118);
+}
+
+.item.pending {
+    background-color: rgb(255, 205, 57);
+}
+
+.item.denied {
+    background-color: rgb(227, 93, 106);
+}
+
+.item.expired {
+    background-color: rgb(206, 212, 218);
 }

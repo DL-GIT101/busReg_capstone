@@ -25,7 +25,7 @@
     <div id="content">
         <div class="container row"> 
             <div class="profile">
-                 <div class="container inside" >
+                 <div class="frame" >
                     <p class="sentence">Business Profile</p>
                     <img src="../img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
                     <div>
@@ -33,16 +33,21 @@
                         <p class="sentence">Name of Owner</p> 
                     </div>
                 </div>
-                <div class="container inside">
+                <div class="frame">
                     <p class="sentence">Business Activity</p> 
-                    <div class="activity">
+                    <div class="item title">
                         Sample
                     </div>
                 </div>
-                <div class="container inside"></div>
+                <div class="frame">
+                    <p class="sentence">Business Permit Status</p> 
+                    <div class="item title approved">
+                        Approved
+                    </div>
+                </div>
             </div>
             
-            <div class="container inside">
+            <div class="frame">
 
             </div>
         </div>
