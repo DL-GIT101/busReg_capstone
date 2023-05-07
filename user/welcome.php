@@ -12,6 +12,7 @@
      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
      crossorigin=""></script>
     <script src="../js/displayMap.js" defer></script>
+    <script src="../js/profile.js" defer></script>
     <title>Welcome</title>
 </head>
 <body>
@@ -30,7 +31,7 @@
 
     <div id="content">
         <div class="container row"> 
-            <div class="profile">
+            <div id="profile">
                  <div class="frame" >
                     <p class="sentence">Business Profile</p>
                     <img src="../img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">

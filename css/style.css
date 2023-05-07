@@ -174,7 +174,7 @@ form > .alert {
     padding: 5px;
 }
 
-.profile {
+#profile {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -254,4 +254,8 @@ form > .alert {
 
 .frame.location > #map {
     width: auto;
+}
+
+.none {
+    display: none;
 }
