@@ -31,7 +31,7 @@
     </nav>
 
     <div id="content">
-        <div class="container row"> 
+        <div class="container flex-row"> 
             <div id="profile">
                  <div class="frame" >
                     <p class="sentence">Business Profile</p>

@@ -95,8 +95,12 @@ img {
     border-radius: 4px;
 }
 
-.row {
+.flex-row {
     flex-direction: row;
+}
+
+.row {
+    display: flex;
 }
 
 .container > .intro {
@@ -128,14 +132,15 @@ form label {
     margin-top: 5px;
 }
 
-form input {
+form input, form select {
     margin: 10px 0px 15px;
     padding: 10px;
     border-radius: 4px;
     border: 1px solid rgb(133, 133, 133);
+    background-color: rgb(245, 245, 247);
 }
 
-form input:focus {
+form input:focus, form select:focus {
     outline: none;
     box-shadow: 0 0 7px rgb(2, 94, 231);
 }
