@@ -11,8 +11,8 @@
      <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
      crossorigin=""></script>
+    <script src="../js/map.js" defer></script>
     <script src="../js/displayMap.js" defer></script>
-    <script src="../js/profile.js" defer></script>
     <title>Welcome</title>
 </head>
 <body>
