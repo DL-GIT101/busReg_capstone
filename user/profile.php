@@ -71,10 +71,6 @@
                     <label for="contact">Contact Number</label>
                     <input type="text" id="contact" name="contact" placeholder="Contact Number" value="">
                     <div class="error"></div>
-                </div>
-                <!--address -->
-                <div class="frame location">
-                    <p class="title">Address</p>
                     <label for="address_1">House No./Unit No./Building/Street</label>
                     <input type="text" id="address_1" name="address_1" placeholder="House No./Unit No./Building/Street" value="">
                     <div class="error"></div>
@@ -167,6 +163,11 @@
                         ?>
                     </select>
                     <div class="error"></div>
+                </div>
+                <!--address -->
+                <div class="frame location">
+                    <p class="title">Pin Location</p>
+                    
                     <div id="map"></div>
                 </div>
             </div>
