@@ -21,29 +21,51 @@
             <a href="../php/logout.php">Logout</a>
        </div>
     </nav>
-<!-- make a form profle + sql table. this for just creating profile. then create conditional for the dashboard either blur or just put some default values -->
+
     <div id="content">
         <div class="container">
-        <div class="intro">
+            <div class="intro">
                 <p class="title">Profile</p>
                 <p class="sentence">Enter your informations to make a profile</p>
             </div>
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                <label for="name">Name</label>
-                <input type="text" id="email" name="email" placeholder="Email Address" value=<?php echo $email; ?>>
-                <div class="error"></div>
+                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                <div class="frame">
+                    <p class="title">Business</p>
+                    <label for="bus_name">Name</label>
+                    <input type="text" id="bus_name" name="bus_name" placeholder="Business Name" value="">
+                    <div class="error"></div>
 
-                <label for="password">Password</label>
-                <input type="text" id="password" name="password" placeholder="Password" value=<?php echo $password; ?>>
-                <div class="error"></div>
+                    <label for="activity">Activity</label>
+                    <input type="text" id="activity" name="activity" placeholder="Business Activity" value="">
+                    <div class="error"></div>
 
-                <label for="cPassword">Confirm Password</label>
-                <input type="text" id="cPassword" name="cPassword" placeholder="Confirm Password" value=<?php echo $cPassword; ?>>
-                <div class="error"></div>
+                    <label for="entity">Entity</label>
+                    <input type="text" id="entity" name="entity" placeholder="Business Entity" value="">
+                    <div class="error"></div>
 
-                <input type="submit" value="Create">
-            </form>
+                    <label for="contact">Contact Number</label>
+                    <input type="text" id="contact" name="contact" placeholder="Contact Number" value="">
+                    <div class="error"></div>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Business Email Address" value=<?php echo $email; ?>>
+                    <div class="error"><?php echo $email_err; ?></div>
+
+                    <label for="address_1">House No./Unit No./Building/Street</label>
+                    <input type="text" id="address_1" name="address_1" placeholder="House No./Unit No./Building/Street" value="">
+                    <div class="error"></div>
+
+                    <label for="address_2">Barangay</label> <!-- Gawing select -->
+                    <input type="text" id="address_2" name="address_2" placeholder="Barangay" value="">
+                    <div class="error"></div>
+                </div>
+                    <input type="submit" value="Create">
+                </form>
         </div>
     </div>
 </body>
 </html>
+
+<!-- manager  - [name - gender - nationality - bus_entity - position] 
+    business_profile - [name - activity - logo -  contact_no - email - add_line_1 - add_line_2 - pin]
+     ->

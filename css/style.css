@@ -123,24 +123,24 @@ form {
     flex-direction: column;
 }
 
-form > label {
+form label {
     color: rgb(66, 66, 69);
     margin-top: 5px;
 }
 
-form > input {
+form input {
     margin: 10px 0px 15px;
     padding: 10px;
     border-radius: 4px;
     border: 1px solid rgb(133, 133, 133);
 }
 
-form > input:focus {
+form input:focus {
     outline: none;
     box-shadow: 0 0 7px rgb(2, 94, 231);
 }
 
-form > input[type=submit] {
+form input[type=submit] {
     background-color:rgb(255, 204, 0);
     border: none;
     width: 25%;
@@ -150,22 +150,22 @@ form > input[type=submit] {
     padding: 5px;
 }
 
-form > input[type=submit]:hover {
+form input[type=submit]:hover {
     background-color:rgb(207, 166, 1);
 }
 
-form > a {
+form a {
     text-align: center;
     color: rgb(66, 66, 69);
 }
 
-form > .error {
+form .error {
     color: rgb(220, 53, 69);
     font-size: smaller;
     padding: 0px 10px;
 }
 
-form > .alert {
+form .alert {
     display: none;
     color: rgb(220, 53, 69);
     border: 1px solid rgb(241, 174, 181);
