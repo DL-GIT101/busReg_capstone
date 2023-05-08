@@ -97,5 +97,13 @@ let polygon =
             "type":"administrative",
             "importance":0.5770730099093615,
             "icon":"https://nominatim.openstreetmap.org/ui/mapicons/poi_boundary_administrative.p.20.png"}}]};
-
-L.geoJSON(polygon).addTo(map);
+let polygonStyle = {
+    color: 'rgb(0, 39, 116)',
+    weight: 2,
+    opacity: 1,
+    fillColor: '#ff0000',
+    fillOpacity: 0,
+}
+let tarlacCity = L.geoJSON(polygon, {
+    style: polygonStyle
+}).addTo(map);
