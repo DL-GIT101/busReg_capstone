@@ -1,5 +1,11 @@
 <?php 
 
+require_once "../php/config.php";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -172,7 +178,7 @@
                     </select>
                     <div class="error"></div>
                 </div>
-                <div class="frame location">
+                <div class="frame wide">
                     <p class="title">Pin Location</p>
                     
                     <div id="map"></div>

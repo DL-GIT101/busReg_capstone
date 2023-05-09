@@ -65,7 +65,7 @@
                       <span class="emphasize">Renew</span> Business Permit
                     </a>
                 </div>
-                <div class="frame location">
+                <div class="frame wide">
                     <p class="title">Location</p>
                     <div id="map">
                         <!--temp- map -->

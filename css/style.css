@@ -253,14 +253,15 @@ form .alert {
     display: flex;
 }
 
-.frame.location {
+.frame.wide {
     width: 600px;
 }
 
-.frame.location > #map {
+.frame.wide > #map {
     width: auto;
 }
 
 .none {
     display: none;
 }
+
