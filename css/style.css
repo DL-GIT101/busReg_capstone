@@ -132,6 +132,12 @@ form label {
     margin-top: 5px;
 }
 
+form label > span {
+    color: rgb(95, 95, 100);
+    font-size: smaller;
+    margin-left: 2px;
+}
+
 form input, form select{
     margin: 10px 0px 15px;
     padding: 10px;
