@@ -1,3 +1,6 @@
+<?php 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,14 +35,13 @@
 
     <div id="content">
         <div class="container">
-            <div class="intro">
-                <p class="title">Profile</p>
-                <p class="sentence">Enter your informations to make a profile</p>
-            </div>
+                
                 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <div class="row">
                 <!--Owner -->
                 <div class="frame">
+                <p class="title">Profile</p>
+                <p class="sentence text-center">Enter your informations to make a profile</p>
                     <p class="title">Owner</p>
                     <label for="owner_name">Name</label>
                     <input type="text" id="owner_name" name="owner_name" placeholder="Owner Name" value="">
@@ -71,6 +73,12 @@
                     <label for="contact">Contact Number</label>
                     <input type="text" id="contact" name="contact" placeholder="Contact Number" value="">
                     <div class="error"></div>
+                    
+                </div>
+                <!--address -->
+                <div class="frame">
+                    <p class="title">Address</p>
+
                     <label for="address_1">House No./Unit No./Building/Street</label>
                     <input type="text" id="address_1" name="address_1" placeholder="House No./Unit No./Building/Street" value="">
                     <div class="error"></div>
@@ -164,7 +172,6 @@
                     </select>
                     <div class="error"></div>
                 </div>
-                <!--address -->
                 <div class="frame location">
                     <p class="title">Pin Location</p>
                     
