@@ -2,9 +2,53 @@
 
 require_once "../php/config.php";
 
+$fname = $fname_err = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    
+        //FIRST NAME
+        $fname = validate($_POST["fname"]);
+        if(empty($fname)){
+            $fname_err = "Enter First Name";
+        } elseif(!preg_match("/^[a-zA-Z- ]*$/", $fname)){
+            $fname_err = "Only Letters and Spaces are allowed";
+        } else{
+              $fname = ucwords(strtolower($fname));
+        }
+        //MIDDLE NAME
+        $mname = validate($_POST["mname"]);
+        if(empty($mname)){
+            $mname = " ";
+        }elseif(!preg_match("/^[a-zA-Z- ]*$/", $mname)){
+            $mname_err = "Only Letters and Spaces are allowed";
+        }else{
+            $mname = ucwords(strtolower($mname));
+        }
+        //LAST NAME
+        $lname = validate($_POST["lname"]);
+        if(empty($lname)){
+            $lname_err = "Enter SUffix";
+        } elseif(!preg_match("/^[a-zA-Z- ]*$/", $lname)){
+            $lname = "Only Letters and Spaces are allowed";
+        } else{
+              $lname = ucwords(strtolower($lname));
+        }
+        //SUFFIX
+        $suffix = validate($_POST["suffix"]);
+        if(empty($suffix)){
+            $suffix = " ";
+        }elseif(!preg_match("/^[a-zA-Z]*$/", $suffix)){
+            $suffix_err = "Only Letters are allowed";
+        }else{
+            $suffix = ucwords(strtolower($suffix));
+        }
+}
+
+function validate($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+        return $data;
 }
 ?>
 <!DOCTYPE html>
@@ -42,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div id="content">
         <div class="container">
                 
-                <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                <form autocomplete="off" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <div class="row">
                 <div class="frame wide">
                     <div class="intro">
@@ -53,26 +97,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <p class="title">Owner</p>
                     <div class="row">
                         <div class="group">
-                            <label for="first_name">First Name</label>
-                            <input type="text" id="first_name" name="first_name" placeholder="First Name" value="">
-                            <div class="error"></div>
+                            <label for="fname">First Name</label>
+                            <input type="text" id="fname" name="fname" placeholder="First Name" value="<?php echo $fname; ?>">
+                            <div class="error"><?php echo $fname_err; ?></div>
                         </div>
                         <div class="group">
-                            <label for="middle_name">Middle Name</label>
-                            <input type="text" id="middle_name" name="middle_name" placeholder="Middle Name" value="">
-                            <div class="error"></div>
+                            <label for="mname">Middle Name<span>(Optional)</span></label>
+                            <input type="text" id="mname" name="mname" placeholder="Middle Name" value="<?php echo $mname; ?>">
+                            <div class="error"><?php echo $mname_err; ?></div>
                         </div>
                         <div class="group">
-                            <label for="surname">Surname</label>
-                            <input type="text" id="surname" name="surname" placeholder="Surname" value="">
-                            <div class="error"></div>
+                            <label for="lname">Surname</label>
+                            <input type="text" id="lname" name="lname" placeholder="Surname" value="<?php echo $lname; ?>">
+                            <div class="error"><?php echo $lname_err; ?></div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="group">
-                            <label for="suffix">Suffix</label>
-                            <input type="text" id="suffix" name="suffix" placeholder="suffix" value="">
-                            <div class="error"></div>
+                            <label for="suffix">Suffix<span>(Optional)</span></label>
+                            <input type="text" id="suffix" name="suffix" placeholder="suffix" value="<?php echo $suffix; ?>">
+                            <div class="error"><?php echo $suffix_err; ?></div>
                         </div>
                         <div class="group">
                             <label for="gender">Gender</label>
