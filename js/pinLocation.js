@@ -3,7 +3,10 @@ let longitudeInput = document.getElementById('longitude');
 let marker = null;
 
 if(latitudeInput.value && longitudeInput.value) {
-    marker = L.latLng(latitudeInput.value, longitudeInput.value);
+    let lat = latitudeInput.value;
+    let lng = longitudeInput.value;
+    let latlng = L.latLng(lat, lng);
+    marker = L.marker(latlng).addTo(map);
 }
 const onMapClick = (e) => {
     if(tarlacCity.getBounds().contains(e.latlng)){
