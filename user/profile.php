@@ -332,6 +332,9 @@ function validate($data) {
                 <div class="frame wide">
                     <p class="title">Pin Location</p>
                     <div id="map"></div>
+                    <input type="text" id="latitude" name="latitude" value="">
+                    <input type="text" id="longitude" name="longitude" value="">
+                    <div class="error"></div>
                     <input type="submit" value="Create Profile">
                     </form>
                 </div>
