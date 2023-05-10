@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //LAST NAME
         $lname = validate($_POST["lname"]);
         if(empty($lname)){
-            $lname_err = "Enter SUffix";
+            $lname_err = "Enter Suffix";
         } elseif(!preg_match("/^[a-zA-Z- ]*$/", $lname)){
             $lname = "Only Letters and Spaces are allowed";
         } else{
@@ -42,8 +42,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }else{
             $suffix = ucwords(strtolower($suffix));
         }
-}
 
+        $gender = validate($_POST["gender"]);
+        if(empty($gender)){
+            $gender_err = "Select Gender";
+        }
+    }
 function validate($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -86,7 +90,7 @@ function validate($data) {
     <div id="content">
         <div class="container">
                 
-                <form autocomplete="off" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>">
             <div class="row">
                 <div class="frame wide">
                     <div class="intro">
@@ -98,34 +102,34 @@ function validate($data) {
                     <div class="row">
                         <div class="group">
                             <label for="fname">First Name</label>
-                            <input type="text" id="fname" name="fname" placeholder="First Name" value="<?php echo $fname; ?>">
-                            <div class="error"><?php echo $fname_err; ?></div>
+                            <input type="text" id="fname" name="fname" placeholder="First Name" value="<?= $fname; ?>">
+                            <div class="error"><?= $fname_err; ?></div>
                         </div>
                         <div class="group">
                             <label for="mname">Middle Name<span>(Optional)</span></label>
-                            <input type="text" id="mname" name="mname" placeholder="Middle Name" value="<?php echo $mname; ?>">
-                            <div class="error"><?php echo $mname_err; ?></div>
+                            <input type="text" id="mname" name="mname" placeholder="Middle Name" value="<?= $mname; ?>">
+                            <div class="error"><?= $mname_err; ?></div>
                         </div>
                         <div class="group">
                             <label for="lname">Surname</label>
-                            <input type="text" id="lname" name="lname" placeholder="Surname" value="<?php echo $lname; ?>">
-                            <div class="error"><?php echo $lname_err; ?></div>
+                            <input type="text" id="lname" name="lname" placeholder="Surname" value="<?= $lname; ?>">
+                            <div class="error"><?= $lname_err; ?></div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="group">
                             <label for="suffix">Suffix<span>(Optional)</span></label>
-                            <input type="text" id="suffix" name="suffix" placeholder="suffix" value="<?php echo $suffix; ?>">
-                            <div class="error"><?php echo $suffix_err; ?></div>
+                            <input type="text" id="suffix" name="suffix" placeholder="suffix" value="<?= $suffix; ?>">
+                            <div class="error"><?= $suffix_err; ?></div>
                         </div>
                         <div class="group">
                             <label for="gender">Gender</label>
                             <select name="gender" id="gender">
                                 <option value="" disabled selected>Select Gender..</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="Male" <?= $gender === "Male" ? "selected" : "" ?>>Male</option>
+                                <option value="Female" <?= $gender === "Female" ? "selected" : "" ?>>Female</option>
                             </select>
-                            <div class="error"></div>
+                            <div class="error"><?= $gender_err; ?></div>
                         </div>
                     </div>
                     
