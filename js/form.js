@@ -1,5 +1,6 @@
-const errors = document.querySelectorAll('form >.error');
-const inputs = document.querySelectorAll('form > input');
+const errors = document.querySelectorAll('form .error');
+const inputs = document.querySelectorAll('form input');
+const select = document.querySelectorAll('form select');
 
 let i = 0;
 errors.forEach(error => {
@@ -11,7 +12,17 @@ errors.forEach(error => {
     i+=1;
 });
 
-const alerts = document.querySelectorAll('form > .alert');
+let j = 0;
+errors.forEach(error => {
+  if(error.textContent.trim().length > 0){
+    select[j].style.boxShadow = '0 0 3px red'
+    select[j].style.border = '1px solid red'
+    select[j].style.marginBottom = '0px'
+  }
+  j+=1;
+});
+
+const alerts = document.querySelectorAll('form .alert');
 alerts.forEach(alert => {
     if(alert.textContent.trim().length > 0){
       alert.style.display = "block";
