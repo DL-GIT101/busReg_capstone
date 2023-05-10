@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //activity
         $activity = validate($_POST["activity"]);
         if(empty($activity)){
-            $activity_err = "Enter business Activity";
+            $activity_err = "Enter Business Activity";
         } elseif(!preg_match("/^[a-zA-Z]*$/", $activity)){
             $activity_err = "Only Letters are allowed";
         }else{
@@ -110,9 +110,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $address_1 = ucwords(strtolower($address_1));
         }
         //barangay
-        $barangay = validate($_POST["barangay"]);
-        if(empty($barangay)){
-            $barangay_err = "Select Barangay";
+        $address_2 = validate($_POST["address_2"]);
+        if(empty($address_2)){
+            $address_2_err = "Select Barangay";
+        }
+        //location
+        $latitude = validate($_POST["latitude"]);
+        $longitude = validate($_POST["longitude"]);
+        if(empty($latitude) && empty($longitude)){
+            $latlang_err = "Pin the business location";
         }
 
     }
@@ -139,6 +145,7 @@ function validate($data) {
      crossorigin=""></script>
     <script src="../js/map.js" defer></script>
     <script src="../js/pinLocation.js" defer></script>
+    <script src="../js/form.js" defer></script>
 </head>
 <body>
 <nav id="navbar">
@@ -187,7 +194,7 @@ function validate($data) {
                     <div class="row">
                         <div class="group">
                             <label for="suffix">Suffix<span>(Optional)</span></label>
-                            <input type="text" id="suffix" name="suffix" placeholder="suffix" value="<?= $suffix; ?>">
+                            <input type="text" id="suffix" name="suffix" placeholder="Suffix" value="<?= $suffix; ?>">
                             <div class="error"><?= $suffix_err; ?></div>
                         </div>
                         <div class="group">
@@ -206,40 +213,40 @@ function validate($data) {
                      <div class="row">
                         <div class="group">
                             <label for="bus_name">Name</label>
-                            <input type="text" id="bus_name" name="bus_name" placeholder="Business Name" value="">
-                            <div class="error"></div>
+                            <input type="text" id="bus_name" name="bus_name" placeholder="Business Name" value="<?= $bus_name; ?>">
+                            <div class="error"><?= $bus_name_err; ?></div>
                         </div>
                         <div class="group">
                             <label for="logo">Logo<span>(Optional)</span></label>
                             <input type="file" id="logo" name="logo">
-                            <div class="error"></div>
+                            <div class="error"><?= $logo_err; ?></div>
                         </div>
                      </div>
                      <div class="row">
                         <div class="group">
                             <label for="activity">Activity</label>
-                            <input type="text" id="activity" name="activity" placeholder="Business Activity" value="">
-                            <div class="error"></div>
+                            <input type="text" id="activity" name="activity" placeholder="Business Activity" value="<?= $activity; ?>">
+                            <div class="error"><?= $activity_err; ?></div>
                         </div>
                         <div class="group">
                             <label for="contact">Contact Number</label>
                             <div class="row">
                             <input type="text" disabled value="+63">
-                            <input type="text" id="contact" name="contact" placeholder="Contact Number" maxlength="10" value="">
+                            <input type="text" id="contact" name="contact" placeholder="Contact Number" maxlength="10" value="<?= $contact; ?>">
                             </div>
+                            <div class="error"><?= $contact_err; ?></div>
                             
-                            <div class="error"></div>
                         </div>
                      </div>
                      <div class="row">
                         <div class="group">
                             <label for="address_1">House No./Unit No./Building/Street</label>
-                            <input type="text" id="address_1" name="address_1" placeholder="House No./Unit No./Building/Street" value="">
-                            <div class="error"></div>
+                            <input type="text" id="address_1" name="address_1" placeholder="House No./Unit No./Building/Street" value="<?= $address_1; ?>">
+                            <div class="error"><?= $address_1_err; ?></div>
                         </div>
                         <div class="group">
-                            <label for="barangay">Barangay</label>
-                            <select id="barangay" name="barangay">
+                            <label for="address_2">Barangay</label>
+                            <select id="address_2" name="address_2">
                             <option value="" disabled selected>Select Barangay...</option>
                             <?php
                                 $barangays = array(
@@ -320,21 +327,23 @@ function validate($data) {
                                     'Ungot',
                                     'Villa Bacolor'
                                 );
-                                foreach ($barangays as $barangay){
-                                    echo "<option value='$barangay'>$barangay</option>";
+                                foreach ($barangays as $barangay) {
+                                    echo "<option value='$barangay' " . ($address_2 === $barangay ? "selected" : "") . ">$barangay</option>";
+
                                 }
+                                
                             ?>
                             </select>
-                            <div class="error"></div>
+                            <div class="error"><?= $address_2_err; ?></div>
                         </div>
                      </div>
                 </div>
                 <div class="frame wide">
                     <p class="title">Pin Location</p>
                     <div id="map"></div>
-                    <input type="text" id="latitude" name="latitude" value="">
-                    <input type="text" id="longitude" name="longitude" value="">
-                    <div class="error"></div>
+                    <input type="text" id="latitude" name="latitude" value="<?= $latitude; ?>" hidden> 
+                    <input type="text" id="longitude" name="longitude" value="<?= $longitude; ?>" hidden>
+                    <div class="error"><?= $latlang_err; ?></div>
                     <input type="submit" value="Create Profile">
                     </form>
                 </div>
