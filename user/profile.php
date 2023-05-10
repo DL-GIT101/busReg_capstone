@@ -17,36 +17,104 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         //MIDDLE NAME
         $mname = validate($_POST["mname"]);
-        if(empty($mname)){
-            $mname = " ";
-        }elseif(!preg_match("/^[a-zA-Z- ]*$/", $mname)){
-            $mname_err = "Only Letters and Spaces are allowed";
-        }else{
-            $mname = ucwords(strtolower($mname));
+        if(!empty($mname)){
+            if(!preg_match("/^[a-zA-Z- ]*$/", $mname)){
+                $mname_err = "Only Letters and Spaces are allowed";
+            }else{
+                $mname = ucwords(strtolower($mname));
+            }
         }
         //LAST NAME
         $lname = validate($_POST["lname"]);
         if(empty($lname)){
             $lname_err = "Enter Suffix";
         } elseif(!preg_match("/^[a-zA-Z- ]*$/", $lname)){
-            $lname = "Only Letters and Spaces are allowed";
+            $lname_err = "Only Letters and Spaces are allowed";
         } else{
               $lname = ucwords(strtolower($lname));
         }
         //SUFFIX
         $suffix = validate($_POST["suffix"]);
-        if(empty($suffix)){
-            $suffix = " ";
-        }elseif(!preg_match("/^[a-zA-Z]*$/", $suffix)){
-            $suffix_err = "Only Letters are allowed";
-        }else{
-            $suffix = ucwords(strtolower($suffix));
+        if(!empty($suffix)){
+            if(!preg_match("/^[a-zA-Z]*$/", $suffix)){
+                $suffix_err = "Only Letters are allowed";
+            }else{
+                $suffix = ucwords(strtolower($suffix));
+            }
         }
-
+        //gender
         $gender = validate($_POST["gender"]);
         if(empty($gender)){
             $gender_err = "Select Gender";
         }
+        //business name
+        $bus_name = validate($_POST["bus_name"]);
+        if(empty($bus_name)){
+            $bus_name_err = "Enter Business Name";
+        }elseif(!preg_match("/^[a-zA-Z&*@\\-!#()%+?\"\/~\s]*$/", $bus_name)){
+            $bus_name_err = "Only letters, numbers, and special characters are allowed";
+        }else{
+            $bus_name = ucwords(strtolower($bus_name));
+        }
+        //logo
+        $logo = $_FILES['logo'];
+        if(!empty($logo)){
+            $name = $logo['name'];
+            $temp_name = $logo['tmp_name'];
+            $size = $logo['size'];
+            $type = $logo['type'];
+            $valid_extensions = array("jpg","peg", "png", "svg");
+            $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+            if(in_array($extension, $valid_extensions)){
+
+                if($size > 2097152){
+                    $logo_err = "File size must be less than 2MB";
+                }else{
+                    $new_name = $_SESSION["id"].".".$extension;
+                    $path = "upload/". $new_name;
+
+                    if(move_uploaded_file($temp_name,$path)){
+
+                    }else {
+                        $logo_err = "Error uploading";
+                    }
+                }
+            } else{
+                $logo_err = "Only JPG, JPEG, PNG, SVG file types are allowed";
+            }
+        }
+        //activity
+        $activity = validate($_POST["activity"]);
+        if(empty($activity)){
+            $activity_err = "Enter business Activity";
+        } elseif(!preg_match("/^[a-zA-Z]*$/", $activity)){
+            $activity_err = "Only Letters are allowed";
+        }else{
+            $activity = ucwords(strtolower($activity));
+        }
+        // contact number
+        $contact = validate($_POST['contact']);
+        if(empty($contact)){
+            $contact_err = "Enter Contact Number";
+        } elseif(!preg_match('/^[0-9]{10}$/',$contact)){
+            $contact_err = "Only Numbers are allowed";
+        }
+        // address one
+        $address_1 = $_POST['address_1'];
+        if(empty($address_1)){
+            $address_1_err = "Enter Address";
+        }elseif(!preg_match("/^[a-zA-Z0-9&*@#().\/~-]*$/", $address_1)){
+            $address_1_err = "Invalid Address";
+        } else{
+            $address_1 = ucwords(strtolower($address_1));
+        }
+        //barangay
+        $barangay = validate($_POST["barangay"]);
+        if(empty($barangay)){
+            $barangay_err = "Select Barangay";
+        }
+
     }
 function validate($data) {
     $data = trim($data);
@@ -90,7 +158,7 @@ function validate($data) {
     <div id="content">
         <div class="container">
                 
-                <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
             <div class="row">
                 <div class="frame wide">
                     <div class="intro">
@@ -142,7 +210,7 @@ function validate($data) {
                             <div class="error"></div>
                         </div>
                         <div class="group">
-                            <label for="logo">Logo</label>
+                            <label for="logo">Logo<span>(Optional)</span></label>
                             <input type="file" id="logo" name="logo">
                             <div class="error"></div>
                         </div>
@@ -155,7 +223,11 @@ function validate($data) {
                         </div>
                         <div class="group">
                             <label for="contact">Contact Number</label>
-                            <input type="text" id="contact" name="contact" placeholder="Contact Number" value="">
+                            <div class="row">
+                            <input type="text" disabled value="+63">
+                            <input type="text" id="contact" name="contact" placeholder="Contact Number" maxlength="10" value="">
+                            </div>
+                            
                             <div class="error"></div>
                         </div>
                      </div>
@@ -166,8 +238,8 @@ function validate($data) {
                             <div class="error"></div>
                         </div>
                         <div class="group">
-                            <label for="address_2">Barangay</label>
-                            <select id="address_2" name="address_2">
+                            <label for="barangay">Barangay</label>
+                            <select id="barangay" name="barangay">
                             <option value="" disabled selected>Select Barangay...</option>
                             <?php
                                 $barangays = array(
