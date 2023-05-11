@@ -3,7 +3,10 @@ session_start();
 
 require_once "../php/config.php";
 
-$fname = $fname_err = "";
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -115,7 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_gender = $gender;
             $param_bname = $bus_name;
             $param_activity = $activity;
-            $param_contact = $contact;
+            $param_contact = "+63".$contact;
             $param_address1 = $address_1;
             $param_address2 = $address_2;
             $param_latitude = $latitude;
