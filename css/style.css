@@ -257,7 +257,7 @@ form .group {
 }
 
 .item.pending {
-    background-color: rgb(255, 205, 57);
+    background-color: rgb(255, 176, 57);
 }
 
 .item.denied {
@@ -296,7 +296,7 @@ form .group {
     width: auto;
 }
 
-.none {
+.hidden {
     display: none;
 }
 
