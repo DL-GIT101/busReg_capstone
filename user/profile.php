@@ -114,7 +114,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_suffix = $suffix;
             $param_gender = $gender;
             $param_bname = $bus_name;
-           // $param_logo = $name_logo;
             $param_activity = $activity;
             $param_contact = $contact;
             $param_address1 = $address_1;
