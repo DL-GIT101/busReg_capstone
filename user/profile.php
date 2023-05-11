@@ -61,32 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }else{
             $bus_name = ucwords(strtolower($bus_name));
         }
-        //logo
-        $logo = $_FILES['logo'];
-        if(!empty($logo)){
-            $name_logo = $logo['name'];
-            $temp_name = $logo['tmp_name'];
-            $size = $logo['size'];
-            $type = $logo['type'];
-            $valid_extensions = array("jpg","peg", "png", "svg");
-            $extension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-
-            if(in_array($extension, $valid_extensions)){
-
-                if($size > 2097152){
-                    $logo_err = "File size must be less than 2MB";
-                }else{
-                    $name_logo = $_SESSION["id"]."-logo".".".$extension;
-                    $path = "upload/". $name_logo;
-
-                    
-                }
-            } else{
-                $logo_err = "Only JPG, JPEG, PNG, SVG file types are allowed";
-            }
-        }else{
-            $name_logo = null;
-        }
+        
         //activity
         $activity = validate($_POST["activity"]);
         if(empty($activity)){
@@ -107,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $address_1 = $_POST['address_1'];
         if(empty($address_1)){
             $address_1_err = "Enter Address";
-        }elseif(!preg_match("/^[a-zA-Z0-9&*@#().\/~-]*$/", $address_1)){
+        }elseif(!preg_match("/^[a-zA-Z 0-9&*@#().\/~-]*$/", $address_1)){
             $address_1_err = "Invalid Address";
         } else{
             $address_1 = ucwords(strtolower($address_1));
@@ -130,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $sql = "INSERT INTO user_profile (user_id, first_name, middle_name, last_name, suffix, gender, business_name, logo, activity, contact_number, address_1, address_2, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         if($stmt = $mysqli->prepare($sql)){
-            $stmt->bind_param("sssssssbssssdd",$param_userID, $param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_bname, $param_logo, $param_activity, $param_contact, $param_address1, $param_address2, $param_latitude, $param_longitude);
+            $stmt->bind_param("ssssssssssssdd",$param_userID, $param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_bname, $param_logo, $param_activity, $param_contact, $param_address1, $param_address2, $param_latitude, $param_longitude);
 
             $param_userID =  $_SESSION['id'];
             $param_fname = $fname;
@@ -139,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_suffix = $suffix;
             $param_gender = $gender;
             $param_bname = $bus_name;
-            $param_logo = $name_logo;
+           // $param_logo = $name_logo;
             $param_activity = $activity;
             $param_contact = $contact;
             $param_address1 = $address_1;
@@ -147,15 +122,54 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_latitude = $latitude;
             $param_longitude = $longitude;
 
-            if(move_uploaded_file($temp_name,$path)){
-                if($stmt->execute()){
-                    header("location: welcome.php");
-                }else {
-                    echo "something went wrong";
+        //logo
+        $targetDir = "upload/";
+        $fileName = basename($_FILES["logo"]["name"]);
+        $targetFilePath = $targetDir . $fileName;
+        $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+        $fileSize = $_FILES["logo"]["size"];
+           
+        if(!empty($_FILES["logo"]["name"])){
+
+        $allowTypes = array('jpg','png','jpeg','svg');
+
+        if(in_array($fileType,$allowTypes)){
+
+            if($fileSize > 2097152){
+
+                $logo_err = "File size should be 2MB or less";
+
+            }else{
+
+                if(move_uploaded_file($_FILES["logo"]["tmp_name"], $targetFilePath)){
+                    $param_logo = $fileName;
+                    if($stmt->execute()){
+                        header("location: welcome.php");
+                    } else{
+                        echo "Oops! Something went wrong. Please try again later.";
+                    }
+                }else{
+                    $logo_err = "Error uploading" . $_FILES['logo']['error'];
                 }
-            }else {
-                $logo_err = "Error uploading";
             }
+
+        }else {
+            $logo_err = "Only jpg, jpeg, png, and svg are allowed";
+        }
+
+
+        }else{
+            $param_logo = null;
+            if($stmt->execute()){
+                header("location: welcome.php");
+            } else{
+                echo "Oops! Something went wrong. Please try again later.";
+            }
+        }
+
+
+
+
 
             $stmt->close();
         }
