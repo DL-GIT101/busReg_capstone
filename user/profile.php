@@ -1,4 +1,5 @@
 <?php 
+session_start();
 
 require_once "../php/config.php";
 
@@ -23,6 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }else{
                 $mname = ucwords(strtolower($mname));
             }
+        }else{
+            $mname = '';
         }
         //LAST NAME
         $lname = validate($_POST["lname"]);
@@ -41,6 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }else{
                 $suffix = ucwords(strtolower($suffix));
             }
+        }else{
+            $suffix = '';
         }
         //gender
         $gender = validate($_POST["gender"]);
@@ -59,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //logo
         $logo = $_FILES['logo'];
         if(!empty($logo)){
-            $name = $logo['name'];
+            $name_logo = $logo['name'];
             $temp_name = $logo['tmp_name'];
             $size = $logo['size'];
             $type = $logo['type'];
@@ -71,18 +76,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if($size > 2097152){
                     $logo_err = "File size must be less than 2MB";
                 }else{
-                    $new_name = $_SESSION["id"].".".$extension;
-                    $path = "upload/". $new_name;
+                    $name_logo = $_SESSION["id"]."-logo".".".$extension;
+                    $path = "upload/". $name_logo;
 
-                    if(move_uploaded_file($temp_name,$path)){
-
-                    }else {
-                        $logo_err = "Error uploading";
-                    }
+                    
                 }
             } else{
                 $logo_err = "Only JPG, JPEG, PNG, SVG file types are allowed";
             }
+        }else{
+            $name_logo = null;
         }
         //activity
         $activity = validate($_POST["activity"]);
@@ -117,12 +120,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //location
         $latitude = validate($_POST["latitude"]);
         $longitude = validate($_POST["longitude"]);
-        if(empty($latitude) && empty($longitude)){
+        if(empty($latitude) || empty($longitude)){
             $latlang_err = "Pin the business location";
         }
 
-        
+    //insert to database
+    if(empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($gender_err) && empty($bus_name_err) && empty($logo_err) && empty($activity_err) &&empty($contact_err) && empty($address_1_err) && empty($address_2_err) && empty($latlang_err)){
+//first_name	middle_name	last_name	suffix	gender	business_name	logo	activity	contact_number	address_1	address_2	latitude	longitude
+        $sql = "INSERT INTO user_profile (user_id, first_name, middle_name, last_name, suffix, gender, business_name, logo, activity, contact_number, address_1, address_2, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+        if($stmt = $mysqli->prepare($sql)){
+            $stmt->bind_param("sssssssbssssdd",$param_userID, $param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_bname, $param_logo, $param_activity, $param_contact, $param_address1, $param_address2, $param_latitude, $param_longitude);
+
+            $param_userID =  $_SESSION['id'];
+            $param_fname = $fname;
+            $param_mname = $mname;
+            $param_lname = $lname;
+            $param_suffix = $suffix;
+            $param_gender = $gender;
+            $param_bname = $bus_name;
+            $param_logo = $name_logo;
+            $param_activity = $activity;
+            $param_contact = $contact;
+            $param_address1 = $address_1;
+            $param_address2 = $address_2;
+            $param_latitude = $latitude;
+            $param_longitude = $longitude;
+
+            if(move_uploaded_file($temp_name,$path)){
+                if($stmt->execute()){
+                    header("location: welcome.php");
+                }else {
+                    echo "something went wrong";
+                }
+            }else {
+                $logo_err = "Error uploading";
+            }
+
+            $stmt->close();
+        }
+    }
+        $mysqli->close();
     }
 function validate($data) {
     $data = trim($data);
