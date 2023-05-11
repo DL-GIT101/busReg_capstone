@@ -159,6 +159,7 @@ form input:focus, form select:focus {
 .before_input {
     width: 25px;
     margin-right: 5px;
+    margin-bottom: 0px;
     background-color: rgb(206, 206, 206);
     flex-grow: 1;
 }
