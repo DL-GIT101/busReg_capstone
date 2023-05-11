@@ -1,7 +1,6 @@
 const errors = document.querySelectorAll('form .error');
-const inputs = document.querySelectorAll('form input[type=text], form select,form input[type=file]');
+const inputs = document.querySelectorAll('form input[type=text], form select,form input[type=file], #map');
 const select = document.querySelectorAll('form select');
-console.log(inputs);
 let i = 0;
 errors.forEach(error => {
   if(error.textContent.trim().length > 0){

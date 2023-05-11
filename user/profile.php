@@ -88,8 +88,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $activity = validate($_POST["activity"]);
         if(empty($activity)){
             $activity_err = "Enter Business Activity";
-        } elseif(!preg_match("/^[a-zA-Z]*$/", $activity)){
-            $activity_err = "Only Letters are allowed";
+        } elseif(!preg_match("/^[a-zA-Z- ]*$/", $activity)){
+            $activity_err = "Only Letters and Spaces are allowed";
         }else{
             $activity = ucwords(strtolower($activity));
         }
@@ -120,6 +120,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if(empty($latitude) && empty($longitude)){
             $latlang_err = "Pin the business location";
         }
+
+        
 
     }
 function validate($data) {
