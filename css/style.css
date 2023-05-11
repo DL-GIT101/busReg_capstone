@@ -138,7 +138,7 @@ form label > span {
     margin-left: 2px;
 }
 
-form input, form select{
+form input, form select, .before_input{
     margin: 10px 0px 15px;
     padding: 10px;
     border-radius: 4px;
@@ -156,7 +156,7 @@ form input:focus, form select:focus {
     box-shadow: 0 0 7px rgb(2, 94, 231);
 }
 
-form input:disabled {
+.before_input {
     width: 25px;
     margin-right: 5px;
     background-color: rgb(206, 206, 206);

@@ -231,7 +231,7 @@ function validate($data) {
                         <div class="group">
                             <label for="contact">Contact Number</label>
                             <div class="row">
-                            <input type="text" disabled value="+63">
+                            <div class="before_input">+63</div>
                             <input type="text" id="contact" name="contact" placeholder="Contact Number" maxlength="10" value="<?= $contact; ?>">
                             </div>
                             <div class="error"><?= $contact_err; ?></div>
