@@ -264,12 +264,8 @@ form .group {
     background-color: rgb(227, 93, 106);
 }
 
-.item.expired {
-    background-color: rgb(206, 212, 218);
-}
-
 .item.none {
-    background-color: inherit;
+    background-color: rgb(206, 212, 218);
 }
 
 .item.services {
