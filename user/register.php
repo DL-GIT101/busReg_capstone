@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if(empty($email_err) && empty($pword_error) && empty($cPassword_error)){
 
-        $sql = "SELECT MAX(id) as max_id FROM users";
+        $sql = "SELECT id as max_id FROM users ORDER BY id DESC LIMIT 1";
         
         $stmt = $mysqli->prepare($sql);
 
@@ -106,11 +106,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         if($last_id){
-            $id_suffix = substr($last_id, 10) + 1;
+            $date = substr($last_id, 2, -3);
+            $today = date('Ymd');
+            if($date === $today){
+                $id_suffix = substr($last_id, 10) + 1;
+            }else {
+                $id_suffix = 0;
+            }
+            
         }
 
         $id_suffix = str_pad($id_suffix, 3, '0', STR_PAD_LEFT);
-        $id_prefix = 'US' . date('Ymd');
+        $id_prefix = 'US' . $today;
 
         $id = $id_prefix . $id_suffix; 
     }    
