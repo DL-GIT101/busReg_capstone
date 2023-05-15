@@ -21,7 +21,11 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
             if($result->num_rows == 1){
                 $row = $result->fetch_array(MYSQLI_ASSOC);
 
-                $logo_path = "upload/".$row["logo"];
+                if (!empty($row["logo"])) {
+                    $logo_path = "upload/".$row["logo"];
+                } else {
+                    $logo_path = "upload/No_image_available.svg";
+                }
                 $business_name = $row["business_name"];
                 $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"];
                 $business_activity = $row["activity"];
