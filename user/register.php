@@ -137,7 +137,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                     </div>';
             } else{
-                echo "error in insertion";
+            echo    '<div id="myModal" class="modal">
+                        <div class="modal-content error">
+                            <p class="title">Registration Error</p>
+                            <p class="sentence">Try again later.</p> 
+                            <a href="../index.php">OK</a>
+                        </div>
+                    </div>';
             }
 
             $stmt->close();
