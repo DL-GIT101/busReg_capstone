@@ -7,9 +7,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
-
-
-$sql = "SELECT * FROM user_profile WHERE user_id = ?";
+// update the the table. and check for logic the variable submitted might not be updated
+    $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
     if($stmt = $mysqli->prepare($sql)){
         $stmt->bind_param("s",$param_id);
@@ -18,30 +17,28 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
         if($stmt->execute()){
             $result = $stmt->get_result();
-
             if($result->num_rows == 1){
-            /*    $row = $result->fetch_array(MYSQLI_ASSOC);
+                $hidden = "hidden";
+                $row = $result->fetch_array(MYSQLI_ASSOC);
 
-                if (!empty($row["logo"])) {
-                    $logo_path = "upload/".$row["logo"];
-                } else {
-                    $logo_path = "upload/No_image_available.svg";
-                }
-                $business_name = $row["business_name"];
-                $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"];
-                $business_activity = $row["activity"];
-                $permit_status = $row["permit_status"];
+                $fname = $row["first_name"];
+                $mname = $row["middle_name"];
+                $lname = $row["last_name"];
+                $suffix = $row["suffix"];
+                $gender = $row["gender"];
+
+                $bus_name = $row["business_name"];
+                $activity = $row["activity"];
+                $contact = substr($row["contact_number"],3);
+                $address_1 = $row["address_1"];
+                $address_2 = $row["address_2"];
                 $latitude = $row["latitude"];
                 $longitude = $row["longitude"]; 
-*/
+                $submit_btn = "Update Profile";
+
             }else {
-                echo    '<div id="notif_modal" class="modal">
-                            <div class="modal-content">
-                                <p class="title">Create Profile</p>
-                                <p class="sentence">Please create your profile before accessing our services.</p> 
-                                <button id="modal_close_btn">CLOSE</button>
-                            </div>
-                        </div>';
+                $hidden = "";
+                $submit_btn = "Create Profile";
             }
         }else{
             echo "Oops! Something went wrong. Please try again later";
@@ -50,8 +47,8 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
     }
 
     $stmt->close();
-    
-    $mysqli->close();
+
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -218,6 +215,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
         $mysqli->close();
     }
+
 function validate($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -245,6 +243,13 @@ function validate($data) {
     <script src="../js/modal.js" defer></script>
 </head>
 <body>
+    <div id="notif_modal" class="modal <?= $hidden ?>">
+        <div class="modal-content">
+            <p class="title">Create Profile</p>
+            <p class="sentence">Please create your profile before accessing our services.</p> 
+            <button id="modal_close_btn">CLOSE</button>
+        </div>
+    </div>
 <nav id="navbar">
        <div id="logo">
         <a href="../index.php">
@@ -441,7 +446,7 @@ function validate($data) {
                     <input type="text" id="latitude" name="latitude" value="<?= $latitude; ?>" hidden> 
                     <input type="text" id="longitude" name="longitude" value="<?= $longitude; ?>" hidden>
                     <div class="error"><?= $latlang_err; ?></div>
-                    <input type="submit" value="Create Profile">
+                    <input type="submit" value="<?= $submit_btn; ?>">
                     </form>
                 </div>
             </div>
