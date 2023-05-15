@@ -8,6 +8,51 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     exit;
 }
 
+
+$sql = "SELECT * FROM user_profile WHERE user_id = ?";
+
+    if($stmt = $mysqli->prepare($sql)){
+        $stmt->bind_param("s",$param_id);
+
+        $param_id = validate($_SESSION['id']);
+
+        if($stmt->execute()){
+            $result = $stmt->get_result();
+
+            if($result->num_rows == 1){
+            /*    $row = $result->fetch_array(MYSQLI_ASSOC);
+
+                if (!empty($row["logo"])) {
+                    $logo_path = "upload/".$row["logo"];
+                } else {
+                    $logo_path = "upload/No_image_available.svg";
+                }
+                $business_name = $row["business_name"];
+                $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"];
+                $business_activity = $row["activity"];
+                $permit_status = $row["permit_status"];
+                $latitude = $row["latitude"];
+                $longitude = $row["longitude"]; 
+*/
+            }else {
+                echo    '<div id="notif_modal" class="modal">
+                            <div class="modal-content">
+                                <p class="title">Create Profile</p>
+                                <p class="sentence">Please create your profile before accessing our services.</p> 
+                                <button id="modal_close_btn">CLOSE</button>
+                            </div>
+                        </div>';
+            }
+        }else{
+            echo "Oops! Something went wrong. Please try again later";
+        }
+
+    }
+
+    $stmt->close();
+    
+    $mysqli->close();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         //FIRST NAME
@@ -104,7 +149,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     //insert to database
     if(empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($gender_err) && empty($bus_name_err) && empty($logo_err) && empty($activity_err) &&empty($contact_err) && empty($address_1_err) && empty($address_2_err) && empty($latlang_err)){
-//first_name	middle_name	last_name	suffix	gender	business_name	logo	activity	contact_number	address_1	address_2	latitude	longitude
+
         $sql = "INSERT INTO user_profile (user_id, first_name, middle_name, last_name, suffix, gender, business_name, logo, activity, contact_number, address_1, address_2, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         if($stmt = $mysqli->prepare($sql)){
@@ -159,7 +204,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $logo_err = "Only jpg, jpeg, png, and svg are allowed";
         }
 
-
         }else{
             $param_logo = null;
             if($stmt->execute()){
@@ -168,10 +212,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "Oops! Something went wrong. Please try again later.";
             }
         }
-
-
-
-
 
             $stmt->close();
         }
@@ -202,6 +242,7 @@ function validate($data) {
     <script src="../js/map.js" defer></script>
     <script src="../js/pinLocation.js" defer></script>
     <script src="../js/form.js" defer></script>
+    <script src="../js/modal.js" defer></script>
 </head>
 <body>
 <nav id="navbar">
@@ -408,7 +449,3 @@ function validate($data) {
     </div>
 </body>
 </html>
-
-<!-- owner  - [name - gender ] 
-    business_profile - [name - activity - logo -  contact_no - add_line_1 - add_line_2 - pin]
-     ->
