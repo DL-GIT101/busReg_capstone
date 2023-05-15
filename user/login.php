@@ -109,7 +109,7 @@ function validate($data) {
                 <p class="title">Welcome</p>
                 <p class="sentence">Sign in to your account to continue</p>
             </div>
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            <form autocomplete="off" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 
                 <div class="alert"><?php echo $login_err; ?></div>
                 <label for="email">Email</label>
