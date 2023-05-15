@@ -128,7 +128,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_pword = password_hash($password, PASSWORD_DEFAULT);
 
             if($stmt->execute()){
-                header("location: login.php");
+            echo    '<div id="myModal" class="modal">
+                        <div class="modal-content success">
+                            <p class="title">Registration Successful</p>
+                            <p class="sentence">Your account has been successfully created.</p>
+                            <p class="sentence">You can now log in using your credentials.</p>    
+                            <a href="login.php">Go to Login</a>
+                        </div>
+                    </div>';
             } else{
                 echo "error in insertion";
             }
@@ -168,7 +175,6 @@ function validate($data) {
  
         <div id="user">
              <a href="login.php">Login</a>
-
         </div>
      </nav>
      
@@ -178,7 +184,7 @@ function validate($data) {
                 <p class="title">Create an Account</p>
                 <p class="sentence">Please enter your email and password to create an account.</p>
             </div>
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            <form autocomplete="off" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email Address" value=<?php echo $email; ?>>
                 <div class="error"><?php echo $email_err; ?></div>
