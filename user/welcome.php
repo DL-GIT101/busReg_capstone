@@ -89,6 +89,7 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
     <div id="content">
         <div class="container flex-row"> 
+            
             <div id="profile">
                  <div class="frame" >
                     <p class="sentence">Business Profile</p>
@@ -113,11 +114,8 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
             <div class="service">
                 <div class="frame">
                     <p class="title">Services</p>
-                    <a href="" class="item title services">
+                    <a href="permit.php" class="item title services">
                       <span class="emphasize">New</span> Business Permit
-                    </a>
-                    <a href="" class="item title services">
-                      <span class="emphasize">Renew</span> Business Permit
                     </a>
                 </div>
                 <div class="frame wide">
@@ -128,6 +126,7 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </body>
