@@ -194,6 +194,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $targetFilePath = $targetDir . $fileName;
         $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
         $fileSize = $_FILES["logo"]["size"];
+        //new name
+        $new_fileName = $_SESSION['id'] . "_LOGO_". uniqid() ."_". $fileName;
+        $targetFilePath = $targetDir . $new_fileName;
            
         if(!empty($_FILES["logo"]["name"])){
 
@@ -209,7 +212,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if(move_uploaded_file($_FILES["logo"]["tmp_name"], $targetFilePath)){
 
-                    $param_logo = $fileName;
+                    $param_logo = $new_fileName;
 
                     if(!empty($logo)){
                         unlink($logo);
