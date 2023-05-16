@@ -281,15 +281,15 @@ function validate($data) {
     </div>
     <div id="myModal" class="modal <?= $created ?>">
         <div class="modal-content success">
-            <p class="title">Profile Created Successful</p>
-            <p class="sentence">Your account has now a profile.</p>
-            <p class="sentence">You can now start using our services.</p>    
+            <p class="title">Profile Created/Updated Successful</p>
+            <p class="sentence">Information has been added to you profile</p>
+            <p class="sentence">Profile is now complete</p>    
             <a href="welcome.php">Go to Dashboard</a>
         </div>
     </div>
     <div id="myModal" class="modal <?= $created_error ?>">
         <div class="modal-content error">
-            <p class="title">Profile Creation Error</p>
+            <p class="title">Profile Creation/Update Error</p>
             <p class="sentence">Try again later.</p> 
             <a href="../index.php">OK</a>
         </div>
