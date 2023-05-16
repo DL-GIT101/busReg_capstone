@@ -92,7 +92,9 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
             <div id="profile">
                  <div class="frame" >
                     <p class="sentence">Business Profile</p>
-                    <img src="<?= $logo_path ?>" alt="Logo">
+                    <div class="logo_container"> 
+                        <img src="<?= $logo_path ?>" alt="Logo">
+                    </div>
                     <div>
                         <p class="title"><?= $business_name ?></p>
                         <p class="sentence"><?= $name ?></p> 
