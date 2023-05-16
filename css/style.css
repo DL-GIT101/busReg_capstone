@@ -247,6 +247,7 @@ form .group {
 .frame > .logo_container {
     display: flex;
     align-items: center;
+    justify-content: center;
     width: 150px;
     height: 150px;
     align-self: center;
