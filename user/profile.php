@@ -7,7 +7,9 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
-// update the the table. and check for logic the variable submitted might not be updated
+$created = $created_error = "hidden";
+
+if($created === "hidden"){
     $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
     if($stmt = $mysqli->prepare($sql)){
@@ -15,7 +17,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
         $param_id = validate($_SESSION['id']);
 
-        if($stmt->execute()){
+        if($stmt->execute()){ 
             $result = $stmt->get_result();
             if($result->num_rows == 1){
 
@@ -55,11 +57,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     }
 
     $stmt->close();
-
-
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+        $hidden = "hidden";
         //FIRST NAME
         $fname = validate($_POST["fname"]);
         if(empty($fname)){
@@ -212,9 +213,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                     
                     if($stmt->execute()){
-                        header("location: welcome.php");
+                        $created = "";
                     } else{
-                        echo "Oops! Something went wrong. Please try again later.";
+                        $created_error = "";
                     }
                 }else{
                     $logo_err = "Error uploading" . $_FILES['logo']['error'];
@@ -231,9 +232,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             $param_logo = null;
             if($stmt->execute()){
-                header("location: welcome.php");
+                $created = "";
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                $created_error = "";
             }
         }
 
@@ -270,6 +271,7 @@ function validate($data) {
     <script src="../js/modal.js" defer></script>
 </head>
 <body>
+    <!--modals -->
     <div id="notif_modal" class="modal <?= $hidden ?>">
         <div class="modal-content">
             <p class="title">Create Profile</p>
@@ -277,6 +279,22 @@ function validate($data) {
             <button id="modal_close_btn">CLOSE</button>
         </div>
     </div>
+    <div id="myModal" class="modal <?= $created ?>">
+        <div class="modal-content success">
+            <p class="title">Profile Created Successful</p>
+            <p class="sentence">Your account has now a profile.</p>
+            <p class="sentence">You can now start using our services.</p>    
+            <a href="welcome.php">Go to Dashboard</a>
+        </div>
+    </div>
+    <div id="myModal" class="modal <?= $created_error ?>">
+        <div class="modal-content error">
+            <p class="title">Profile Creation Error</p>
+            <p class="sentence">Try again later.</p> 
+            <a href="../index.php">OK</a>
+        </div>
+    </div>
+
 <nav id="navbar">
        <div id="logo">
         <a href="../index.php">
