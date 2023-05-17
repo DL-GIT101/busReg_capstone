@@ -135,6 +135,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_pword = password_hash($password, PASSWORD_DEFAULT);
 
             if($stmt->execute()){
+                $directory = 'upload/'. $id;
+                mkdir($directory, 0777, true);
+                
             echo    '<div id="myModal" class="modal">
                         <div class="modal-content success">
                             <p class="title">Registration Successful</p>
