@@ -39,114 +39,36 @@
                 <th>Status</th>
                 <th>File Upload</th>
             </tr>
-            <tr>
-                <td>Barangay Clearance for business</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="barangay_clearance" name="barangay_clearance">
-                </td>
-            </tr>
-            <tr>
-                <td>DTI Certificate of Registration</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="dti" name="dti">
-                </td>
-            </tr>
-            <tr>
-                <td>On the Place of Business</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="place" name="place">
-                </td>
-            </tr>
-            <tr>
-                <td>Community Tax Certificate</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="community_tax" name="community_tax">
-                </td>
-            </tr>
-            <tr>
-                <td>Certificate of Zoning Compliance</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="zoning_compliance" name="zoning_compliance">
-                </td>
-            </tr>
-            <tr>
-                <td>Valid Fire Safety Inspection Certificate/Official Receipt</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="fire_saafety" name="fire_saafety">
-                </td>
-            </tr>
-            <tr>
-                <td>Sanitary Permit</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="sanitary_permit" name="sanitary_permit">
-                </td>
-            </tr>
-            <tr>
-                <td>Environmental Compliance Clearance</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="environment_compliance" name="environment_compliance">
-                </td>
-            </tr>
-            <tr>
-                <td>Latest 2X2 picture</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="twoByTwo" name="twoByTwo">
-                </td>
-            </tr>
-            <tr>
-                <td>Barangay Clearance for business</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="barangay_clearance" name="barangay_clearance">
-                </td>
-            </tr>
-            <tr>
-                <td>Tax Order of Payment</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="tax_order" name="tax_order">
-                </td>
-            </tr>
-            <tr>
-                <td>Tax Order of Payment Official Receipt</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <input type="file" id="tax_order_or" name="tax_order_or">
-                </td>
-            </tr>
+            <?php 
+                $requirements_names = array(
+                    'Barangay Clearance for business',
+                    'DTI Certificate of Registration',
+                    'On the Place of Business',
+                    'Community Tax Certificate',
+                    'Certificate of Zoning Compliance',
+                    'Business Inspection Clearance',
+                    'Valid Fire Safety Inspection Certificate/Official Receipt',
+                    'Sanitary Permit',
+                    'Environmental Compliance Clearance',
+                    'Latest 2x2 picture',
+                    'Tax Order of Payment',
+                    'Tax Order of Payment Official Receipt'
+                );
+                $count = 1;
+                foreach($requirements_names as $name){
+                    echo '  <tr>
+                                <td>'.$name.'</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
+                                </td>
+                            </tr>';
+                $count++;
+                }
+            ?>
+            
         </table>
         <input type="submit" value="Upload">
     </form>       
