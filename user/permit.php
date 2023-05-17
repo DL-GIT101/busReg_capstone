@@ -1,3 +1,42 @@
+<?php 
+    session_start();
+
+    if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+        header("location: login.php");
+        exit;
+    }
+//edit this to cater needs, remove array for error message and stick to old way lol use count
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $allowedExtensions = array('jpg', 'jpeg', 'png');
+    $errorMessages = array();
+
+    $count = $_POST['count'];
+
+    for ($i = 1; $i <= $count; $i++) {
+        $name = $_FILES['requirement_' . $i]['name'];
+        $fileSize = $_FILES['requirement_' . $i]['size'];
+        $fileTmpPath = $_FILES['requirement_' . $i]['tmp_name'];
+        $fileExtension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+
+        if ($_FILES['requirement_' . $i]['error'] === UPLOAD_ERR_OK) {
+            if (in_array($fileExtension, $allowedExtensions)) {
+                if ($fileSize <= 2097152) { // Maximum file size of 2MB
+                    // File is valid, do further processing
+                    move_uploaded_file($fileTmpPath, 'uploads/' . $name);
+                } else {
+                    $errorMessages[] = 'File size should be 2MB or less.';
+                }
+            } else {
+                $errorMessages[] = 'Only JPG, JPEG, and PNG files are allowed.';
+            }
+        } else {
+            $errorMessages[] = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
+        }
+    }
+
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
