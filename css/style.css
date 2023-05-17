@@ -389,3 +389,31 @@ form .group {
 .modal-content.error > a:hover {
     background-color: rgb(151, 36, 48);
 }
+
+table {
+    border-collapse: collapse;
+    border-radius: 8px;
+}
+
+table, td, th{
+    border: 1px solid rgb(29, 29, 31);
+}
+table th{
+    text-align: left;
+    background-color: rgb(255, 204, 0);
+    color: rgb(245, 245, 247);
+}
+
+table td {
+    font-size: 14px;
+}
+
+table th, table td {
+    padding: 10px;
+}
+
+table input[type=file] {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}

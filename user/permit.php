@@ -31,11 +31,124 @@
         <p class="sentence">Please upload the photos of the following requirements</p>
     </div>
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
-        <label for="logo">Logo</label>
-        <input type="file" id="logo" name="logo">
-        <div class="error"><?= $logo_err; ?></div>
-
-        <input type="submit" value="Upload Files">
+        <table>
+            <tr>
+                <th>Requirement</th>
+                <th>Uploaded File</th>
+                <th>Delete</th>
+                <th>Status</th>
+                <th>File Upload</th>
+            </tr>
+            <tr>
+                <td>Barangay Clearance for business</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="barangay_clearance" name="barangay_clearance">
+                </td>
+            </tr>
+            <tr>
+                <td>DTI Certificate of Registration</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="dti" name="dti">
+                </td>
+            </tr>
+            <tr>
+                <td>On the Place of Business</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="place" name="place">
+                </td>
+            </tr>
+            <tr>
+                <td>Community Tax Certificate</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="community_tax" name="community_tax">
+                </td>
+            </tr>
+            <tr>
+                <td>Certificate of Zoning Compliance</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="zoning_compliance" name="zoning_compliance">
+                </td>
+            </tr>
+            <tr>
+                <td>Valid Fire Safety Inspection Certificate/Official Receipt</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="fire_saafety" name="fire_saafety">
+                </td>
+            </tr>
+            <tr>
+                <td>Sanitary Permit</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="sanitary_permit" name="sanitary_permit">
+                </td>
+            </tr>
+            <tr>
+                <td>Environmental Compliance Clearance</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="environment_compliance" name="environment_compliance">
+                </td>
+            </tr>
+            <tr>
+                <td>Latest 2X2 picture</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="twoByTwo" name="twoByTwo">
+                </td>
+            </tr>
+            <tr>
+                <td>Barangay Clearance for business</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="barangay_clearance" name="barangay_clearance">
+                </td>
+            </tr>
+            <tr>
+                <td>Tax Order of Payment</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="tax_order" name="tax_order">
+                </td>
+            </tr>
+            <tr>
+                <td>Tax Order of Payment Official Receipt</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="file" id="tax_order_or" name="tax_order_or">
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="Upload">
     </form>       
 
     </div>
