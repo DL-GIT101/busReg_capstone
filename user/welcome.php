@@ -22,7 +22,7 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 $row = $result->fetch_array(MYSQLI_ASSOC);
 
                 if (!empty($row["logo"])) {
-                    $logo_path = "upload/".$row["logo"];
+                    $logo_path = "upload/".$_SESSION['id']."/".$row["logo"];
                 } else {
                     $logo_path = "upload/No_image_available.svg";
                 }

@@ -37,7 +37,7 @@ if($created === "hidden"){
                 if($row["logo"] == null){
                     $logo = null;
                 }else{
-                    $logo = "upload/".$row["logo"];
+                    $logo = "upload/".$_SESSION['id']."/".$row["logo"];
                 }
                 $activity = $row["activity"];
                 $contact = substr($row["contact_number"],3);
@@ -189,13 +189,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_longitude = $longitude;
 
         //logo
-        $targetDir = "upload/";
+        $targetDir = "upload/".$_SESSION['id']."/";
         $fileName = basename($_FILES["logo"]["name"]);
         $targetFilePath = $targetDir . $fileName;
         $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
         $fileSize = $_FILES["logo"]["size"];
         //new name
-        $new_fileName = $_SESSION['id'] . "_LOGO_". uniqid() ."_". $fileName;
+        $new_fileName = "LOGO_". uniqid() ."_". $fileName;
         $targetFilePath = $targetDir . $new_fileName;
            
         if(!empty($_FILES["logo"]["name"])){
