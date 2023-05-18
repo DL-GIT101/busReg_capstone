@@ -12,7 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $file_inputs = count($_FILES);
 
-    
+    $requirements = array();
+    $status = array();
     
     for ($i = 1; $i <= $file_inputs; $i++) {
 
@@ -32,10 +33,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (in_array($fileType, $allowTypes)) {
                     if ($fileSize <= 2097152) {
                        if(move_uploaded_file($_FILES['requirement_' . $i]['tmp_name'], $targetFilePath)){
-                            echo "success";
+                            array_push($requirements,$new_fileName);
+                            array_push($status,'Uploaded');
                         }else{
-                        //    $$errorMsg 
-                           echo 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
+                            $$errorMsg  = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
                         }
                     } else {
                         $$errorMsg = 'File size should be 2MB or less.';
@@ -47,8 +48,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $$errorMsg = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
             }
         } else {
-            //variable to be put on table 
-            echo $i;
+            array_push($requirements,null);
+            array_push($status,'-');
         }
     }
 }
