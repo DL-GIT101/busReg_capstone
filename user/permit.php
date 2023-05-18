@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $requirements = array();
     $status = array();
+    $error_count = 0;
     
     for ($i = 1; $i <= $file_inputs; $i++) {
 
@@ -37,21 +38,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             array_push($status,'Uploaded');
                         }else{
                             $$errorMsg  = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
+                            $error_count++;
                         }
                     } else {
                         $$errorMsg = 'File size should be 2MB or less.';
+                        $error_count++;
                     }
                 } else {
                     $$errorMsg = 'Only JPG, JPEG, PNG and PDF files are allowed.';
+                    $error_count++;
                 } 
             } else {
                 $$errorMsg = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
+                $error_count++;
             }
         } else {
             array_push($requirements,null);
             array_push($status,'-');
         }
     }
+
+    if($error_count === 0){
+        //insert data  dont forget to serialized the array and bind with s
+    }else{
+        echo 'has error';
+    }
+
 }
 ?>
 <!DOCTYPE html>
