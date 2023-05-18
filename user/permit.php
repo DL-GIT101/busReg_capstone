@@ -5,36 +5,52 @@
         header("location: login.php");
         exit;
     }
-//edit this to cater needs, remove array for error message and stick to old way lol use count
+   
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    $allowTypes = array('jpg', 'jpeg', 'png', 'pdf');
 
-    $allowedExtensions = array('jpg', 'jpeg', 'png');
-    $errorMessages = array();
+    $file_inputs = count($_FILES);
 
-    $count = $_POST['count'];
+    
+    
+    for ($i = 1; $i <= $file_inputs; $i++) {
 
-    for ($i = 1; $i <= $count; $i++) {
-        $name = $_FILES['requirement_' . $i]['name'];
+        $errorMsg = 'errorMsg_' . $i;
+        $targetDir = "upload/".$_SESSION['id']."/";
+
+        $fileName = basename($_FILES['requirement_' . $i]['name']);
+        $targetFilePath = $targetDir. $fileName;
         $fileSize = $_FILES['requirement_' . $i]['size'];
-        $fileTmpPath = $_FILES['requirement_' . $i]['tmp_name'];
-        $fileExtension = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+        $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-        if ($_FILES['requirement_' . $i]['error'] === UPLOAD_ERR_OK) {
-            if (in_array($fileExtension, $allowedExtensions)) {
-                if ($fileSize <= 2097152) { // Maximum file size of 2MB
-                    // File is valid, do further processing
-                    move_uploaded_file($fileTmpPath, 'uploads/' . $name);
+        $new_fileName = 'requirement_' . $i.'_'. uniqid() ."_". $fileName;
+        $targetFilePath = $targetDir . $new_fileName;
+
+        if(!empty($_FILES['requirement_' . $i]['name'])){
+            if ($_FILES['requirement_' . $i]['error'] === UPLOAD_ERR_OK){
+                if (in_array($fileType, $allowTypes)) {
+                    if ($fileSize <= 2097152) {
+                       if(move_uploaded_file($_FILES['requirement_' . $i]['tmp_name'], $targetFilePath)){
+                            echo "success";
+                        }else{
+                        //    $$errorMsg 
+                           echo 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
+                        }
+                    } else {
+                        $$errorMsg = 'File size should be 2MB or less.';
+                    }
                 } else {
-                    $errorMessages[] = 'File size should be 2MB or less.';
-                }
+                    $$errorMsg = 'Only JPG, JPEG, PNG and PDF files are allowed.';
+                } 
             } else {
-                $errorMessages[] = 'Only JPG, JPEG, and PNG files are allowed.';
+                $$errorMsg = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
             }
         } else {
-            $errorMessages[] = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
+            //variable to be put on table 
+            echo $i;
         }
     }
-
 }
 ?>
 <!DOCTYPE html>
@@ -94,14 +110,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'Tax Order of Payment Official Receipt'
                 );
                 $count = 1;
-                foreach($requirements_names as $name){
+                foreach($requirements_names as $fileName){
+                        $errorMsg = 'errorMsg_' . $count;
                     echo '  <tr>
-                                <td>'.$name.'</td>
+                                <td>'.$fileName.'</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td>
                                     <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
+                                    <div class="error">'.${$errorMsg}.'</div>
                                 </td>
                             </tr>';
                 $count++;
