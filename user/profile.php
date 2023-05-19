@@ -173,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             
 
-            $param_userID =  $_SESSION['id'];
+            $param_id = validate($_SESSION['id']);
             $param_fname = $fname;
             $param_mname = $mname;
             $param_lname = $lname;
