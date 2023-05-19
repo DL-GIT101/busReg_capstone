@@ -92,9 +92,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if($stmt = $mysqli->prepare($sql)){
 
-            $stmt->bind_param('sss', $param_userID, $param_req, $param_Stat);
+            $stmt->bind_param('sss', $param_id, $param_req, $param_Stat);
 
-            $$param_id = validate($_SESSION['id']);
+            $param_id = validate($_SESSION['id']);
             $param_req = $serialized_requirements;
             $param_Stat = $serialized_status;
 
