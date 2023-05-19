@@ -9,7 +9,6 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 }
 $created = $created_error = "hidden";
 
-if($created === "hidden"){
     $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
     if($stmt = $mysqli->prepare($sql)){
@@ -58,7 +57,7 @@ if($created === "hidden"){
     }
 
     $stmt->close();
-}
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $hidden = "hidden";
