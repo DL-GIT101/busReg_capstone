@@ -420,3 +420,30 @@ table input[type=file] {
 .space-between{
     justify-content: space-between;
 }
+
+.delete_file {
+    background-color: rgb(220, 53, 69);
+    border: none;
+    border-radius: 4px;
+    color: rgb(245, 245, 247);
+    font-size: 14px;
+    font-family: 'Noto Serif', serif;
+    cursor: pointer;
+}
+
+.delete_file:hover {
+    background-color: rgb(141, 32, 43);
+}
+
+td >.view_file {
+    background-color: rgb(0, 59, 179);
+    text-decoration: none;
+    border: none;
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: rgb(245, 245, 247);
+}
+
+td >.view_file:hover {
+    background-color: rgb(0, 39, 117);
+}
