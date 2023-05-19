@@ -5,7 +5,7 @@
         header("location: login.php");
         exit;
     }
-    
+    $success = $failed = "hidden";
     $sql = "SELECT * FROM new_permit WHERE user_id = ?";
    
     if($stmt = $mysqli->prepare($sql)){
@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if($error_count === 0){
-        //insert data  dont forget to serialized the array and bind with s
+      
         $serialized_requirements = serialize($requirements);
         $serialized_status = serialize($status);
         $sql = "INSERT INTO new_permit (user_id, requirements, status) VALUES (?, ?, ?)";
@@ -99,22 +99,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_Stat = $serialized_status;
 
             if($stmt->execute()){
-                echo    '<div id="myModal" class="modal">
-                            <div class="modal-content success">
-                                <p class="title">Upload Successful</p>
-                                <p class="sentence">All Uploaded files will be reviewed</p>  
-                                <a href="permit.php">OK</a>
-                            </div>
-                        </div>';
+               $success = "";
             }else{
-                echo    '<div id="myModal" class="modal">
-                            <div class="modal-content error">
-                                <p class="title">Upload Error</p>
-                                <p class="sentence">Try again later.</p> 
-                                <a href="permit.php">OK</a>
-                            </div>
-                        </div>';
-                }
+                $failed = "";
+            }
             $stmt->close();
         }
 
@@ -136,9 +124,36 @@ function validate($data) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/form.js" defer></script>
+    <script src="../js/modal.js" defer></script>
     <title>New Permit</title>
 </head>
 <body>
+    <!-- upload success -->
+<div class="modal <?= $success ?>">
+    <div class="modal-content success">
+            <p class="title">Upload Successful</p>
+            <p class="sentence">All Uploaded files will be reviewed</p>  
+            <a href="permit.php">OK</a>
+    </div>
+</div>
+<!-- upload failed -->
+<div class="modal <?= $failed ?>">
+    <div class="modal-content error">
+        <p class="title">Upload Error</p>
+        <p class="sentence">Try again later.</p> 
+        <a href="permit.php">OK</a>
+    </div>
+</div>
+<!-- file delete -->
+<div id="notif_modal" class="modal hidden">
+        <div class="modal-content error">
+            <div class="row space-between"><p class="title">Delete File</p>
+            <span id="modal_close_btn">&times;</span></div>
+            <p class="sentence">Are you sure you want to delete this file? This action cannot be undone.</p> 
+            <a href="permit.php">OK</a>
+        </div>
+</div>
 
 <nav id="navbar">
        <div id="logo">
@@ -195,8 +210,8 @@ function validate($data) {
                       echo '<td></td>
                             <td></td>';
                     }else{
-                        echo    '<td><a target="_blank" href="upload/'.$_SESSION['id'].'/'.$requirements[$count-1].'">View</a></td>
-                        <td></td>';
+                        echo    '<td><a class="view_file" target="_blank" href="upload/'.$_SESSION['id'].'/'.$requirements[$count-1].'">View</a></td>
+                        <td><button type="button" class="delete_file">Delete</td>';
                     }
                     
                     echo        '<td>'.$status[$count-1].'</td>
