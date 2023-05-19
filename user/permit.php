@@ -1,6 +1,6 @@
 <?php 
     session_start();
-
+    require_once "../php/config.php";
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         header("location: login.php");
         exit;
@@ -60,10 +60,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if($error_count === 0){
         //insert data  dont forget to serialized the array and bind with s
-    }else{
-        echo 'has error';
-    }
+        $serialized_requirements = serialize($requirements);
+        $serialized_status = serialize($status);
+        $sql = "INSERT INTO new_permit (user_id, requirements, status) VALUES (?, ?, ?)";
 
+        if($stmt = $mysqli->prepare($sql)){
+
+            $stmt->bind_param('sss', $param_userID, $param_req, $param_Stat);
+
+            $param_userID =  $_SESSION['id'];
+            $param_req = $serialized_requirements;
+            $param_Stat = $serialized_status;
+
+            if($stmt->execute()){
+                echo    '<div id="myModal" class="modal">
+                            <div class="modal-content success">
+                                <p class="title">Upload Successful</p>
+                                <p class="sentence">All Uploaded files will be reviewed</p>  
+                                <a href="permit.php">OK</a>
+                            </div>
+                        </div>';
+            }else{
+                echo    '<div id="myModal" class="modal">
+                            <div class="modal-content error">
+                                <p class="title">Upload Error</p>
+                                <p class="sentence">Try again later.</p> 
+                                <a href="permit.php">OK</a>
+                            </div>
+                        </div>';
+                }
+            $stmt->close();
+        }
+
+    }
+    $mysqli->close();
 }
 ?>
 <!DOCTYPE html>
