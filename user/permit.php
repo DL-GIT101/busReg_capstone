@@ -5,6 +5,32 @@
         header("location: login.php");
         exit;
     }
+    
+    $sql = "SELECT * FROM new_permit WHERE user_id = ?";
+   
+    if($stmt = $mysqli->prepare($sql)){
+        
+        $stmt->bind_param("s",$param_id);
+        
+        $param_id = validate($_SESSION['id']);
+       
+        if($stmt->execute()){
+            $result = $stmt->get_result();
+            if($result->num_rows == 1){
+           
+               $row = $result->fetch_array(MYSQLI_ASSOC);
+
+                $serialized_requirements = $row["requirements"];
+                $serialized_status = $row["status"];
+                $requirements = unserialize($serialized_requirements);
+                $status = unserialize($serialized_status);
+                
+            }
+        }else {
+            echo "error retrieving data";
+        }
+    }
+    $stmt->close();
    
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
@@ -68,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $stmt->bind_param('sss', $param_userID, $param_req, $param_Stat);
 
-            $param_userID =  $_SESSION['id'];
+            $$param_id = validate($_SESSION['id']);
             $param_req = $serialized_requirements;
             $param_Stat = $serialized_status;
 
@@ -94,6 +120,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     }
     $mysqli->close();
+}
+
+function validate($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+        return $data;
 }
 ?>
 <!DOCTYPE html>
@@ -157,9 +190,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $errorMsg = 'errorMsg_' . $count;
                     echo '  <tr>
                                 <td>'.$fileName.'</td>
+                                <td>'.$requirements[$count-1].'</td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>'.$status[$count-1].'</td>
                                 <td>
                                     <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
                                     <div class="error">'.${$errorMsg}.'</div>
