@@ -447,3 +447,7 @@ td >.view_file {
 td >.view_file:hover {
     background-color: rgb(0, 39, 117);
 }
+
+.row.space-between > span {
+    cursor: pointer;
+}
