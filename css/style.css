@@ -401,7 +401,6 @@ table, td, th{
 table th{
     text-align: left;
     background-color: rgb(255, 204, 0);
-    color: rgb(245, 245, 247);
 }
 
 table td {
