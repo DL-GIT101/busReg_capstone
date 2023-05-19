@@ -416,3 +416,7 @@ table input[type=file] {
     padding: 0px;
     border: none;
 }
+
+.space-between{
+    justify-content: space-between;
+}
