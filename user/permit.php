@@ -165,7 +165,7 @@ function validate($data) {
         <table>
             <tr>
                 <th>Requirement</th>
-                <th>Uploaded File</th>
+                <th>View</th>
                 <th>Delete</th>
                 <th>Status</th>
                 <th>File Upload</th>
@@ -189,10 +189,17 @@ function validate($data) {
                 foreach($requirements_names as $fileName){
                         $errorMsg = 'errorMsg_' . $count;
                     echo '  <tr>
-                                <td>'.$fileName.'</td>
-                                <td>'.$requirements[$count-1].'</td>
-                                <td></td>
-                                <td>'.$status[$count-1].'</td>
+                                <td>'.$fileName.'</td>';
+
+                    if(empty($requirements[$count-1])){
+                      echo '<td></td>
+                            <td></td>';
+                    }else{
+                        echo    '<td><a target="_blank" href="upload/'.$_SESSION['id'].'/'.$requirements[$count-1].'">View</a></td>
+                        <td></td>';
+                    }
+                    
+                    echo        '<td>'.$status[$count-1].'</td>
                                 <td>
                                     <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
                                     <div class="error">'.${$errorMsg}.'</div>
@@ -205,7 +212,6 @@ function validate($data) {
         </table>
         <input type="submit" value="Upload">
     </form>       
-
     </div>
 </div>
 
