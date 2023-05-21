@@ -2,12 +2,10 @@
 session_start();
 require_once "../php/config.php";
 
-if (isset($_GET['file']) && isset($_GET['count'])) {
+if (isset($_GET['file'])) {
 
     $file = urldecode($_GET['file']);
     $filePath = 'upload/'.$_SESSION['id'].'/'.$file;
-
-    $count = urldecode($_GET['count']);
 
     $sql = "SELECT * FROM new_permit WHERE user_id = ?";
    
@@ -27,9 +25,11 @@ if (isset($_GET['file']) && isset($_GET['count'])) {
                 $serialized_status = $row["status"];
                 $requirements = unserialize($serialized_requirements);
                 $status = unserialize($serialized_status);
+
+                $index = array_search($file, $requirements);
                 
-                $requirements[$count-1] = null;
-                $status[$count-1] = '-';
+                $requirements[$index] = null;
+                $status[$index] = '-';
 
                 if (file_exists($filePath)) {
                     if (unlink($filePath)) {
