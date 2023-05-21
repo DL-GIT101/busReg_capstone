@@ -151,7 +151,7 @@ function validate($data) {
             <div class="row space-between"><p class="title">Delete File</p>
             <span id="modal_close_btn">&times;</span></div>
             <p class="sentence">Are you sure you want to delete this file? This action cannot be undone.</p> 
-            <a href="permit.php">OK</a>
+            <a id="file_link" href="">Delete</a>
         </div>
 </div>
 
@@ -211,7 +211,7 @@ function validate($data) {
                             <td></td>';
                     }else{
                         echo    '<td><a class="view_file" target="_blank" href="upload/'.$_SESSION['id'].'/'.$requirements[$count-1].'">View</a></td>
-                        <td><button type="button" class="delete_file">Delete</td>';
+                        <td><button value="'.$requirements[$count-1].'" type="button" class="delete_file">Delete</td>';
                     }
                     
                     echo        '<td>'.$status[$count-1].'</td>
