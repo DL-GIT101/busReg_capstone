@@ -4,9 +4,9 @@ require_once "../php/config.php";
 
 if (isset($_GET['file'])) {
 
-    $file = urldecode($_GET['file']);
-    $filePath = 'upload/'.$_SESSION['id'].'/'.$file;
-
+$file = urldecode($_GET['file']);
+$filePath = 'upload/'.$_SESSION['id'].'/'.$file;
+ 
     $sql = "SELECT * FROM new_permit WHERE user_id = ?";
    
     if($stmt = $mysqli->prepare($sql)){
@@ -44,7 +44,7 @@ if (isset($_GET['file'])) {
         }else {
             $error = "yes";
         }
-    }
+    } 
     $stmt->close();
 
     if($error !== "yes"){
@@ -54,7 +54,7 @@ if (isset($_GET['file'])) {
         $serialized_status = serialize($status);
 
         if($stmt = $mysqli->prepare($sql)){
-            $stmt->bind_param('ss',$param_req, $param_Stat, $param_id);
+            $stmt->bind_param('sss',$param_req, $param_Stat, $param_id);
 
             $param_id = validate($_SESSION['id']);
             $param_req = $serialized_requirements;
@@ -69,5 +69,11 @@ if (isset($_GET['file'])) {
         }
     }
     $mysqli->close();
+} 
+function validate($data) {
+    $data = trim($data);
+    $data = stripslashes($data);
+    $data = htmlspecialchars($data);
+        return $data;
 }
 ?>
