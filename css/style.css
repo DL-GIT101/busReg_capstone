@@ -370,11 +370,11 @@ form .group {
     border: 1px solid rgb(25,135,84);
 }
 
-.modal-content.success > a {
+.modal-content.success > a,.modal-content.success > button {
     background-color: rgb(25,135,84);
 }
 
-.modal-content.success > a:hover {
+.modal-content.success > a:hover,.modal-content.success > button:hover {
     background-color: rgb(17, 97, 60);
 }
 
@@ -382,11 +382,11 @@ form .group {
     border: 1px solid rgb(220, 53, 69);
 }
 
-.modal-content.error > a {
+.modal-content.error > a,.modal-content.error > button {
     background-color: rgb(220, 53, 69);
 }
 
-.modal-content.error > a:hover {
+.modal-content.error > a:hover,.modal-content.error > button:hover {
     background-color: rgb(151, 36, 48);
 }
 
