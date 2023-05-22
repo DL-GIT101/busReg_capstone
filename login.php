@@ -49,12 +49,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                         if(password_verify($password, $hashed_pword)){
                             session_start();
 
-                            $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             // the name before @ as a substitute for username
                             $_SESSION["email"] = substr($email, 0, strpos($email, '@'));
 
-                            header("location: user/welcome.php");
+                            if($_SESSION["id"] == "ADMIN"){
+                                $_SESSION["loggedin"] = "admin";
+                                header("location: admin/dashboard.php");
+                            }else{
+                                $_SESSION["loggedin"] = true;
+                                header("location: user/welcome.php");
+                            }
+
                         }else{
                             $login_err = "Invalid email or password";
                         }
