@@ -5,6 +5,10 @@
         header("location: login.php");
         exit;
     }
+    if(hasProfile($mysqli,$_SESSION['id']) === 0){
+        header("location: profile.php");
+        exit;
+    }
     $success = $failed = "hidden";
     $sql = "SELECT * FROM new_permit WHERE user_id = ?";
    
@@ -139,6 +143,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mysqli->close();
 }
 
+function hasProfile($mysqli,$param_id){
+    $sql = "SELECT * FROM user_profile WHERE user_id = ?";
+
+    if($stmt = $mysqli->prepare($sql)){
+        $stmt->bind_param("s",$param_id);
+
+        $param_id = validate($_SESSION['id']);
+
+        if($stmt->execute()){
+            $result = $stmt->get_result();
+
+            if($result->num_rows == 1){
+                return 1;
+            }else {
+                return 0;
+            }
+        }else{
+            echo "Oops! Something went wrong. Please try again later";
+        }
+
+    }
+
+    $stmt->close();
+}
+
 function validate($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -170,7 +199,7 @@ function validate($data) {
 <div class="modal <?= $failed ?>">
     <div class="modal-content error">
         <p class="title">Upload Error</p>
-        <p class="sentence">Check the files or Try again later.</p> 
+        <p class="sentence">Check the error or Try again later.</p> 
         <button class="modal_close_btn">CLOSE</button>
     </div> 
 </div>
