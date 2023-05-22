@@ -281,7 +281,7 @@ function validate($data) {
         <div class="modal-content">
             <p class="title">Create Profile</p>
             <p class="sentence">Please create your profile before accessing our services.</p> 
-            <button id="modal_close_btn">CLOSE</button>
+            <button class="modal_close_btn">CLOSE</button>
         </div>
     </div>
     <div id="myModal" class="modal <?= $created ?>">
