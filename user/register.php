@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <p class="title">Registration Successful</p>
                             <p class="sentence">Your account has been successfully created.</p>
                             <p class="sentence">You can now log in using your credentials.</p>    
-                            <a href="login.php">Go to Login</a>
+                            <a href="../login.php">Go to Login</a>
                         </div>
                     </div>';
             } else{
@@ -190,7 +190,7 @@ function validate($data) {
         </div>
  
         <div id="user">
-             <a href="login.php">Login</a>
+             <a href="../login.php">Login</a>
         </div>
      </nav>
      
@@ -214,7 +214,7 @@ function validate($data) {
                 <div class="error"><?php echo $cPassword_error; ?></div>
 
                 <input type="submit" value="Sign up">
-                <a href="login.php">Have an account? Click Here</a>
+                <a href="../login.php">Have an account? Click Here</a>
             </form>
         </div>
      </div>

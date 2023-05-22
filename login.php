@@ -3,11 +3,11 @@
 session_start();
 
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: welcome.php");
+    header("location: user/welcome.php");
     exit;
 }
 
-require_once "../php/config.php";
+require_once "php/config.php";
 
 $email = $email_err = $password = $pword_error = "";
 
@@ -54,7 +54,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             // the name before @ as a substitute for username
                             $_SESSION["email"] = substr($email, 0, strpos($email, '@'));
 
-                            header("location: welcome.php");
+                            header("location: user/welcome.php");
                         }else{
                             $login_err = "Invalid email or password";
                         }
@@ -85,21 +85,21 @@ function validate($data) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="../js/form.js" defer></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/form.js" defer></script>
     <title>Login</title>
 </head>
 <body>
 <nav id="navbar">
        <div id="logo">
         <a href="../index.php">
-            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
+            <img src="img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
             <p>Business Permit & Licensing</p>  
         </a>
        </div>
 
        <div id="user">
-            <a href="register.php">Register</a>
+            <a href="user/register.php">Register</a>
        </div>
     </nav>
 
@@ -121,7 +121,7 @@ function validate($data) {
                 <div class="error"><?php echo $pword_error; ?></div>
 
                 <input type="submit" value="Login">
-                <a href="register.php">Don't have an account? Click Here</a>
+                <a href="user/register.php">Don't have an account? Click Here</a>
             </form>
         </div>
     </div>

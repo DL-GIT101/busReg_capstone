@@ -2,7 +2,7 @@
     session_start();
     require_once "../php/config.php";
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-        header("location: login.php");
+        header("location: ../login.php");
         exit;
     }
     if(hasProfile($mysqli,$_SESSION['id']) === 0){

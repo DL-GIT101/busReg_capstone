@@ -40,7 +40,7 @@
                   <a href="php/logout.php">Logout</a>';
         } else {
             echo '<a href="user/register.php">Register</a>
-                  <a href="user/login.php">Login</a>';
+                  <a href="login.php">Login</a>';
         }
     ?>
             

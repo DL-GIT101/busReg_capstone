@@ -4,7 +4,7 @@ session_start();
 require_once "../php/config.php";
 
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: login.php");
+    header("location: ../login.php");
     exit;
 }
 $created = $created_error = "hidden";
