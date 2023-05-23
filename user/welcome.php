@@ -111,7 +111,7 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 </div>
             </div>
             
-            <div class="service">
+            <div class="row">
                 <div class="frame">
                     <p class="title">Services</p>
                     <a href="permit.php" class="item title services">
