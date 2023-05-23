@@ -1,10 +1,5 @@
 <?php 
     session_start();
-
-    if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-        $log = true;
-    }
-
 ?>
 
 <!DOCTYPE html>
@@ -35,10 +30,14 @@
 
        <div id="user">
     <?php 
-        if(isset($log)){
+        if($_SESSION["loggedin"] === true){
             echo '<a href="user/welcome.php">Hi, '.$_SESSION['email'].'</a> 
                   <a href="php/logout.php">Logout</a>';
-        } else {
+        } elseif($_SESSION["loggedin"] === "admin"){
+            echo '<a href="admin/dashboard.php">Hi, '.$_SESSION['email'].'</a> 
+                  <a href="php/logout.php">Logout</a>';
+        }
+        else {
             echo '<a href="user/register.php">Register</a>
                   <a href="login.php">Login</a>';
         }
