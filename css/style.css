@@ -107,8 +107,8 @@ img {
     transition: background-color 0.3s;
 }
 
-#sidebar > ul li:hover {
-    background-color: rgb(226, 181, 0);
+#sidebar > ul li:hover, .current {
+    background-color: rgb(221, 177, 0);
 }
 
 #sidebar > ul li a{
@@ -282,6 +282,7 @@ form .group {
 .frame > .intro {
     margin-bottom: 20px;
 }
+
 .frame > .sentence {
     text-align: left;
     margin-bottom: 30px;
