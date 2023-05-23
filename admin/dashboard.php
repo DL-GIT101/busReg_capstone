@@ -16,18 +16,38 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== "admin"){
 </head>
 <body>
 <nav id="navbar">
+<p>ADMIN</p> 
     <div id="logo">
-        <a href="../admin/dashboard.php">
+        <a href="../index.php">
             <img src="../img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
             <p>Business Permit & Licensing</p> 
         </a>
     </div>
-    <p>ADMIN</p> 
+    
     <div id="user">
         <a href="../php/logout.php">Logout</a>
     </div>
 </nav>
 
+<div class="row">
+
+    <nav id="sidebar">
+        <ul>
+            <li id="dashboard">Dashboard</li>
+            <li id="list">MSME List</li>
+            <li id="register">Register MSME</li>
+        </ul>
+    </nav>
+
+    <div id="content">
+
+        <div class="container"> 
+            
+        
+        </div>
+
+    </div>
+</div>
 
 </body>
 </html>

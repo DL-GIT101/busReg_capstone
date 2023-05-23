@@ -38,6 +38,10 @@ body {
     font-size: 24px;
 }
 
+#navbar > p {
+    padding-left: 15px;
+}
+
 #logo > a {
     display: flex;
     text-decoration: none;
@@ -80,6 +84,32 @@ img {
     background-color: aliceblue;
     height: 500px;
     width: 1200px;
+}
+
+#sidebar {
+    background-color: rgb(255, 204, 0);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: flex;
+    flex-direction: column;
+    min-height: auto;
+    min-width: 250px;
+    padding: 20px;
+}
+
+#sidebar > ul {
+    list-style-type: none;
+}
+
+li#dashboard {
+    list-style-image: url('../img/dashboard.png');
+}
+
+li#list {
+    list-style-image: url('../img/list.png');
+}
+
+li#register {
+    list-style-image: url('../img/register.png');
 }
 
 #content {
