@@ -93,7 +93,9 @@ img {
     flex-direction: column;
     min-height: 740px;
     min-width: 250px;
+    margin-right: 50px;
 }
+
 #sidebar > ul {
     padding: 10px 0px;
 }
@@ -338,10 +340,6 @@ form .group {
 .item.services:hover .emphasize {
     text-decoration: underline;
     text-transform: uppercase;
-}
-
-.service {
-    display: flex;
 }
 
 .frame.wide {
