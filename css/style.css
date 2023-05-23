@@ -88,28 +88,37 @@ img {
 
 #sidebar {
     background-color: rgb(255, 204, 0);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2), 8px 0 20px 0 rgba(0, 0, 0, 0.19);
     display: flex;
     flex-direction: column;
-    min-height: auto;
+    min-height: 740px;
     min-width: 250px;
-    padding: 20px;
 }
-
 #sidebar > ul {
-    list-style-type: none;
+    padding: 10px 0px;
 }
 
-li#dashboard {
-    list-style-image: url('../img/dashboard.png');
+#sidebar > ul li {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
 }
 
-li#list {
-    list-style-image: url('../img/list.png');
+#sidebar > ul li:hover {
+    background-color: rgb(226, 181, 0);
 }
 
-li#register {
-    list-style-image: url('../img/register.png');
+#sidebar > ul li a{
+    text-decoration: none;
+    color: rgb(29, 29, 31);
+    font-family: 'Jost', sans-serif;
+}
+
+#sidebar > ul li img{
+    margin-right: 10px;
+    height: 16px;
+    width: 16px; 
 }
 
 #content {

@@ -33,9 +33,9 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== "admin"){
 
     <nav id="sidebar">
         <ul>
-            <li id="dashboard">Dashboard</li>
-            <li id="list">MSME List</li>
-            <li id="register">Register MSME</li>
+            <li><img src="../img/dashboard.png" alt=""><a href="dashboard.php">Dashboard</a></li>
+            <li><img src="../img/list.png" alt=""><a href="">MSME List</a></li>
+            <li><img src="../img/register.png" alt=""><a href="">Register MSME</a></li>
         </ul>
     </nav>
 
