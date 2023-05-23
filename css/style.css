@@ -31,9 +31,11 @@ body {
     display: flex;
     height: 60px;
     justify-content: space-between;
-    align-content: center;
+    align-items: center;
     font-family: 'Jost', sans-serif;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    color: rgb(245, 245, 247);
+    font-size: 24px;
 }
 
 #logo > a {
