@@ -98,7 +98,7 @@ function validate($data) {
 <body>
 <nav id="navbar">
        <div id="logo">
-        <a href="../index.php">
+        <a href="index.php">
             <img src="img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
             <p>Business Permit & Licensing</p>  
         </a>
