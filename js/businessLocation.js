@@ -1,0 +1,17 @@
+let xhr = new XMLHttpRequest();
+xhr.open('GET', 'get_coordinates.php', true);
+xhr.onload = function () {
+    if (xhr.status === 200) {
+    let coordinates = JSON.parse(xhr.responseText);
+
+        for (let i = 0; i < coordinates.length; i++) {
+            let latitude = coordinates[i].latitude;
+            let longitude = coordinates[i].longitude;
+            
+            let location = L.latLng(latitude, longitude);
+            let marker = L.marker(location).addTo(map);
+        }
+    }  
+};
+xhr.send();
+
