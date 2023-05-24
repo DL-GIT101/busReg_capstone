@@ -7,7 +7,7 @@ if (isset($_GET['file'])) {
 $file = urldecode($_GET['file']);
 $filePath = 'upload/'.$_SESSION['id'].'/'.$file;
  
-    $sql = "SELECT * FROM new_permit WHERE user_id = ?";
+    $sql = "SELECT * FROM new_documents WHERE user_id = ?";
    
     if($stmt = $mysqli->prepare($sql)){
         
@@ -48,7 +48,7 @@ $filePath = 'upload/'.$_SESSION['id'].'/'.$file;
     $stmt->close();
 
     if($error !== "yes"){
-        $sql = "UPDATE new_permit SET requirements = ?, status = ? WHERE user_id = ?";
+        $sql = "UPDATE new_documents SET requirements = ?, status = ? WHERE user_id = ?";
 
         $serialized_requirements = serialize($requirements);
         $serialized_status = serialize($status);

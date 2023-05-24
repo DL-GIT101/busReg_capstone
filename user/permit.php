@@ -10,7 +10,7 @@
         exit;
     }
     $success = $failed = "hidden";
-    $sql = "SELECT * FROM new_permit WHERE user_id = ?";
+    $sql = "SELECT * FROM new_documents WHERE user_id = ?";
    
     if($stmt = $mysqli->prepare($sql)){
         
@@ -110,9 +110,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $serialized_status = serialize($status);
 
         if($update === 1){
-            $sql = "UPDATE new_permit SET requirements = ?, status = ? WHERE user_id = ?";
+            $sql = "UPDATE new_documents SET requirements = ?, status = ? WHERE user_id = ?";
         }else{
-            $sql = "INSERT INTO new_permit (user_id, requirements, status) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO new_documents (user_id, requirements, status) VALUES (?, ?, ?)";
         }
         
         if($stmt = $mysqli->prepare($sql)){
