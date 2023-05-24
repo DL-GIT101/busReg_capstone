@@ -29,7 +29,29 @@ $sql2 = "SELECT COUNT(*) FROM user_profile";
         }$stmt2->close();
     }
     
-    
+$sql3 = "SELECT * FROM new_documents";
+if ($stmt3 = $mysqli->prepare($sql3)) {
+    if ($stmt3->execute()) {
+        $result = $stmt3->get_result();
+        $incompleteCount = 0;
+        $completeCount = 0;
+        
+        while ($row = $result->fetch_assoc()) {
+            $serializedRequirements = $row["requirements"];
+            $requirements = unserialize($serializedRequirements);
+            
+            if (in_array(null, $requirements)) {  
+                $incompleteCount++;
+            } else {
+                $completeCount++;
+            }
+        }
+        $noneReqCount =  $userCount - ($incompleteCount + $completeCount);
+    } else {
+        echo "Error retrieving data";
+    }
+    $stmt3->close();
+}    
     
     $mysqli->close();
 
@@ -84,8 +106,6 @@ $sql2 = "SELECT COUNT(*) FROM user_profile";
     </nav>
 
     <div id="content">
-
-      
         <div id="profile">
                  <div class="frame" >
                     <p class="sentence">Users</p>   
@@ -97,6 +117,21 @@ $sql2 = "SELECT COUNT(*) FROM user_profile";
                         <p>Profile</p>
                         <p><?= $profileCount ?></p>
                     </div>     
+                </div>
+                <div class="frame">
+                    <p class="sentence">Documents</p> 
+                    <div class="item pending title row space-between">
+                        <p>Incomplete</p>
+                        <p><?= $incompleteCount ?></p>
+                    </div>  
+                    <div class="item approved title row space-between">
+                        <p>Complete</p>
+                        <p><?= $completeCount ?></p>
+                    </div>
+                    <div class="item none title row space-between">
+                        <p>None</p>
+                        <p><?= $noneReqCount ?></p>
+                    </div>        
                 </div>
                 <div class="frame">
                     <p class="sentence">Permit</p> 
@@ -117,29 +152,12 @@ $sql2 = "SELECT COUNT(*) FROM user_profile";
                         <p>0</p>
                     </div>      
                 </div>
-                <div class="frame">
-                    <p class="sentence">Documents</p> 
-                    <div class="item pending title row space-between">
-                        <p>Incomplete</p>
-                        <p>0</p>
-                    </div>  
-                    <div class="item approved title row space-between">
-                        <p>Complete</p>
-                        <p>0</p>
-                    </div>
-                    <div class="item none title row space-between">
-                        <p>None</p>
-                        <p>0</p>
-                    </div>        
-                </div>
         </div>
         <div class="frame wide">
                     <p class="title">Business Location</p>
                     <div id="map"></div>
                 </div>
         </div>
-
-   
 </div>
 
 </body>
