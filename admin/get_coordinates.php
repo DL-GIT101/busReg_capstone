@@ -1,13 +1,13 @@
 <?php 
 require_once "../php/config.php";
-$sql = "SELECT longitude, latitude FROM user_profile";
+$sql = "SELECT business_name, longitude, latitude FROM user_profile";
 if ($stmt = $mysqli->prepare($sql)) {
     if ($stmt->execute()) {
-        $stmt->bind_result($longitude, $latitude);
+        $stmt->bind_result($name,$longitude, $latitude);
 
         $coordinates = array();
         while ($stmt->fetch()) {
-            $coordinates[] = array('longitude' => $longitude, 'latitude' => $latitude);
+            $coordinates[] = array('name' => $name, 'longitude' => $longitude, 'latitude' => $latitude);
         }
 
         // Convert the coordinates array to JSON format
