@@ -7,6 +7,38 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== "admin"){
 }
 require_once "../php/config.php";
 
+$sql1 = "SELECT COUNT(*) FROM users WHERE id <> ?";
+    if($stmt1 = $mysqli->prepare($sql1)){
+        $stmt1->bind_param("s",$adminID);
+        $adminID = validate($_SESSION['id']);
+        if($stmt1->execute()){
+            $stmt1->bind_result($userCount);
+            $stmt1->fetch();
+        }else{
+            echo "Oops! Something went wrong. Please try again later";
+        }$stmt1->close();
+    }
+
+$sql2 = "SELECT COUNT(*) FROM user_profile";
+    if($stmt2 = $mysqli->prepare($sql2)){
+        if($stmt2->execute()){
+            $stmt2->bind_result($profileCount);
+            $stmt2->fetch();
+        }else{
+            echo "Oops! Something went wrong. Please try again later";
+        }$stmt2->close();
+    }
+    
+    
+    
+    $mysqli->close();
+
+    function validate($data) {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+            return $data;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,6 +54,7 @@ require_once "../php/config.php";
      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
      crossorigin=""></script>
     <script src="../js/map.js" defer></script>
+    <script src="../js/businessLocation.js" defer></script>
     <title>Dashboard</title>
 </head>
 <body>
@@ -58,11 +91,11 @@ require_once "../php/config.php";
                     <p class="sentence">Users</p>   
                     <div class="item title row space-between">
                         <p>Total</p>
-                        <p>0</p>
+                        <p><?= $userCount ?></p>
                     </div>  
                     <div class="item approved title row space-between">
                         <p>Profile</p>
-                        <p>0</p>
+                        <p><?= $profileCount ?></p>
                     </div>     
                 </div>
                 <div class="frame">
