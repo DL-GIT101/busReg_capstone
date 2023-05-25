@@ -491,3 +491,8 @@ td >.view_file:hover {
 .row.space-between > span {
     cursor: pointer;
 }
+
+.user_info:hover {
+    background-color: rgb(214, 214, 214);
+    cursor: pointer;
+}
