@@ -98,6 +98,7 @@ $user_sql = "SELECT id FROM users WHERE id <> ?";
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/click_row.js" defer></script>
     <title>MSME Management</title>
 </head>
 <body>
@@ -140,7 +141,7 @@ $user_sql = "SELECT id FROM users WHERE id <> ?";
             </tr>
             <?php 
             foreach ($all_business as &$business) {
-                echo '  <tr>  
+                echo '  <tr class="user_info">  
                             <td>'.$business['id'].'</td>
                             <td>'.$business['profile'].'</td>
                             <td>'.$business['documents'].'</td>
