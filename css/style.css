@@ -500,6 +500,10 @@ td >.view_file:hover {
     background-color: rgb(214, 214, 214);
 }
 
+.user_info td:first-child {
+    font-weight: 600;
+}
+
 .user_info td:first-child:hover {
     cursor: pointer;
   }
