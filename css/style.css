@@ -72,6 +72,30 @@ main {
     height: 94vh;
 }
 
+.column_container {
+    display: flex;
+    flex-direction: column;
+}
+
+.column_container > * {
+    margin: 20px;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 24px;
+    font-family: 'Jost', sans-serif;
+    color: rgb(29, 29, 31);
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.sentence {
+    color: rgb(66,66,69);
+    font-size: 14px;
+    text-align: center;
+}
+
 #map {
     background-color: aliceblue;
     height: 500px;
@@ -117,14 +141,6 @@ main {
 
 
 
-.container {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    display: flex;
-    flex-direction: column;
-    padding: 50px;
-    border-radius: 4px;
-}
-
 .flex-row {
     flex-direction: row;
 }
@@ -137,24 +153,9 @@ main {
     display: flex;
 }
 
-.container > .intro {
-    margin-bottom: 30px;
-}
 
-.title {
-    font-weight: bold;
-    font-size: 24px;
-    font-family: 'Jost', sans-serif;
-    color: rgb(29, 29, 31);
-    text-align: center;
-    margin-bottom: 5px;
-}
 
-.sentence {
-    color: rgb(66,66,69);
-    font-size: 14px;
-    text-align: center;
-}
+
 
 form {
     display: flex;

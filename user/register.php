@@ -194,11 +194,12 @@ function validate($data) {
     </nav>
      
      <main> 
-        <div class="container">      
-            <div class="intro">
+        <div class="column_container">      
+            <div>
                 <p class="title">Create an Account</p>
                 <p class="sentence">Please enter your email and password to create an account.</p>
             </div>
+
             <form autocomplete="off" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email Address" value=<?php echo $email; ?>>
@@ -215,6 +216,7 @@ function validate($data) {
                 <input type="submit" value="Sign up">
                 <a href="../login.php">Have an account? Click Here</a>
             </form>
+
         </div>
      </main>
 
