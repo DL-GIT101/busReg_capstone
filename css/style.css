@@ -11,8 +11,8 @@ color: rgb(241, 174, 181); for - medyo red
 color: rgb(0, 59, 179); - for blue
 color: rgb(255, 204, 0); - for yellow
 
-font-family: 'Noto Serif', serif; for sentence
 font-family: 'Jost', sans-serif; - for title
+font-family: 'Noto Serif', serif; for sentence
 */
 @import url('https://fonts.googleapis.com/css2?family=Jost:wght@700&family=Noto+Serif&display=swap');
 
@@ -24,12 +24,14 @@ body {
     background-color: rgb(245, 245, 247);
     color: rgb(29, 29, 31);
     font-family: 'Noto Serif', serif;
+    height: 100vh;
+    width: 100vw;
 }
 
-#navbar {
+nav {
     background-color: rgb(0, 59, 179);
     display: flex;
-    height: 60px;
+    height: 6vh;
     justify-content: space-between;
     align-items: center;
     font-family: 'Jost', sans-serif;
@@ -38,7 +40,7 @@ body {
     font-size: 24px;
 }
 
-#navbar > p {
+nav > p {
     padding-left: 15px;
 }
 
