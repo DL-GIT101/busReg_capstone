@@ -22,7 +22,7 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 if (!empty($row["logo"])) {
                     $logo_path = "../user/upload/".$user_id."/".$row["logo"];
                 } else {
-                    $logo_path = "upload/No_image_available.svg";
+                    $logo_path = "../userupload/No_image_available.svg";
                 }
                 $business_name = $row["business_name"];
                 $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"];
@@ -38,11 +38,34 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
         }else{
             echo "Oops! Something went wrong. Please try again later";
         }
-
+        $stmt->close();
     }
 
-    $stmt->close();
-    
+    $sql2 = "SELECT * FROM new_documents WHERE user_id = ?";
+   
+    if($stmt2 = $mysqli->prepare($sql2)){
+        
+        $stmt2->bind_param("s",$param_id);
+        
+        $param_id = $user_id;
+       
+        if($stmt2->execute()){
+            $result = $stmt2->get_result();
+            if($result->num_rows == 1){
+           
+               $row = $result->fetch_array(MYSQLI_ASSOC);
+
+                $serialized_requirements_fetch = $row["requirements"];
+                $serialized_status_fetch = $row["status"];
+                $requirements_fetch = unserialize($serialized_requirements_fetch);
+                $status_fetch = unserialize($serialized_status_fetch);                
+            }
+        }else {
+            echo "error retrieving data";
+        }
+    }
+    $stmt2->close();
+
     $mysqli->close();
 } 
 function validate($data) {
@@ -96,7 +119,7 @@ function validate($data) {
         </ul>
     </nav>
 
-    <div id="content">
+    <div id="content flex-column">
         <div class="container flex-row"> 
             
             <div id="profile">
@@ -127,14 +150,57 @@ function validate($data) {
                         <p id="longitude" class="hidden"><?= $longitude ?></p>
                     </div>
                 </div>
-           
-
         </div>
+        <div class="container"> 
+        
+    <div class="intro">
+        <p class="title">Uploaded Documents</p>
     </div>
-    
-       
-       
-        </div>
+        <table>
+            <tr>
+                <th>Requirement</th>
+                <th>View</th>
+                <th>Status</th>
+            </tr>
+            <?php 
+                $requirements_names = array(
+                    'Barangay Clearance for business',
+                    'DTI Certificate of Registration',
+                    'On the Place of Business',
+                    'Community Tax Certificate',
+                    'Certificate of Zoning Compliance',
+                    'Business Inspection Clearance',
+                    'Valid Fire Safety Inspection Certificate/Official Receipt',
+                    'Sanitary Permit',
+                    'Environmental Compliance Clearance',
+                    'Latest 2x2 picture',
+                    'Tax Order of Payment',
+                    'Tax Order of Payment Official Receipt'
+                );
+                $count = 1;
+                foreach($requirements_names as $fileName){
+                        $errorMsg = 'errorMsg_' . $count;
+                    echo '  <tr>
+                                <td>'.$fileName.'</td>';
+
+                    if(empty($requirements_fetch[$count-1])){
+                      echo '<td></td>
+                            <td></td>
+                            ';
+                    }else{
+                        echo    '<td><a class="view_file" target="_blank" href="../user/upload/'.$user_id.'/'.$requirements_fetch[$count-1].'">View</a></td>
+                        <td>'.$status_fetch[$count-1].'</td>';
+                    }
+                        echo '</tr>';
+                $count++;
+                }
+            ?>
+            
+        </table>     
+    </div>
+    </div>
+
+</div>
     </div>
 </div>
 </body>
