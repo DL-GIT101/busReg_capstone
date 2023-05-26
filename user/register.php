@@ -200,18 +200,18 @@ function validate($data) {
                 <p class="sentence">Please enter your email and password to create an account.</p>
             </div>
 
-            <form autocomplete="off" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Email Address" value=<?php echo $email; ?>>
-                <div class="error"><?php echo $email_err; ?></div>
+                <input type="email" id="email" name="email" placeholder="Email Address" value=<?= $email; ?>>
+                <div class="error"><?= $email_err; ?></div>
 
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Password" value=<?php echo $password; ?>>
-                <div class="error"><?php echo $pword_error; ?></div>
+                <input type="password" id="password" name="password" placeholder="Password" value=<?= $password; ?>>
+                <div class="error"><?= $pword_error; ?></div>
 
                 <label for="cPassword">Confirm Password</label>
-                <input type="password" id="cPassword" name="cPassword" placeholder="Confirm Password" value=<?php echo $cPassword; ?>>
-                <div class="error"><?php echo $cPassword_error; ?></div>
+                <input type="password" id="cPassword" name="cPassword" placeholder="Confirm Password" value=<?= $cPassword; ?>>
+                <div class="error"><?= $cPassword_error; ?></div>
 
                 <input type="submit" value="Sign up">
                 <a href="../login.php">Have an account? Click Here</a>
