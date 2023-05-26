@@ -31,9 +31,6 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 $latitude = $row["latitude"];
                 $longitude = $row["longitude"];
 
-            }else {
-                header("location: user_management.php");
-                exit();
             }
         }else{
             echo "Oops! Something went wrong. Please try again later";
@@ -120,6 +117,16 @@ function validate($data) {
     </nav>
 
     <div id="content flex-column">
+        <div class="container">
+
+            <p class="title"><?= $user_id ?></p>
+            <div class="actions">
+                <button class="delete_btn">Delete</button>
+                <button class="edit_btn">Edit</button>
+            </div>
+
+        </div>
+
         <div class="container flex-row"> 
             
             <div id="profile">

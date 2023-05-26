@@ -503,3 +503,31 @@ td >.view_file:hover {
 .user_info td:first-child:hover {
     cursor: pointer;
   }
+
+.actions {
+    display: flex;
+    justify-content: center;
+}
+
+.actions button {
+    margin:0px 10px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    font-family: 'Noto Serif', serif;
+    color: rgb(245, 245, 247);
+    cursor: pointer;
+}
+
+.delete_btn {
+    background-color: rgb(219, 24, 43);
+}
+
+.edit_btn {
+    background-color: rgb(0, 59, 179);
+}
+
+.actions button:hover{
+    filter: brightness(0.8);
+}
