@@ -35,33 +35,21 @@ nav {
     justify-content: space-between;
     align-items: center;
     font-family: 'Jost', sans-serif;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     color: rgb(245, 245, 247);
-    font-size: 24px;
+    font-size: 20px;
 }
 
-nav > p {
-    padding-left: 15px;
-}
-
-#logo > a {
+#nav_logo {
     display: flex;
-    text-decoration: none;
+    align-items: center;
+    height: 100%;
+    cursor: pointer;
 }
 
-img {
-    height: 150px;
-}
-
-#logo > a > p {
-    color: rgb(245, 245, 247);
-    font-size: 24px;
-    padding: 15px 0px;
-}
-
-#logo > a > img {
-    height: 50px;
-    padding: 5px 10px;
+#nav_logo > img {
+    height: 80%;
+    object-fit: cover;
+    padding: 0px 10px;
 }
 
 #user {

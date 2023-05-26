@@ -176,22 +176,20 @@ function validate($data) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
     <!-- Javascript -->
+    <script src="../js/script.js" defer></script>
     <script src="../js/form.js" defer></script>
-
     <title>Register</title>
 </head>
 
 <body>
 
     <nav>
-        <div id="logo">
-         <a href="../index.php">
-             <img src="../img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
-             <p>Business Permit & Licensing</p>  
-         </a>
+        <div id="nav_logo">
+                <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+                <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
  
-        <div id="user">
+        <div id="account">
              <a href="../login.php">Login</a>
         </div>
     </nav>
