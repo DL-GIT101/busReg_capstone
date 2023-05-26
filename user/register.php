@@ -188,13 +188,12 @@ function validate($data) {
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
                 <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
- 
         <div id="account">
              <a href="../login.php">Login</a>
         </div>
     </nav>
      
-     <div id="content"> 
+     <main> 
         <div class="container">      
             <div class="intro">
                 <p class="title">Create an Account</p>
@@ -217,7 +216,7 @@ function validate($data) {
                 <a href="../login.php">Have an account? Click Here</a>
             </form>
         </div>
-     </div>
+     </main>
 
 </body>
 </html>
