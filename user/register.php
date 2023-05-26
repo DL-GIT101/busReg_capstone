@@ -3,13 +3,11 @@
 session_start();
 
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: welcome.php");
+    header("location: dashboard.php");
     exit;
 }
 
-require_once "../php/config.php";
-
-$email = $email_err = $password = $pword_error = $cPassword = $cPassword_error = "";
+require_once "../php/connection.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // email
@@ -177,11 +175,15 @@ function validate($data) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
+    <!-- Javascript -->
     <script src="../js/form.js" defer></script>
+
     <title>Register</title>
 </head>
+
 <body>
-    <nav id="navbar">
+
+    <nav>
         <div id="logo">
          <a href="../index.php">
              <img src="../img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
@@ -192,7 +194,7 @@ function validate($data) {
         <div id="user">
              <a href="../login.php">Login</a>
         </div>
-     </nav>
+    </nav>
      
      <div id="content"> 
         <div class="container">      
