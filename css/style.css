@@ -73,7 +73,7 @@ main {
     height: 94vh;
 }
 
-.column_container {
+.column_container, form {
     display: flex;
     flex-direction: column;
 }
@@ -92,6 +92,95 @@ main {
 .sentence {
     color: rgb(66,66,69);
     text-align: center;
+}
+
+form > *{
+    margin-bottom: 5px;
+}
+
+form label {
+    color: rgb(66, 66, 69);
+}
+
+form label > span {
+    color: rgb(95, 95, 100);
+    font-size: smaller;
+    margin-left: 2px;
+}
+
+form input, form select, .before_input{
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgb(133, 133, 133);
+}
+
+form select {
+    height: 37px;
+}
+
+form input:focus, form select:focus {
+    outline: 2px solid rgb(0, 59, 179);
+    border: 1px solid rgb(0, 59, 179);
+}
+
+.before_input {
+    width: 25px;
+    height: 18px;
+    padding: 8px 10px;
+    margin:10px 5px 0px 0px;
+    background-color: rgb(206, 206, 206);
+    flex-grow: 1;
+}
+
+form input[type=file] {
+    padding: 7px 10px;
+}
+
+.row > input {
+    flex-grow: 10;
+}
+
+form input[type=submit] {
+    background-color:rgb(255, 204, 0);
+    border: none;
+    min-width: 50px;
+    height: 40px;
+    align-self: center;
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    padding: 10px;
+}
+
+form input[type=submit]:hover {
+    background-color:rgb(207, 166, 1);
+}
+
+form a {
+    text-align: center;
+    color: rgb(66, 66, 69);
+}
+
+form .error {
+    color: rgb(220, 53, 69);
+    font-size: smaller;
+    padding: 0px 10px;
+}
+
+form .alert {
+    display: none;
+    color: rgb(220, 53, 69);
+    border: 1px solid rgb(241, 174, 181);
+    border-radius: 4px;
+    background-color: rgb(248, 215, 218);
+    padding: 5px;
+}
+
+form .group {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    min-width: 180px;
+    margin-right: 10px;
 }
 
 #map {
@@ -155,98 +244,6 @@ main {
 
 
 
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-form label {
-    color: rgb(66, 66, 69);
-    margin-top: 5px;
-}
-
-form label > span {
-    color: rgb(95, 95, 100);
-    font-size: smaller;
-    margin-left: 2px;
-}
-
-form input, form select, .before_input{
-    margin: 10px 0px 15px;
-    padding: 10px;
-    border-radius: 4px;
-    border: 1px solid rgb(133, 133, 133);
-    background-color: rgb(245, 245, 247);
-}
-
-form select {
-    height: 37px;
-}
-
-form input:focus, form select:focus {
-    outline: none;
-    box-shadow: 0 0 7px rgb(2, 94, 231);
-}
-
-.before_input {
-    width: 25px;
-    height: 18px;
-    padding: 8px 10px;
-    margin:10px 5px 0px 0px;
-    background-color: rgb(206, 206, 206);
-    flex-grow: 1;
-}
-
-form input[type=file] {
-    padding: 7px 10px;
-}
-
-.row > input {
-    flex-grow: 10;
-}
-
-form input[type=submit] {
-    background-color:rgb(255, 204, 0);
-    border: none;
-    min-width: 50px;
-    height: 40px;
-    align-self: center;
-    font-family: 'Jost', sans-serif;
-    font-size: 16px;
-    padding: 10px;
-}
-
-form input[type=submit]:hover {
-    background-color:rgb(207, 166, 1);
-}
-
-form a {
-    text-align: center;
-    color: rgb(66, 66, 69);
-}
-
-form .error {
-    color: rgb(220, 53, 69);
-    font-size: smaller;
-    padding: 0px 10px;
-}
-
-form .alert {
-    display: none;
-    color: rgb(220, 53, 69);
-    border: 1px solid rgb(241, 174, 181);
-    border-radius: 4px;
-    background-color: rgb(248, 215, 218);
-    padding: 5px;
-}
-
-form .group {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    min-width: 180px;
-    margin-right: 10px;
-}
 
 #profile {
     display: flex;
