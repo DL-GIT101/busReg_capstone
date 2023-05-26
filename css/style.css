@@ -142,6 +142,10 @@ img {
     flex-direction: row;
 }
 
+.flex-column {
+    flex-direction: column;
+}
+
 .row {
     display: flex;
 }
