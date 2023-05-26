@@ -1,7 +1,9 @@
 /* 
 color: rgb(29, 29, 31); - for black 
 color: rgb(245, 245, 247); - for white
-color: rgb(66, 66, 69); - for gray
+
+color: rgb(66, 66, 69); - gray
+color: rgb(23, 23, 26); - dark gray
 
 color: rgb(220, 53, 69); for - dark red
 color: rgb(248, 215, 218); for - light red
@@ -94,12 +96,12 @@ main {
     text-align: center;
 }
 
-form > *{
+form > * {
     margin-bottom: 5px;
 }
 
 form label {
-    color: rgb(66, 66, 69);
+    color: rgb(23, 23, 26);
 }
 
 form label > span {
@@ -119,7 +121,7 @@ form select {
 }
 
 form input:focus, form select:focus {
-    outline: 2px solid rgb(0, 59, 179);
+    outline: 1px solid rgb(0, 59, 179);
     border: 1px solid rgb(0, 59, 179);
 }
 
@@ -160,10 +162,9 @@ form a {
     color: rgb(66, 66, 69);
 }
 
-form .error {
+form .error_msg {
     color: rgb(220, 53, 69);
-    font-size: smaller;
-    padding: 0px 10px;
+    padding-left: 10px;
 }
 
 form .alert {
@@ -173,6 +174,11 @@ form .alert {
     border-radius: 4px;
     background-color: rgb(248, 215, 218);
     padding: 5px;
+}
+
+.error_input {
+    border: 1px solid rgb(220, 53, 69);
+    outline: 1px solid rgb(220, 53, 69);
 }
 
 form .group {
