@@ -31,6 +31,8 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 $latitude = $row["latitude"];
                 $longitude = $row["longitude"];
 
+            }else{
+                $hidden = "hidden";
             }
         }else{
             echo "Oops! Something went wrong. Please try again later";
@@ -127,7 +129,7 @@ function validate($data) {
 
         </div>
 
-        <div class="container flex-row"> 
+        <div class="container flex-row <?= $hidden ?>"> 
             
             <div id="profile">
                  <div class="frame" >
@@ -158,7 +160,7 @@ function validate($data) {
                     </div>
                 </div>
         </div>
-        <div class="container"> 
+        <div class="container <?= $hidden ?>"> 
         
     <div class="intro">
         <p class="title">Uploaded Documents</p>
