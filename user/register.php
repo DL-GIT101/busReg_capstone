@@ -203,15 +203,15 @@ function validate($data) {
             <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email Address" value=<?= $email; ?>>
-                <div class="error"><?= $email_err; ?></div>
+                <div class="error_msg"><?= $email_err; ?></div>
 
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Password" value=<?= $password; ?>>
-                <div class="error"><?= $pword_error; ?></div>
+                <div class="error_msg"><?= $pword_error; ?></div>
 
                 <label for="cPassword">Confirm Password</label>
                 <input type="password" id="cPassword" name="cPassword" placeholder="Confirm Password" value=<?= $cPassword; ?>>
-                <div class="error"><?= $cPassword_error; ?></div>
+                <div class="error_msg"><?= $cPassword_error; ?></div>
 
                 <input type="submit" value="Sign up">
                 <a href="../login.php">Have an account? Click Here</a>
