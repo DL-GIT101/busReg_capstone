@@ -11,128 +11,116 @@ require_once "../php/connection.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // email
-    $email = validate($_POST["email"]);
-        if(empty($email)){
+$email = validate($_POST["email"]);
+    if(empty($email)) {
             $email_err = "Enter Email";
-        } elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+    } elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $email_err = "Invalid Email";
-        } else{
+    } else {
+        $sql = "SELECT email FROM users WHERE email = ?";
+        if($stmt = $mysqli->prepare($sql)) {
+            $stmt->bind_param("s", $param_email);
+            $param_email = validate($_POST["email"]);
 
-                $sql = "SELECT email FROM users WHERE email = ?";
+            if($stmt->execute()) {
+                $stmt->store_result();
 
-                if($stmt = $mysqli->prepare($sql)){
-                    $stmt->bind_param("s", $param_email);
-
-                    $param_email = validate($_POST["email"]);
-
-                    if($stmt->execute()){
-
-                        $stmt->store_result();
-
-                        if($stmt->num_rows() == 1){
-                            $email_err = "Email was already taken";
-                        }else {
-                            $email = validate($_POST["email"]);
-                        }
-                    }else {
-                        echo "email error";
+                    if($stmt->num_rows() == 1) {
+                        $email_err = "Email was already taken";
+                    } else {
+                        $email = validate($_POST["email"]);
                     }
 
-                    $stmt->close();
-                }
+            } else {
+                echo "Error Getting Email";
             }
+        $stmt->close();
+        }
+    }
 
 //password
-    $password = validate($_POST["password"]);
-    if(empty($password)){
+$password = validate($_POST["password"]);
+    if(empty($password)) {
         $pword_error = "Enter Password";
-    }else{
-        if(!preg_match('@[A-Z]@', $password)){
+    } else {
+        if(!preg_match('@[A-Z]@', $password)) {
             $pword_error .= "Password must include at least one uppercase letter <br>";
         }
-        if(!preg_match('@[a-z]@', $password)){
+        if(!preg_match('@[a-z]@', $password)) {
             $pword_error .= "Password must include at least one lowercase letter  <br>";
         }
-        if(!preg_match('@[0-9]@', $password)){
+        if(!preg_match('@[0-9]@', $password)) {
             $pword_error .= "Password must include at least one number  <br>";
         }
-        if(!preg_match('@[^\w]@', $password)){
+        if(!preg_match('@[^\w]@', $password)) {
             $pword_error .= "Password must include at least one special character  <br>";
         }
-        if(strlen($password)<8){
+        if(strlen($password)<8) {
             $pword_error .= "Password must be at least 8 characters in length  <br>";
         }
-        if(empty($pword_error)){
+        if(empty($pword_error)) {
             $pwordHash = password_hash($password, PASSWORD_DEFAULT);
         }
     }
 //confirm password
-    $cPassword = validate($_POST["cPassword"]);
-    if(empty($cPassword)){
+$cPassword = validate($_POST["cPassword"]);
+    if(empty($cPassword)) {
         $cPassword_error = "Enter confirm password";
-        if(empty($pword_error)){
+        if(empty($pword_error)) {
             $pword_error = "Confirm password is empty";
         }
-    }else{
-        if(!empty($pword_error)){
+    } else {
+        if(!empty($pword_error)) {
             $cPassword_error = "Invalid Password";
-        }else{
-            if($password!==$cPassword){
+        } else {
+            if($password!==$cPassword){ 
                 $cPassword_error = "Password and Confirm Password do not match";
             }
         }
     }
 
-//id  ex. US20230503001
+//ID  ex. US20230503001
+if(empty($email_err) && empty($pword_error) && empty($cPassword_error)) {
+    $sql = "SELECT id as max_id FROM users ORDER BY id DESC LIMIT 1";
 
-    if(empty($email_err) && empty($pword_error) && empty($cPassword_error)){
-
-        $sql = "SELECT id as max_id FROM users ORDER BY id DESC LIMIT 1";
-        
-        $stmt = $mysqli->prepare($sql);
-
-        if($stmt){
-
-            $stmt->execute();
+    if($stmt = $mysqli->prepare($sql)) {
+        if($stmt->execute()){  
             $stmt->bind_result($max_id);
 
-            if($stmt->fetch()){
+            if($stmt->fetch()) {
                 $last_id = $max_id;
             }
-
-            $stmt->close();
         }
+    $stmt->close();
+    }
 
-        if($last_id){
-            $date = substr($last_id, 2, -3);
-            $today = date('Ymd');
-            if($date === $today){
-                $id_suffix = substr($last_id, 10) + 1;
-            }else {
-                $id_suffix = 0;
-            }
-            
+    if($last_id) {
+        $date = substr($last_id, 2, -3);
+        $today = date('Ymd');
+
+        if($date === $today) {
+            $id_suffix = substr($last_id, 10) + 1;
+        }else {
+            $id_suffix = 0;
         }
+    }
 
-        $id_suffix = str_pad($id_suffix, 3, '0', STR_PAD_LEFT);
-        $id_prefix = 'US' . $today;
+    $id_suffix = str_pad($id_suffix, 3, '0', STR_PAD_LEFT);
+    $id_prefix = 'US' . $today;
+    $id = $id_prefix . $id_suffix; 
+}    
 
-        $id = $id_prefix . $id_suffix; 
-    }    
+if(!empty($id)) {
+    $sql = "INSERT INTO users (id, email, password) VALUES (?, ?, ?)";
 
-    if(!empty($id)){
-
-        $sql = "INSERT INTO users (id, email, password) VALUES (?, ?, ?)";
-
-        if($stmt = $mysqli->prepare($sql)){
-
-            $stmt->bind_param("sss",$param_id, $param_email, $param_pword);
+    if($stmt = $mysqli->prepare($sql)){
+    $stmt->bind_param("sss",$param_id, $param_email, $param_pword);
 
             $param_id = $id;
             $param_email = $email;
             $param_pword = password_hash($password, PASSWORD_DEFAULT);
 
-            if($stmt->execute()){
+            if($stmt->execute()) {
                 $directory = 'upload/'. $id;
                 mkdir($directory, 0777, true);
                 
@@ -144,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <a href="../login.php">Go to Login</a>
                         </div>
                     </div>';
-            } else{
+            } else {
             echo    '<div id="myModal" class="modal">
                         <div class="modal-content error">
                             <p class="title">Registration Error</p>
