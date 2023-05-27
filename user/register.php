@@ -8,7 +8,10 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 }
 
 require_once "../php/connection.php";
-
+$title = "Registration Successful";
+$message = "Your account has been successfully created <br>";
+$message .= "You can now log in using your credentials";
+$button = '<a href="../login.php">Go to Login</a>';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // email
 $email = validate($_POST["email"]);
@@ -123,15 +126,11 @@ if(!empty($id)) {
             if($stmt->execute()) {
                 $directory = 'upload/'. $id;
                 mkdir($directory, 0777, true);
-                
-            echo    '<div id="myModal" class="modal">
-                        <div class="modal-content success">
-                            <p class="title">Registration Successful</p>
-                            <p class="sentence">Your account has been successfully created.</p>
-                            <p class="sentence">You can now log in using your credentials.</p>    
-                            <a href="../login.php">Go to Login</a>
-                        </div>
-                    </div>';
+                $title = "Registration Successful";
+                $message = "Your account has been successfully created <br>";
+                $message .= "You can now log in using your credentials";
+                $button = '<a href="../login.php">Go to Login</a>';
+
             } else {
             echo    '<div id="myModal" class="modal">
                         <div class="modal-content error">
@@ -170,7 +169,13 @@ function validate($data) {
 </head>
 
 <body>
-
+<modal class="hidden">
+    <div class="content">
+        <p class="title"><?= $title ?></p>
+        <p class="sentence"><?= $message ?></p>
+        <?= $button ?>
+    </div>
+</modal>
     <nav>
         <div id="nav_logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
@@ -184,7 +189,7 @@ function validate($data) {
      <main> 
         <div class="column_container">      
             <div>
-                <p class="title">Create an Account</p>
+                <p class="title text-center">Create an Account</p>
                 <p class="sentence">Please enter your email and password to create an account.</p>
             </div>
 
