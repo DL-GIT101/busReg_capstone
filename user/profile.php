@@ -1,7 +1,7 @@
 <?php 
 session_start();
 
-require_once "../php/config.php";
+require_once "../php/connection.php";
 
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: ../login.php");
@@ -264,19 +264,22 @@ function validate($data) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile</title>
     <link rel="stylesheet" href="../css/style.css">
+    <!-- OpenStreetMap Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
      crossorigin=""/>
      <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
      crossorigin=""></script>
+    <!-- Javascript -->
+    <script src="../js/script.js" defer></script>
+    <script src="../js/form.js" defer></script>
     <script src="../js/map.js" defer></script>
     <script src="../js/pinLocation.js" defer></script>
-    <script src="../js/form.js" defer></script>
     <script src="../js/modal.js" defer></script>
 </head>
 <body>
-    <!--modals -->
+    <!--modals 
     <div id="notif_modal" class="modal <?= $hidden ?>">
         <div class="modal-content">
             <p class="title">Create Profile</p>
@@ -298,209 +301,136 @@ function validate($data) {
             <p class="sentence">Try again later.</p> 
             <a href="../index.php">OK</a>
         </div>
-    </div>
+    </div>-->
 
-<nav id="navbar">
-       <div id="logo">
-        <a href="../index.php">
-            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
-            <p>Business Permit & Licensing</p>  
-        </a>
-       </div>
-
-       <div id="user">
-            <a href="welcome.php">Dashboard</a>
-            <a href="../php/logout.php">Logout</a>
-       </div>
+    <nav>
+        <div id="nav_logo">
+                <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+                <p>Tarlac City Business Permit & Licensing Office</p>  
+        </div>
+        <div id="account">
+             <a href="dashboard.php">Dashboard</a>
+             <a href="../php/logout.php">Logout</a>
+        </div>
     </nav>
 
-    <div id="content">
-        <div class="container">
-                
-                <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
-            <div class="row">
-                <div class="frame wide">
-                    <div class="intro">
-                        <p class="title">Profile</p>
-                        <p class="sentence">Enter your informations to make a profile</p>
-                    </div>
+    <main>
+        <section>
+        <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+            <div class="text-center">
+                <p class="title">Profile</p>
+                <p class="sentence">Enter your informations to make a profile</p>
+            </div>
                 <!--Owner -->
-                    <p class="title">Owner</p>
-                    <div class="row">
-                        <div class="group">
-                            <label for="fname">First Name</label>
-                            <input type="text" id="fname" name="fname" placeholder="First Name" value="<?= $fname; ?>">
-                            <div class="error"><?= $fname_err; ?></div>
-                        </div>
-                        <div class="group">
-                            <label for="mname">Middle Name<span>(Optional)</span></label>
-                            <input type="text" id="mname" name="mname" placeholder="Middle Name" value="<?= $mname; ?>">
-                            <div class="error"><?= $mname_err; ?></div>
-                        </div>
-                        <div class="group">
-                            <label for="lname">Surname</label>
-                            <input type="text" id="lname" name="lname" placeholder="Surname" value="<?= $lname; ?>">
-                            <div class="error"><?= $lname_err; ?></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="group">
-                            <label for="suffix">Suffix<span>(Optional)</span></label>
-                            <input type="text" id="suffix" name="suffix" placeholder="Suffix" value="<?= $suffix; ?>">
-                            <div class="error"><?= $suffix_err; ?></div>
-                        </div>
-                        <div class="group">
-                            <label for="gender">Gender</label>
-                            <select name="gender" id="gender">
-                                <option value="" disabled selected>Select Gender..</option>
-                                <option value="Male" <?= $gender === "Male" ? "selected" : "" ?>>Male</option>
-                                <option value="Female" <?= $gender === "Female" ? "selected" : "" ?>>Female</option>
-                            </select>
-                            <div class="error"><?= $gender_err; ?></div>
-                        </div>
-                    </div>
-                    
+                <p class="title text-center">Owner</p>
+            <div class="flex">
+                <div class="input-group">
+                    <label for="fname">First Name</label>
+                    <input type="text" id="fname" name="fname" placeholder="First Name" value="<?= $fname; ?>">
+                    <div class="error_msg"><?= $fname_err; ?></div>
+                </div>
+                <div class="input-group">
+                    <label for="lname">Surname</label>
+                    <input type="text" id="lname" name="lname" placeholder="Surname" value="<?= $lname; ?>">
+                    <div class="error_msg"><?= $lname_err; ?></div>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="input-group">
+                    <label for="mname">Middle Name<span>(Optional)</span></label>
+                    <input type="text" id="mname" name="mname" placeholder="Middle Name" value="<?= $mname; ?>">
+                    <div class="error_msg"><?= $mname_err; ?></div>
+                </div>
+                <div class="input-group">
+                    <label for="suffix">Suffix<span>(Optional)</span></label>
+                    <input type="text" id="suffix" name="suffix" placeholder="Suffix" value="<?= $suffix; ?>">
+                    <div class="error_msg"><?= $suffix_err; ?></div>
+                </div>
+                <div class="input-group">
+                    <label for="gender">Gender</label>
+                    <select name="gender" id="gender">
+                        <option value="" disabled selected>Select Gender..</option>
+                        <option value="Male" <?= $gender === "Male" ? "selected" : "" ?>>Male</option>
+                        <option value="Female" <?= $gender === "Female" ? "selected" : "" ?>>Female</option>
+                    </select>
+                    <div class="error_msg"><?= $gender_err; ?></div>
+                </div>
+            </div>
                 <!--BUSINESS -->
-                     <p class="title">Business</p>
-                     <div class="row">
-                        <div class="group">
-                            <label for="bus_name">Name</label>
-                            <input type="text" id="bus_name" name="bus_name" placeholder="Business Name" value="<?= $bus_name; ?>">
-                            <div class="error"><?= $bus_name_err; ?></div>
-                        </div>
-                        <div class="group">
-                            <label for="logo">Logo<span>(Optional)</span></label>
-                            <input type="file" id="logo" name="logo">
-                            <div class="error"><?= $logo_err; ?></div>
-                        </div>
-                     </div>
-                     <div class="row">
-                        <div class="group">
-                            <label for="activity">Activity</label>
-                            <input type="text" id="activity" name="activity" placeholder="Business Activity" value="<?= $activity; ?>">
-                            <div class="error"><?= $activity_err; ?></div>
-                        </div>
-                        <div class="group">
-                            <label for="contact">Contact Number</label>
-                            <div class="row">
-                            <div class="before_input">+63</div>
-                            <input type="text" id="contact" name="contact" placeholder="Contact Number" maxlength="10" value="<?= $contact; ?>">
-                            </div>
-                            <div class="error"><?= $contact_err; ?></div>
-                            
-                        </div>
-                     </div>
-                     <div class="row">
-                        <div class="group">
-                            <label for="address_1">House No./Unit No./Building/Street</label>
-                            <input type="text" id="address_1" name="address_1" placeholder="House No./Unit No./Building/Street" value="<?= $address_1; ?>">
-                            <div class="error"><?= $address_1_err; ?></div>
-                        </div>
-                        <div class="group">
-                            <label for="address_2">Barangay</label>
-                            <select id="address_2" name="address_2">
-                            <option value="" disabled selected>Select Barangay...</option>
-                            <?php
-                                $barangays = array(
-                                    'Aguso',
-                                    'Alvindia',
-                                    'Amucao',
-                                    'Armenia',
-                                    'Asturias',
-                                    'Atioc',
-                                    'Balanti',
-                                    'Balete',
-                                    'Balibago I',
-                                    'Balibago II',
-                                    'Balingcanaway',
-                                    'Banaba',
-                                    'Bantog',
-                                    'Baras-baras',
-                                    'Batang-batang',
-                                    'Binauganan',
-                                    'Bora',
-                                    'Buenavista',
-                                    'Buhilit',
-                                    'Burot',
-                                    'Calingcuan',
-                                    'Capehan',
-                                    'Carangian',
-                                    'Care',
-                                    'Central',
-                                    'Culipat',
-                                    'Cut-cut I',
-                                    'Cut-cut II',
-                                    'Dalayap',
-                                    'Dela Paz',
-                                    'Dolores',
-                                    'Laoang',
-                                    'Ligtasan',
-                                    'Lourdes',
-                                    'Mabini',
-                                    'Maligaya',
-                                    'Maliwalo',
-                                    'Mapalacsiao',
-                                    'Mapalad',
-                                    'Matatalaib',
-                                    'Paraiso',
-                                    'Poblacion',
-                                    'Salapungan',
-                                    'San Carlos',
-                                    'San Francisco',
-                                    'San Isidro',
-                                    'San Jose',
-                                    'San Jose de Urquico',
-                                    'San Juan Bautista',
-                                    'San Juan de Mata',
-                                    'San Luis',
-                                    'San Manuel',
-                                    'San Miguel',
-                                    'San Nicolas',
-                                    'San Pablo',
-                                    'San Pascual',
-                                    'San Rafael',
-                                    'San Roque',
-                                    'San Sebastian',
-                                    'San Vicente',
-                                    'Santa Cruz',
-                                    'Santa Maria',
-                                    'Santo Cristo',
-                                    'Santo Domingo',
-                                    'Santo Niño',
-                                    'Sapang Maragul',
-                                    'Sapang Tagalog',
-                                    'Sepung Calzada',
-                                    'Sinait',
-                                    'Suizo',
-                                    'Tariji',
-                                    'Tibag',
-                                    'Tibagan',
-                                    'Trinidad',
-                                    'Ungot',
-                                    'Villa Bacolor'
+            <p class="title text-center">Business</p>
+            <div class="flex">
+                <div class="input-group">
+                    <label for="bus_name">Name</label>
+                    <input type="text" id="bus_name" name="bus_name" placeholder="Business Name" value="<?= $bus_name; ?>">
+                    <div class="error_msg"><?= $bus_name_err; ?></div>
+                </div>
+                <div class="input-group">
+                    <label for="logo">Logo<span>(Optional)</span></label>
+                    <input type="file" id="logo" name="logo">
+                    <div class="error_msg"><?= $logo_err; ?></div>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="input-group">
+                    <label for="activity">Activity</label>
+                    <input type="text" id="activity" name="activity" placeholder="Business Activity" value="<?= $activity; ?>">
+                    <div class="error_msg"><?= $activity_err; ?></div>
+                </div>
+                <div class="input-group">
+                    <label for="contact">Contact Number</label>
+                    <div class="flex">
+                        <div class="pre-input">+63</div>
+                        <input class="flex-grow-1" type="text" id="contact" name="contact" placeholder="Contact Number" maxlength="10" value="<?= $contact; ?>">
+                    </div>
+                    <div class="error_msg"><?= $contact_err; ?></div>
+                </div>
+            </div>
+            <div class="flex">
+                <div class="input-group">
+                    <label for="address_1">House No./Unit No./Building/Street</label>
+                    <input type="text" id="address_1" name="address_1" placeholder="House No./Unit No./Building/Street" value="<?= $address_1; ?>">
+                    <div class="error_msg"><?= $address_1_err; ?></div>
+                </div>
+                <div class="input-group">
+                    <label for="address_2">Barangay</label>
+                    <select id="address_2" name="address_2">
+                    <option value="" disabled selected>Select Barangay...</option>
+                        <?php
+                        $barangays = array(
+                            'Aguso','Alvindia','Amucao','Armenia','Asturias','Atioc',
+                            'Balanti','Balete','Balibago I','Balibago II','Balingcanaway','Banaba','Bantog','Baras-baras','Batang-batang','Binauganan','Bora','Buenavista','Buhilit','Burot',
+                            'Calingcuan','Capehan','Carangian','Care','Central','Culipat','Cut-cut I','Cut-cut II',
+                            'Dalayap','Dela Paz','Dolores',
+                            'Laoang','Ligtasan','Lourdes',
+                            'Mabini','Maligaya','Maliwalo','Mapalacsiao','Mapalad','Matatalaib',
+                            'Paraiso','Poblacion',
+                            'Salapungan','San Carlos','San Francisco','San Isidro','San Jose','San Jose de Urquico','San Juan Bautista','San Juan de Mata','San Luis','San Manuel','San Miguel','San Nicolas','San Pablo','San Pascual','San Rafael','San Roque','San Sebastian','San Vicente','Santa Cruz','Santa Maria','Santo Cristo','Santo Domingo','Santo Niño','Sapang Maragul','Sapang Tagalog','Sepung Calzada','Sinait','Suizo',
+                            'Tariji','Tibag','Tibagan','Trinidad',
+                            'Ungot',
+                            'Villa Bacolor'
                                 );
                                 foreach ($barangays as $barangay) {
                                     echo "<option value='$barangay' " . ($address_2 === $barangay ? "selected" : "") . ">$barangay</option>";
 
                                 }
-                                
                             ?>
-                            </select>
-                            <div class="error"><?= $address_2_err; ?></div>
-                        </div>
-                     </div>
-                </div>
-                <div class="frame wide">
-                    <p class="title">Pin Location</p>
-                    <div id="map"></div>
-                    <input type="text" id="latitude" name="latitude" value="<?= $latitude; ?>" hidden> 
-                    <input type="text" id="longitude" name="longitude" value="<?= $longitude; ?>" hidden>
-                    <div class="error"><?= $latlang_err; ?></div>
-                    <input type="submit" value="<?= $submit_btn; ?>">
-                    </form>
+                        </select>
+                        <div class="error_msg"><?= $address_2_err; ?></div>
                 </div>
             </div>
-        </div>
-    </div>
+        </form>
+        </section>
+
+        <section>
+        <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+            <p class="title text-center">Pin Location</p>
+            <map id="map"></map>
+            <input type="text" id="latitude" name="latitude" value="<?= $latitude; ?>" hidden> 
+            <input type="text" id="longitude" name="longitude" value="<?= $longitude; ?>" hidden>
+            <div class="error_msg"><?= $latlang_err; ?></div>
+            <input type="submit" value="<?= $submit_btn; ?>">
+        </form>
+        </section>
+    </main>
 </body>
 </html>
