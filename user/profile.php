@@ -318,8 +318,8 @@ function validate($data) {
     </nav>
 
     <main>
+        <form class="flex-row" autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
         <section>
-        <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
             <div class="text-center">
                 <p class="title">Profile</p>
                 <p class="sentence">Enter your informations to make a profile</p>
@@ -421,19 +421,19 @@ function validate($data) {
                         <div class="error_msg"><?= $address_2_err; ?></div>
                 </div>
             </div>
-        </form>
+        
         </section>
 
         <section>
-        <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+        
             <p class="title text-center">Pin Location</p>
             <map id="map"></map>
             <input type="text" id="latitude" name="latitude" value="<?= $latitude; ?>" hidden> 
             <input type="text" id="longitude" name="longitude" value="<?= $longitude; ?>" hidden>
             <div class="error_msg"><?= $latlang_err; ?></div>
             <input type="submit" value="<?= $submit_btn; ?>">
-        </form>
         </section>
+        </form>
     </main>
 </body>
 </html>
