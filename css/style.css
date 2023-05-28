@@ -167,8 +167,7 @@ form .error_msg {
     padding-left: 10px;
 }
 
-form .alert {
-    display: none;
+form .error_alert {
     color: rgb(220, 53, 69);
     border: 1px solid rgb(241, 174, 181);
     border-radius: 4px;
