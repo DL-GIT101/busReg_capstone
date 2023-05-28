@@ -168,13 +168,14 @@ function validate($data) {
 </head>
 
 <body>
-<modal class="<?= $hidden ?>">
-    <div class="content <?= $status ?>">
-        <p class="title"><?= $title ?></p>
-        <p class="sentence"><?= $message ?></p>
-        <?= $button ?>
-    </div>
-</modal>
+    <modal class="<?= $hidden ?>">
+        <div class="content <?= $status ?>">
+            <p class="title"><?= $title ?></p>
+            <p class="sentence"><?= $message ?></p>
+            <?= $button ?>
+        </div>
+    </modal>
+    
     <nav>
         <div id="nav_logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
