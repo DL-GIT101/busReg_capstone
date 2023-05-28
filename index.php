@@ -31,7 +31,7 @@
     <!-- Javascript -->
     <script src="js/script.js" defer></script>
     <script src="js/map.js" defer></script>
-    <title>Business Registration</title>
+    <title>BPLO</title>
 </head>
 <body>
 
