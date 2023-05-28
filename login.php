@@ -3,11 +3,11 @@
 session_start();
 
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: user/welcome.php");
+    header("location: user/dashboard.php");
     exit;
 }
 
-require_once "php/config.php";
+require_once "php/connection.php";
 
 $email = $email_err = $password = $pword_error = "";
 
@@ -92,44 +92,42 @@ function validate($data) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <!-- Javascript -->
     <script src="js/form.js" defer></script>
     <title>Login</title>
 </head>
 <body>
-<nav id="navbar">
-       <div id="logo">
-        <a href="index.php">
-            <img src="img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
-            <p>Business Permit & Licensing</p>  
-        </a>
-       </div>
 
-       <div id="user">
-            <a href="user/register.php">Register</a>
-       </div>
+    <nav>
+        <div id="nav_logo">
+            <img src="img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
+            </div>
+            <div id="account">
+                <a href="user/register.php">Register</a>
+            </div>
     </nav>
 
-    <div id="content">
-        <div class="container">      
-            <div class="intro">
-                <p class="title">Welcome</p>
+    <main id="content">
+        <div class="column_container">      
+            <div>
+                <p class="title text-center">Welcome</p>
                 <p class="sentence">Sign in to your account to continue</p>
             </div>
-            <form autocomplete="off" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-
-                <div class="alert"><?php echo $login_err; ?></div>
+            <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                <div class="alert"><?= $login_err; ?></div>
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email" placeholder="Email Address" value=<?php echo $email; ?>>
-                <div class="error"><?php echo $email_err; ?></div>
+                <input type="email" id="email" name="email" placeholder="Email Address" value=<?= $email; ?>>
+                <div class="error"><?= $email_err; ?></div>
 
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Password" value=<?php echo $password; ?>>
-                <div class="error"><?php echo $pword_error; ?></div>
+                <input type="password" id="password" name="password" placeholder="Password" value=<?= $password; ?>>
+                <div class="error"><?= $pword_error; ?></div>
 
                 <input type="submit" value="Login">
                 <a href="user/register.php">Don't have an account? Click Here</a>
             </form>
         </div>
-    </div>
+    </main>
 </body>
 </html>
