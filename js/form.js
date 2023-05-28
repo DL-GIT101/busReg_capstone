@@ -15,9 +15,9 @@ for (let i = 0; i < inputs.length; i++) {
   });  
 }
 
-const alerts = document.querySelectorAll('form .alert');
-alerts.forEach(alert => {
+const error_alert = document.querySelectorAll('form .error_alert');
+error_alert.forEach(alert => {
     if(alert.textContent.trim().length > 0){
-      alert.style.display = "block";
+      alert.classList.remove('hidden');
     }
 });
