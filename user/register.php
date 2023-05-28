@@ -8,10 +8,8 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 }
 
 require_once "../php/connection.php";
-$title = "Registration Successful";
-$message = "Your account has been successfully created <br>";
-$message .= "You can now log in using your credentials";
-$button = '<a href="../login.php">Go to Login</a>';
+$hidden = "hidden";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // email
 $email = validate($_POST["email"]);
@@ -126,25 +124,26 @@ if(!empty($id)) {
             if($stmt->execute()) {
                 $directory = 'upload/'. $id;
                 mkdir($directory, 0777, true);
+
                 $title = "Registration Successful";
                 $message = "Your account has been successfully created <br>";
                 $message .= "You can now log in using your credentials";
                 $button = '<a href="../login.php">Go to Login</a>';
 
+                $status = "success";
+                $hidden = "";
             } else {
-            echo    '<div id="myModal" class="modal">
-                        <div class="modal-content error">
-                            <p class="title">Registration Error</p>
-                            <p class="sentence">Try again later.</p> 
-                            <a href="../index.php">OK</a>
-                        </div>
-                    </div>';
-            }
+                $title = "Registration Fail";
+                $message = "Try again later <br>";
+                $button = '<a href="../index.php">OK</a>';
 
-            $stmt->close();
+                $status = "fail";
+                $hidden = "";
+            }
+        $stmt->close();
         }
     }
-        $mysqli->close();
+$mysqli->close();
 }
 
 function validate($data) {
@@ -169,8 +168,8 @@ function validate($data) {
 </head>
 
 <body>
-<modal class="hidden">
-    <div class="content">
+<modal class="<?= $hidden ?>">
+    <div class="content <?= $status ?>">
         <p class="title"><?= $title ?></p>
         <p class="sentence"><?= $message ?></p>
         <?= $button ?>
