@@ -6,7 +6,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     exit;
 }
 
-require_once "../php/config.php";
+require_once "../php/connection.php";
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
