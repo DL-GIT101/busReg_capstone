@@ -5,7 +5,7 @@ const bounds = L.latLngBounds(southWest, northEast);
 
 let map = L.map('map', {
     maxBounds: bounds,
-    minZoom: 11,
+    minZoom: 12,
     maxZoom: 18
 }).setView([15.480288, 120.588008], 11);
 
