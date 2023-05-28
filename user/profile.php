@@ -7,24 +7,21 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: ../login.php");
     exit;
 }
-$created = $created_error = "hidden";
+$modal = "hidden";
 
-    $sql = "SELECT * FROM user_profile WHERE user_id = ?";
+$sql = "SELECT * FROM user_profile WHERE user_id = ?";
+if($stmt = $mysqli->prepare($sql)){
+    $stmt->bind_param("s",$param_id);
 
-    if($stmt = $mysqli->prepare($sql)){
-        $stmt->bind_param("s",$param_id);
+    $param_id = validate($_SESSION['id']);
 
-        $param_id = validate($_SESSION['id']);
+    if($stmt->execute()){ 
+        $result = $stmt->get_result();
 
-        if($stmt->execute()){ 
-            $result = $stmt->get_result();
-            if($result->num_rows == 1){
-
-                $hidden = "hidden";
+            if($result->num_rows === 1){
                 $submit_btn = "Update Profile";
 
                 $row = $result->fetch_array(MYSQLI_ASSOC);
-
                 $fname = $row["first_name"];
                 $mname = $row["middle_name"];
                 $lname = $row["last_name"];
@@ -46,21 +43,26 @@ $created = $created_error = "hidden";
                 $longitude = $row["longitude"]; 
 
             }else {
-                $hidden = "";
                 $submit_btn = "Create Profile";
                 $permit = "None";
+                $modal = "";
+                $status = "";
+                $title = "Create Profile";
+                $message = "Please create your profile before accessing our services";
+                $button = '<button class="modal_close_btn">Close</button>';
             }
         }else{
-            $created_error = "";
+            $modal = "";
+            $status = "fail";
+            $title = "Profile Information Error";
+            $message = "Profile cannot be retrieve";
+            $button = '<a href="../index.php">OK</a>';
         }
-
-    }
-
     $stmt->close();
-
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $hidden = "hidden";
+    $modal = "hidden";
         //FIRST NAME
         $fname = validate($_POST["fname"]);
         if(empty($fname)){
@@ -171,7 +173,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $param_permit = $permit;
             }
-            
 
             $param_id = validate($_SESSION['id']);
             $param_fname = $fname;
@@ -218,9 +219,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                     
                     if($stmt->execute()){
-                        $created = "";
+                        $modal = "";
+                        $status = "success";
+                        $title = "Profile Information Success";
+                        $message = "Information has been added to you profile <br>";
+                        $message .= "You can view your profile now";
+                        $button = '<a href="dashboard.php">Go to Dashboard</a>';
                     } else{
-                        $created_error = "";
+                        $modal = "";
+                        $status = "fail";
+                        $title = "Profile Information Error";
+                        $message = "Try again later";
+                        $button = '<a href="../index.php">OK</a>';
                     }
                 }else{
                     $logo_err = "Error uploading" . $_FILES['logo']['error'];
@@ -237,12 +247,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             $param_logo = null;
             if($stmt->execute()){
-                $created = "";
+                $modal = "";
+                $status = "success";
+                $title = "Profile Information Success";
+                $message = "Information has been added to you profile <br>";
+                $message .= "You can view your profile now";
+                $button = '<a href="dashboard.php">Go to Dashboard</a>';
             } else{
-                $created_error = "";
+                $modal = "";
+                $status = "fail";
+                $title = "Profile Information Error";
+                $message = "Try again later";
+                $button = '<a href="../index.php">OK</a>';
             }
         }
-
             $stmt->close();
         }
     }
@@ -279,29 +297,14 @@ function validate($data) {
     <script src="../js/modal.js" defer></script>
 </head>
 <body>
-    <!--modals 
-    <div id="notif_modal" class="modal <?= $hidden ?>">
-        <div class="modal-content">
-            <p class="title">Create Profile</p>
-            <p class="sentence">Please create your profile before accessing our services.</p> 
-            <button class="modal_close_btn">CLOSE</button>
+
+    <modal class="<?= $modal ?>">
+        <div class="content <?= $status ?>">
+            <p class="title"><?= $title ?></p>
+            <p class="sentence"><?= $message ?></p>
+            <?= $button ?>
         </div>
-    </div>
-    <div id="myModal" class="modal <?= $created ?>">
-        <div class="modal-content success">
-            <p class="title">Profile Created/Updated Successful</p>
-            <p class="sentence">Information has been added to you profile</p>
-            <p class="sentence">Profile is now complete</p>    
-            <a href="welcome.php">Go to Dashboard</a>
-        </div>
-    </div>
-    <div id="myModal" class="modal <?= $created_error ?>">
-        <div class="modal-content error">
-            <p class="title">Profile Creation/Update Error</p>
-            <p class="sentence">Try again later.</p> 
-            <a href="../index.php">OK</a>
-        </div>
-    </div>-->
+    </modal>
 
     <nav>
         <div id="nav_logo">
