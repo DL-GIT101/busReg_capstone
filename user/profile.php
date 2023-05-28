@@ -156,7 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
     //insert to database
-    if(empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($gender_err) && empty($bus_name_err) && empty($logo_err) && empty($activity_err) &&empty($contact_err) && empty($address_1_err) && empty($address_2_err) && empty($latlang_err)){
+    if(empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($gender_err) && empty($bus_name_err) && empty($logo_err) && empty($activity_err) &&empty($contact_err) && empty($address_1_err) && empty($address_2_err) && empty($latlang_err)){ 
 
         if($submit_btn === "Update Profile"){
             $sql = "UPDATE user_profile SET first_name = ?, middle_name = ?, last_name = ?, suffix = ?, gender = ?, business_name = ?, logo = ?, activity = ?, contact_number = ?, address_1 = ?, address_2 = ?, latitude = ?, longitude = ? WHERE user_id = ?";
@@ -164,12 +164,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = "INSERT INTO user_profile (user_id, first_name, middle_name, last_name, suffix, gender, business_name, logo, activity, permit_status, contact_number, address_1, address_2, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         }
 
-        if($stmt = $mysqli->prepare($sql)){
-
+       if($stmt = $mysqli->prepare($sql)){
+ 
             if($submit_btn === "Update Profile"){
-                $stmt->bind_param("sssssssssssdds",$param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_bname, $param_logo, $param_activity, $param_contact, $param_address1, $param_address2, $param_latitude, $param_longitude, $param_userID);
+                $stmt->bind_param("sssssssssssdds",$param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_bname, $param_logo, $param_activity, $param_contact, $param_address1, $param_address2, $param_latitude, $param_longitude, $param_id);
             }else {
-                $stmt->bind_param("sssssssssssssdd",$param_userID, $param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_bname, $param_logo, $param_activity,$param_permit, $param_contact, $param_address1, $param_address2, $param_latitude, $param_longitude);
+                $stmt->bind_param("sssssssssssssdd",$param_id, $param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_bname, $param_logo, $param_activity,$param_permit, $param_contact, $param_address1, $param_address2, $param_latitude, $param_longitude);
 
                 $param_permit = $permit;
             }
@@ -240,12 +240,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }else {
             $logo_err = "Only jpg, jpeg, png, and svg are allowed";
         }
-
+ 
         }else{
-            if(!empty($logo)){
+           if(!empty($logo)){
                 unlink($logo);
             }
-            $param_logo = null;
+           $param_logo = null;  
             if($stmt->execute()){
                 $modal = "";
                 $status = "success";
@@ -260,13 +260,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $message = "Try again later";
                 $button = '<a href="../index.php">OK</a>';
             }
+          }
+           
         }
-            $stmt->close();
-        }
+        $stmt->close();
+    } 
+       
     }
-        $mysqli->close();
-    }
-
+    $mysqli->close();
 function validate($data) {
     $data = trim($data);
     $data = stripslashes($data);
