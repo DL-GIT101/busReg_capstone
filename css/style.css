@@ -115,6 +115,7 @@ form input, form select, .pre-input{
     border-radius: 10px;
     border: 1px solid rgb(133, 133, 133);
     background-color: rgb(255, 255, 255);
+    font-size: 12px;
 }
 
 form select {
