@@ -221,8 +221,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if($stmt->execute()){
                         $modal = "";
                         $status = "success";
-                        $title = "Profile Information Success";
-                        $message = "Information has been added to you profile <br>";
+                        if($submit_btn === "Update Profile"){
+                            $title = "Profile Information Updated";
+                            $message = "Your Profile has been updated <br>";
+                        }else{
+                            $title = "Profile Creation Success";
+                            $message = "You can now view your profile and use our services  <br>";
+                        }
                         $message .= "You can view your profile now";
                         $button = '<a href="dashboard.php">Go to Dashboard</a>';
                     } else{
@@ -248,11 +253,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
            $param_logo = null;  
             if($stmt->execute()){
                 $modal = "";
-                $status = "success";
-                $title = "Profile Information Success";
-                $message = "Information has been added to you profile <br>";
-                $message .= "You can view your profile now";
-                $button = '<a href="dashboard.php">Go to Dashboard</a>';
+                        $status = "success";
+                        if($submit_btn === "Update Profile"){
+                            $title = "Profile Information Updated";
+                            $message = "Your Profile has been updated <br>";
+                        }else{
+                            $title = "Profile Creation Success";
+                            $message = "You can now view your profile and use our services  <br>";
+                        }
+                        $message .= "You can view your profile now";
+                        $button = '<a href="dashboard.php">Go to Dashboard</a>';
             } else{
                 $modal = "";
                 $status = "fail";
