@@ -340,7 +340,7 @@ subsection > #logo > img {
     align-self: center;
 }
 
-subsection > .info {
+.info {
     background-color: rgb(255, 204, 0);
     border-radius: 10px;
     padding: 10px;
@@ -360,7 +360,7 @@ subsection > .info {
     background-color: rgb(227, 93, 106);
 }
 
-.info.none {
+.info.none, .info.uploaded {
     background-color: rgb(206, 212, 218);
 }
 
@@ -415,6 +415,10 @@ table .delete {
 
 table .view {
     background-color: rgb(0, 59, 179);
+}
+
+td .info{
+    padding: 1px 6px;
 }
 
 .row.space-between > span {
