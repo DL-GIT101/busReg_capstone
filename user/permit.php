@@ -1,6 +1,6 @@
 <?php 
     session_start();
-    require_once "../php/config.php";
+    require_once "../php/connection.php";
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         header("location: ../login.php");
         exit;
@@ -182,6 +182,7 @@ function validate($data) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/script.js" defer></script>
     <script src="../js/form.js" defer></script>
     <script src="../js/modal.js" defer></script>
     <title>New Permit</title>
@@ -213,28 +214,25 @@ function validate($data) {
         </div>
 </div>
 
-<nav id="navbar">
-       <div id="logo">
-        <a href="../index.php">
-            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
-            <p>Business Permit & Licensing</p>  
-        </a>
-       </div>
+<nav>
+        <div id="nav_logo">
+                <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+                <p>Tarlac City Business Permit & Licensing Office</p>  
+        </div>
+        <div id="account">
+             <a href="dashboard.php">Dashboard</a>
+             <a href="../php/logout.php">Logout</a>
+        </div>
+    </nav>
 
-       <div id="user">
-            <a href="welcome.php">Dashboard</a>
-            <a href="../php/logout.php">Logout</a>
-       </div>
-</nav>
-
-<div id="content">
-    <div class="container"> 
+<main>
         
-    <div class="intro">
-        <p class="title">New Business</p>
-        <p class="sentence">Please upload the photos of the following requirements</p>
-    </div>
+    
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+    <div class="text-center">
+        <p class="title">New Business</p>
+        <p class="sentence">Please upload the photo/file of the following requirements</p>
+    </div>
         <table>
             <tr>
                 <th>Requirement</th>
@@ -265,20 +263,20 @@ function validate($data) {
                                 <td>'.$fileName.'</td>';
 
                     if(empty($requirements_fetch[$count-1])){
-                      echo '<td></td>
-                            <td></td>
-                            <td></td>
+                        echo '  <td></td>
+                                <td></td>
+                                <td></td>
                             ';
                     }else{
-                        echo    '<td><a class="view_file" target="_blank" href="upload/'.$_SESSION['id'].'/'.$requirements_fetch[$count-1].'">View</a></td>
-                        <td><button value="'.$requirements_fetch[$count-1].'" type="button" class="delete_file">Delete</td>
-                        <td>'.$status_fetch[$count-1].'</td>';
+                        echo    '<td><a class="view" target="_blank" href="upload/'.$_SESSION['id'].'/'.$requirements_fetch[$count-1].'">View</a></td>
+                                <td><button value="'.$requirements_fetch[$count-1].'" type="button" class="delete">Delete</td>
+                                <td>'.$status_fetch[$count-1].'</td>';
                     }
-                        echo '<td>
-                                <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
-                                <div class="error">'.${$errorMsg}.'</div>
-                            </td>
-                        </tr>';
+                            echo '<td>
+                                    <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
+                                    <div class="error">'.${$errorMsg}.'</div>
+                                </td>
+                            </tr>';
                 $count++;
                 }
             ?>
@@ -286,8 +284,8 @@ function validate($data) {
         </table>
         <input type="submit" value="Upload">
     </form>       
-    </div>
-</div>
+
+</main>
 
 <!--
     Create a  new style for images upload as form will be in table
