@@ -70,7 +70,6 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
      <script src="../js/script.js" defer></script>
     <script src="../js/map.js" defer></script>
     <script src="../js/displayMap.js" defer></script>
-    <script src="../js/profile.js" defer></script>
     <title>Welcome</title>
 </head>
 <body>
@@ -104,7 +103,7 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 </subsection>
                 <subsection class="space-around">
                     <p class="sentence">Business Permit Status</p> 
-                    <div class="info title " id="permit_status"><?= $permit_status ?></div>
+                    <div class="info title <?= strtolower($permit_status)?>" id="permit_status"><?= $permit_status ?></div>
                 </subsection>
             </section>
             <section class="flex-grow-15">
