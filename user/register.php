@@ -188,8 +188,8 @@ function validate($data) {
      
      <main> 
         <div class="column_container">      
-            <div>
-                <p class="title text-center">Create an Account</p>
+            <div class="text-center">
+                <p class="title">Create an Account</p>
                 <p class="sentence">Please enter your email and password to create an account.</p>
             </div>
 
