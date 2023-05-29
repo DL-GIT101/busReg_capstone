@@ -33,7 +33,7 @@ body {
     font-size: 14px;
 }
 /*For hovering effect of buttons and links  */
-a:hover, form input[type=submit]:hover, button:hover{
+a:hover, form input[type=submit]:hover, button:hover, .info.services:hover{
     filter: brightness(0.8);
 }
 
@@ -48,7 +48,7 @@ nav {
     font-size: 20px;
 }
 
-#nav_logo, #account, #account > a {
+#nav_logo, #account, #account > a, subsection >.service {
     display: flex;
     align-items: center;
     height: 100%;
@@ -60,7 +60,7 @@ nav {
     padding: 0px 10px;
 }
 
-#account > a {
+#account > a , subsection >.service {
     height: 70%;
     padding: 0px 10px;
     margin: 0px 10px;
@@ -77,7 +77,12 @@ main {
     height: 94vh;
 }
 
-.column_container, form ,form .input-group, section {
+content {
+    height: 80%;
+    width: 80%;
+}
+
+.column_container, form ,form .input-group, section, subsection {
     display: flex;
     flex-direction: column;
 }
@@ -253,7 +258,7 @@ map {
     width: 75%;
 }
 
-section > map {
+section map {
     height: 100%;
     width: 100%;
 }
@@ -295,14 +300,6 @@ section > map {
     width: 16px; 
 }
 
-#profile {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    margin-right: 20px;
-}
-
 form > section {
     justify-content: space-around;
     padding: 10px;
@@ -310,16 +307,22 @@ form > section {
     width: 40vw;
 }
 
-.frame > .intro {
-    margin-bottom: 20px;
+section {
+    flex-grow: 1;
+    justify-content: space-around;
+    margin: 10px;
 }
 
-.frame > .sentence {
-    text-align: left;
-    margin-bottom: 30px;
+subsection {
+    background-color: white;
+    padding: 10px;
+    margin: 5px 0px;
+    border-radius: 10px;
+    flex-grow: 1;
+    border: 1px solid rgb(199, 199, 199);
 }
 
-.frame > .logo_container {
+subsection > #logo {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -328,50 +331,46 @@ form > section {
     align-self: center;
 }
 
-.logo_container > img {
+subsection > #logo > img {
     max-width: 100%;
     max-height: 100%;
     width: auto;
     height: auto;
+    align-self: center;
 }
 
-.frame > .item {
+subsection > .info {
     background-color: rgb(255, 204, 0);
-    border-radius: 4px;
+    border-radius: 10px;
     padding: 10px;
-    font-size: smaller;
+    font-size: 14px;
+    text-align: center;
 }
 
-.item.approved {
+.info.approved {
     background-color: rgb(71, 159, 118);
 }
 
-.item.pending {
+.info.pending {
     background-color: rgb(255, 176, 57);
 }
 
-.item.denied {
+.info.denied {
     background-color: rgb(227, 93, 106);
 }
 
-.item.none {
+.info.none {
     background-color: rgb(206, 212, 218);
 }
 
-.item.services {
+subsection >.service {
+    height: 5%;
     background-color: rgb(0, 59, 179);
     color: rgb(245, 245, 247);
-    text-decoration: none;
-    padding: 10px 0px;
-}
-
-.item.services:hover {
-    background-color: rgb(0, 39, 116);
-}
-
-.item.services:hover .emphasize {
-    text-decoration: underline;
-    text-transform: uppercase;
+    font-family: 'Jost', sans-serif;
+    font-size: 16px;
+    justify-content: center;
+    margin: 0px;
 }
 
 table {
@@ -399,10 +398,6 @@ table input[type=file] {
     margin: 0px;
     padding: 0px;
     border: none;
-}
-
-.space-between{
-    justify-content: space-between;
 }
 
 .delete_file {
@@ -484,12 +479,28 @@ td >.view_file:hover {
     flex-direction: column;
 }
 
-.flex {
+.flex, content {
     display: flex;
 }
 
 .flex-grow-1 {
     flex-grow: 1;
+}
+
+.flex-grow-2 {
+    flex-grow: 2;
+}
+
+.flex-grow-15 {
+    flex-grow: 15;
+}
+
+.space-between{
+    justify-content: space-between;
+}
+
+.space-around{
+    justify-content: space-around;
 }
 
 .hidden {

@@ -67,67 +67,62 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
      <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
      crossorigin=""></script>
+     <script src="../js/script.js" defer></script>
     <script src="../js/map.js" defer></script>
     <script src="../js/displayMap.js" defer></script>
     <script src="../js/profile.js" defer></script>
     <title>Welcome</title>
 </head>
 <body>
-    <nav id="navbar">
-       <div id="logo">
-        <a href="../index.php">
-            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
-            <p>Business Permit & Licensing</p>  
-        </a>
-       </div>
-
-       <div id="user">
-            <a href="profile.php">Profile</a>
-            <a href="../php/logout.php">Logout</a>
-       </div>
+    <nav>
+        <div id="nav_logo">
+                <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+                <p>Tarlac City Business Permit & Licensing Office</p>  
+        </div>
+        <div id="account">
+             <a href="profile.php">Profile</a>
+             <a href="../php/logout.php">Logout</a>
+        </div>
     </nav>
 
-    <div id="content">
-        <div class="container flex-row"> 
-            
-            <div id="profile">
-                 <div class="frame" >
+    <main>    
+        <content>
+            <section class="flex-grow-2">
+                <subsection class="space-around">
                     <p class="sentence">Business Profile</p>
-                    <div class="logo_container"> 
+                    <div id="logo"> 
                         <img src="<?= $logo_path ?>" alt="Logo">
                     </div>
-                    <div>
+                    <div class="text-center">
                         <p class="title"><?= $business_name ?></p>
                         <p class="sentence"><?= $name ?></p> 
                     </div>
-                </div>
-                <div class="frame">
+                </subsection>
+                <subsection class="space-around">
                     <p class="sentence">Business Activity</p> 
-                    <div class="item title"><?= $business_activity ?></div>
-                </div>
-                <div class="frame">
+                    <div class="info title"><?= $business_activity ?></div>
+                </subsection>
+                <subsection class="space-around">
                     <p class="sentence">Business Permit Status</p> 
-                    <div class="item title " id="permit_status"><?= $permit_status ?></div>
-                </div>
-            </div>
-            
-            <div class="row">
-                <div class="frame">
-                    <p class="title">Services</p>
-                    <a href="permit.php" class="item title services">
-                      <span class="emphasize">New</span> Business Permit
-                    </a>
-                </div>
-                <div class="frame wide">
-                    <p class="title">Location</p>
-                    <div id="map">
-                        <p id="latitude" class="hidden"><?= $latitude ?></p>
-                        <p id="longitude" class="hidden"><?= $longitude ?></p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
+                    <div class="info title " id="permit_status"><?= $permit_status ?></div>
+                </subsection>
+            </section>
+            <section class="flex-grow-15">
+                <subsection>
+                        <p class="title">Location</p>
+                        <map id="map">
+                            <p id="latitude" class="hidden"><?= $latitude ?></p>
+                            <p id="longitude" class="hidden"><?= $longitude ?></p>
+                        </map>
+                </subsection>
+            </section>
+            <section>
+                <subsection>
+                        <p class="title">Services</p>
+                        <a href="permit.php" class="service">New Business Permit</a>
+               </subsection>        
+            </section>
+        </content>
+    </main>
 </body>
 </html>
