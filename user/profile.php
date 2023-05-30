@@ -49,7 +49,7 @@ if($stmt = $mysqli->prepare($sql)){
                 $status = "";
                 $title = "Create Profile";
                 $message = "Please create your profile before accessing our services";
-                $button = '<button class="modal_close_btn">Close</button>';
+                $button = '<button class="close">Close</button>';
             }
         }else{
             $modal = "";
