@@ -224,6 +224,19 @@ function validate($data) {
                 
         </div>
 </modal>
+
+<modal id="info_modal" class="hidden">
+        <div class="content">
+            <p class="title">On the Place of Business</p>
+            <p class="sentence">
+                - Building/Occupancy Certificate, if owned	<br>
+                - Lease of Contract, if rented	 <br>
+                - Notice of Award/Award Sheet, if inside a Mall<br>
+                - Homeowners/Neighborhood Certification of No Objection, if inside a subdivision or housing facility</p>
+                <button>OK</button>                
+        </div>
+</modal>
+
 <nav>
         <div id="nav_logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
@@ -233,7 +246,7 @@ function validate($data) {
              <a href="dashboard.php">Dashboard</a>
              <a href="../php/logout.php">Logout</a>
         </div>
-    </nav>
+</nav>
 
 <main>
         
@@ -255,7 +268,7 @@ function validate($data) {
                 $requirements_names = array(
                     'Barangay Clearance for business',
                     'DTI Certificate of Registration',
-                    'On the Place of Business',
+                    'On the Place of Business <img id="info" src="../img/info.png" alt="">',
                     'Community Tax Certificate',
                     'Certificate of Zoning Compliance',
                     'Business Inspection Clearance',

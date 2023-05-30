@@ -446,6 +446,18 @@ table .view {
     background-color: rgb(0, 59, 179);
 }
 
+table #info{
+    cursor: pointer;
+}
+
+#info_modal  .title {
+    font-size: 18px;
+}
+
+#info_modal  .sentence {
+    font-size: 12px;
+}
+
 td .info{
     padding: 1px 6px;
 }
