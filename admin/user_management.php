@@ -6,7 +6,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== "admin"){
     exit;
 }
 
-require_once "../php/config.php";
+require_once "../php/connection.php";
 
 $all_business = array();
 
@@ -98,61 +98,54 @@ $user_sql = "SELECT id FROM users WHERE id <> ?";
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/script.js" defer></script>
     <script src="../js/click_row.js" defer></script>
     <title>MSME Management</title>
 </head>
 <body>
-<nav id="navbar">
-<p>ADMIN</p> 
-    <div id="logo">
-        <a href="../index.php">
-            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac_City_Seal">
-            <p>Business Permit & Licensing</p> 
-        </a>
-    </div>
-    
-    <div id="user">
-        <a href="../php/logout.php">Logout</a>
-    </div>
+<nav>
+        <div id="nav_logo">
+                <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+                <p>Tarlac City BPLO - ADMIN</p>  
+        </div>
+        <div id="account">
+             <a href="../php/logout.php">Logout</a>
+        </div>
 </nav>
 
-<div class="row">
+<div class="flex">
 
     <nav id="sidebar">
         <ul>
             <li ><img src="../img/dashboard.png" alt=""><a href="dashboard.php">Dashboard</a></li>
             <li class="current"><img src="../img/register.png" alt=""><a href="user_management.php">MSME Management</a></li>
             <li><img src="../img/list.png" alt=""><a href="">MSME Permit</a></li>
-            
         </ul>
     </nav>
 
-    <div id="content">
-    <div class="container"> 
-    <div class="intro">
-        <p class="title">MSME Management</p>
-    </div>
-    
-        <table>   
-            <tr>
-                <th>ID</th>
-                <th>Profile</th>
-                <th>Documents</th>
-            </tr>
-            <?php 
-            foreach ($all_business as &$business) {
-                echo '  <tr class="user_info">  
-                            <td>'.$business['id'].'</td>
-                            <td>'.$business['profile'].'</td>
-                            <td>'.$business['documents'].'</td>
-                        </tr>';
-           }
-                
-            ?>
-        </table>
+    <main class="flex-grow-1">
+        <div class="column_container"> 
+                <p class="title text-center">MSME Management</p>
+        
+            <table>   
+                <tr>
+                    <th>ID</th>
+                    <th>Profile</th>
+                    <th>Documents</th>
+                </tr>
+                <?php 
+                foreach ($all_business as &$business) {
+                    echo '  <tr class="user_info">  
+                                <td>'.$business['id'].'</td>
+                                <td>'.$business['profile'].'</td>
+                                <td>'.$business['documents'].'</td>
+                            </tr>';
+            }
+                ?>
+            </table>
        
         </div>
-    </div>
+    </main>
 </div>
 
 </body>
