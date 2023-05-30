@@ -8,7 +8,7 @@ del_btn.forEach(btn => {
     });
   });
 
-  const btn_file_del = document.querySelector('#file_del > .content > button');
+  const btn_file_del = document.querySelector('#file_del > .content  button');
 btn_file_del.addEventListener('click', () => {
-  del_modal.style.display = "none";
+  del_modal.style.display = "none"
 });
