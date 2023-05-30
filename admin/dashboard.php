@@ -84,7 +84,7 @@ if ($stmt3 = $mysqli->prepare($sql3)) {
     <nav>
         <div id="nav_logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City Business Permit & Licensing Office</p>  
+                <p>Tarlac City BPLO - ADMIN</p>  
         </div>
         <div id="account">
              <a href="../php/logout.php">Logout</a>
