@@ -1,27 +1,29 @@
 <?php 
-    session_start();
-    require_once "../php/connection.php";
+session_start();
+require_once "../php/connection.php";
+
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         header("location: ../login.php");
         exit;
     }
+
     if(hasProfile($mysqli,$_SESSION['id']) === 0){
         header("location: profile.php");
         exit;
     }
-    $success = $failed = "hidden";
+
+    $modal = "hidden";
     $sql = "SELECT * FROM new_documents WHERE user_id = ?";
    
     if($stmt = $mysqli->prepare($sql)){
-        
         $stmt->bind_param("s",$param_id);
         
         $param_id = validate($_SESSION['id']);
        
         if($stmt->execute()){
             $result = $stmt->get_result();
+
             if($result->num_rows == 1){
-           
                $row = $result->fetch_array(MYSQLI_ASSOC);
 
                 $serialized_requirements_fetch = $row["requirements"];
@@ -36,62 +38,66 @@
         }else {
             echo "error retrieving data";
         }
-    }
     $stmt->close();
+    }
+    
    
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $allowTypes = array('jpg', 'jpeg', 'png', 'pdf');
 
-    $file_inputs = count($_FILES);
+    $file_inputs_count = count($_FILES);
 
     $requirements = array();
     $status = array();
-    
-    for ($i = 1; $i <= $file_inputs; $i++) {
-
+    $error_count = 0;
+    for ($i = 1; $i <= $file_inputs_count; $i++) {
         $errorMsg = 'errorMsg_' . $i;
-        $targetDir = "upload/".$_SESSION['id']."/";
 
+        $targetDir = "upload/".$_SESSION['id']."/";
         $fileName = basename($_FILES['requirement_' . $i]['name']);
         $targetFilePath = $targetDir. $fileName;
         $fileSize = $_FILES['requirement_' . $i]['size'];
         $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-        $new_fileName = 'requirement_' . $i.'_'. uniqid() ."_". $fileName;
+        $new_fileName = 'requirement_' . $i.'.'.$fileType;
         $targetFilePath = $targetDir . $new_fileName;
-        $uploaded;
+        
         if(!empty($_FILES['requirement_' . $i]['name'])){
             if(empty($requirements_fetch[$i-1])){
                 if ($_FILES['requirement_' . $i]['error'] === UPLOAD_ERR_OK){
                     if (in_array($fileType, $allowTypes)) {
                         if ($fileSize <= 2097152) {
-                        if(move_uploaded_file($_FILES['requirement_' . $i]['tmp_name'], $targetFilePath)){
+                            if(move_uploaded_file($_FILES['requirement_' . $i]['tmp_name'], $targetFilePath)){
                                 array_push($requirements,$new_fileName);
-                                array_push($status,'Uploaded');
-                                $uploaded = 1;
+                                array_push($status,'Uploaded');   
                             }else{
                                 $$errorMsg  = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
+                                $error_count++;
                                 array_push($requirements,null);
                                 array_push($status,null);
                             }
                         } else {
                             $$errorMsg = 'File size should be 2MB or less.';
+                            $error_count++;
                             array_push($requirements,null);
                             array_push($status,null);
                         }
                     } else {
                         $$errorMsg = 'Only JPG, JPEG, PNG and PDF files are allowed.';
+                        $error_count++;
                         array_push($requirements,null);
                         array_push($status,null);
                     } 
                 } else {
                     $$errorMsg = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
+                    $error_count++;
                     array_push($requirements,null);
                     array_push($status,null);
                 }
             }else{
                 $$errorMsg = 'Delete first the uploaded file';
+                $error_count++;
                 array_push($requirements,$requirements_fetch[$i-1]);
                 array_push($status,$status_fetch[$i-1]);
             }
@@ -128,19 +134,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_Stat = $serialized_status;
 
             if($stmt->execute()){
-               if($uploaded === 1){
-                $success = "";
-               }else{
-                $failed = "";
-               }
-            }else{
-                $failed = "";
-            }
-            $stmt->close();
-        }
 
-   
-    $mysqli->close();
+                if ($error_count > 0) {
+                    $modal = "";
+                    $status_modal = "warning";
+                    $title = "Refresh to see Uploaded Files";
+                    $message = "Some Uploaded files are not uploaded";
+                    $button = '<button>OK</button>';
+                } else {
+                    $modal = "";
+                    $status_modal = "success";
+                    $title = "Upload Successful";
+                    $message = "All Uploaded files will be reviewed";
+                    $button = '<a href="permit.php">OK</a>';
+                }
+            }else{
+                $modal = "";
+                $status_modal = "fail";
+                $title = "Upload Error";
+                $message = "Try again later";
+                $button = '<a href="dashboard.php">OK</a>';
+            }
+        $stmt->close();
+        }
+$mysqli->close();
 }
 
 function hasProfile($mysqli,$param_id){
@@ -162,10 +179,8 @@ function hasProfile($mysqli,$param_id){
         }else{
             echo "Oops! Something went wrong. Please try again later";
         }
-
-    }
-
     $stmt->close();
+    }
 }
 
 function validate($data) {
@@ -188,22 +203,7 @@ function validate($data) {
     <title>New Permit</title>
 </head>
 <body>
-    <!-- upload success -->
-<div class="modal <?= $success ?>">
-    <div class="modal-content success">
-            <p class="title">Upload Successful</p>
-            <p class="sentence">All Uploaded files will be reviewed</p>  
-            <a href="permit.php">OK</a>
-    </div>
-</div> 
-<!-- upload failed -->
-<div class="modal <?= $failed ?>">
-    <div class="modal-content error">
-        <p class="title">Upload Error</p>
-        <p class="sentence">Check the error or Try again later.</p> 
-        <button class="modal_close_btn">CLOSE</button>
-    </div> 
-</div>
+
 <!-- file delete -->
 <div id="notif_modal" class="modal hidden">
         <div class="modal-content error">
@@ -214,6 +214,13 @@ function validate($data) {
         </div>
 </div>
 
+<modal class="<?= $modal ?>">
+        <div class="content <?= $status_modal ?>">
+            <p class="title"><?= $title ?></p>
+            <p class="sentence"><?= $message ?></p>
+            <?= $button ?>
+        </div>
+    </modal>
 <nav>
         <div id="nav_logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
@@ -274,7 +281,7 @@ function validate($data) {
                     }
                             echo '<td>
                                     <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
-                                    <div class="error">'.${$errorMsg}.'</div>
+                                    <div class="error_msg">'.${$errorMsg}.'</div>
                                 </td>
                             </tr>';
                 $count++;
@@ -288,7 +295,6 @@ function validate($data) {
 </main>
 
 <!--
-    Create a  new style for images upload as form will be in table
     1. Barangay Clearance for business
     2. DTI Certificate of Registration
     3. On the Place of Business 	 
