@@ -295,33 +295,32 @@ section map {
 
 #sidebar {
     background-color: rgb(255, 204, 0);
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2), 8px 0 20px 0 rgba(0, 0, 0, 0.19);
     display: flex;
     flex-direction: column;
-    min-height: 740px;
-    min-width: 250px;
-    margin-right: 50px;
+    height: 94vh;
+    width: 18vw;
 }
 
 #sidebar > ul {
-    padding: 10px 0px;
+    padding: 0px;
+    width: 100%;
 }
 
 #sidebar > ul li {
     display: flex;
     align-items: center;
     padding: 10px 20px;
-    transition: background-color 0.3s;
 }
 
 #sidebar > ul li:hover, .current {
-    background-color: rgb(221, 177, 0);
+    background-color: rgb(233, 186, 1);
 }
 
 #sidebar > ul li a{
     text-decoration: none;
     color: rgb(29, 29, 31);
     font-family: 'Jost', sans-serif;
+    font-size: 16px;
 }
 
 #sidebar > ul li img{
@@ -505,6 +504,8 @@ td .info{
 .actions button:hover{
     filter: brightness(0.8);
 }
+
+/* Single Styles */
 
 .flex-row {
     flex-direction: row;
