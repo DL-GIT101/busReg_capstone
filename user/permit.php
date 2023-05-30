@@ -140,7 +140,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $status_modal = "warning";
                     $title = "Refresh to see Uploaded Files";
                     $message = "Some Uploaded files are not uploaded";
-                    $button = '<button>OK</button>';
+                    $button = '<button class="close">OK</button>';
                 } else {
                     $modal = "";
                     $status_modal = "success";
@@ -200,19 +200,10 @@ function validate($data) {
     <script src="../js/script.js" defer></script>
     <script src="../js/form.js" defer></script>
     <script src="../js/modal.js" defer></script>
+    <script src="../js/file_modal.js" defer></script>
     <title>New Permit</title>
 </head>
 <body>
-
-<!-- file delete -->
-<div id="notif_modal" class="modal hidden">
-        <div class="modal-content error">
-            <div class="row space-between"><p class="title">Delete File</p>
-            <span class="modal_close_btn">&times;</span></div>
-            <p class="sentence">Are you sure you want to delete this file? This action cannot be undone.</p> 
-            <a id="file_link" href="">Delete</a>
-        </div>
-</div>
 
 <modal class="<?= $modal ?>">
         <div class="content <?= $status_modal ?>">
@@ -220,7 +211,19 @@ function validate($data) {
             <p class="sentence"><?= $message ?></p>
             <?= $button ?>
         </div>
-    </modal>
+</modal>
+
+<modal id="file_del" class="hidden">
+        <div class="content fail">
+            <p class="title">Delete File</p>
+            <p class="sentence">Are you sure you want to delete this file? This action cannot be undone</p>
+            <div id="btn_grp" class="flex align-self-center">
+                <a href="" id="file_link">Delete</a>
+                <button>Cancel</button>
+            </div>
+                
+        </div>
+</modal>
 <nav>
         <div id="nav_logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
