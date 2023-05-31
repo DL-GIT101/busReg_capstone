@@ -77,7 +77,7 @@ if ($stmt3 = $mysqli->prepare($sql3)) {
      crossorigin=""></script>
     <script src="../js/script.js" defer></script>
     <script src="../js/map.js" defer></script>
-    <script src="../js/businessLocation.js" defer></script>
+    <script src="../js/display_MSME_loc.js" defer></script>
     <title>Dashboard</title>
 </head>
 <body>
@@ -106,22 +106,22 @@ if ($stmt3 = $mysqli->prepare($sql3)) {
             <section>
                  <subsection class="space-around">
                     <p class="sentence">Users</p>   
-                    <div class="info title flex space-between">
+                    <div class="info none title flex space-between">
                         <p>Total</p>
                         <p><?= $userCount ?></p>
                     </div>  
-                    <div class="info approved title flex space-between">
+                    <div class="info none title flex space-between">
                         <p>Profile</p>
                         <p><?= $profileCount ?></p>
                     </div>     
                 </subsection>
                 <subsection class="space-around">
                     <p class="sentence">Documents</p> 
-                    <div class="info pending title flex space-between">
+                    <div class="info none title flex space-between">
                         <p>Incomplete</p>
                         <p><?= $incompleteCount ?></p>
                     </div>  
-                    <div class="info approved title flex space-between">
+                    <div class="info none title flex space-between">
                         <p>Complete</p>
                         <p><?= $completeCount ?></p>
                     </div>
@@ -132,15 +132,15 @@ if ($stmt3 = $mysqli->prepare($sql3)) {
                 </subsection>
                 <subsection class="space-around">
                     <p class="sentence">Permit</p> 
-                    <div class="info pending title flex space-between">
+                    <div class="info none title flex space-between">
                         <p>Pending</p>
                         <p>0</p>
                     </div>  
-                    <div class="info approved title flex space-between">
+                    <div class="info none title flex space-between">
                         <p>Approved</p>
                         <p>0</p>
                     </div>
-                    <div class="info denied title flex space-between">
+                    <div class="info none title flex space-between">
                         <p>Denied</p>
                         <p>0</p>
                     </div> 
