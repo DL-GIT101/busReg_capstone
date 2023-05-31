@@ -380,7 +380,7 @@ subsection > #logo > img {
     background-color: rgb(71, 159, 118);
 }
 
-.info.pending {
+.info.pending, .info.created,.info.incomplete {
     background-color: rgb(255, 176, 57);
 }
 
@@ -445,7 +445,7 @@ table .view {
     background-color: rgb(0, 59, 179);
 }
 
-table #info{
+table #info, .user_info > td > *{
     cursor: pointer;
 }
 
@@ -461,21 +461,9 @@ td .info{
     padding: 1px 6px;
 }
 
-.row.space-between > span {
-    cursor: pointer;
-}
-
 .user_info:hover {
     background-color: rgb(214, 214, 214);
 }
-
-.user_info td:first-child {
-    font-weight: 600;
-}
-
-.user_info td:first-child:hover {
-    cursor: pointer;
-  }
 
 .actions {
     display: flex;
@@ -507,16 +495,16 @@ td .info{
 
 /* Single Styles */
 
+.flex, content {
+    display: flex;
+}
+
 .flex-row {
     flex-direction: row;
 }
 
 .flex-column {
     flex-direction: column;
-}
-
-.flex, content {
-    display: flex;
 }
 
 .flex-grow-1 {
@@ -529,6 +517,10 @@ td .info{
 
 .flex-grow-15 {
     flex-grow: 15;
+}
+
+.justify-center {
+    justify-content: center;
 }
 
 .space-between{
