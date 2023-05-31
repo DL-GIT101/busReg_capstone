@@ -96,7 +96,7 @@ if ($stmt3 = $mysqli->prepare($sql3)) {
     <nav id="sidebar">
         <ul>
             <li class="current"><img src="../img/dashboard.png" alt=""><a href="dashboard.php">Dashboard</a></li>
-            <li><img src="../img/register.png" alt=""><a href="user_management.php">MSME Management</a></li>
+            <li><img src="../img/register.png" alt=""><a href="msme_management.php">MSME Management</a></li>
             <li><img src="../img/list.png" alt=""><a href="">MSME Permit</a></li>
         </ul>
     </nav>
