@@ -8,6 +8,9 @@ $user_id = urldecode($_GET['id']);
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
+$profile = "";
+$none = "hidden";
+
     if($stmt = $mysqli->prepare($sql)){
         $stmt->bind_param("s",$param_id);
 
@@ -32,40 +35,15 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 $longitude = $row["longitude"];
 
             }else{
-                $hidden = "hidden";
+                $profile = "hidden";
+                $none = "";
             }
         }else{
             echo "Oops! Something went wrong. Please try again later";
         }
         $stmt->close();
     }
-
-    $sql2 = "SELECT * FROM new_documents WHERE user_id = ?";
-   
-    if($stmt2 = $mysqli->prepare($sql2)){
-        
-        $stmt2->bind_param("s",$param_id);
-        
-        $param_id = $user_id;
-       
-        if($stmt2->execute()){
-            $result = $stmt2->get_result();
-            if($result->num_rows == 1){
-           
-               $row = $result->fetch_array(MYSQLI_ASSOC);
-
-                $serialized_requirements_fetch = $row["requirements"];
-                $serialized_status_fetch = $row["status"];
-                $requirements_fetch = unserialize($serialized_requirements_fetch);
-                $status_fetch = unserialize($serialized_status_fetch);                
-            }
-        }else {
-            echo "error retrieving data";
-        }
-    }
-    $stmt2->close();
-
-    $mysqli->close();
+$mysqli->close();
 } 
 function validate($data) {
     $data = trim($data);
@@ -115,7 +93,8 @@ function validate($data) {
     </nav>
 
     <main class="flex-grow-1">
-        <content>
+        <p class="title <?= $none ?>">The user has not yet created a profile.</p>
+        <content class="<?= $profile ?>">
             <section class="flex-grow-2">
                 <subsection class="space-around">
                     <p class="sentence">Business Profile</p>
