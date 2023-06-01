@@ -267,17 +267,17 @@ modal > .content.warning button {
     background-color: rgb(255, 176, 57);
 }
 
-#file_del #btn_grp *{
+#btn_grp *{
     height: 80%;
     margin: 10px;
 }
 
-#file_del #btn_grp a{
+#btn_grp a{
     padding-top: 0px ;
     padding-bottom: 0px ;
 }
 
-#file_del #btn_grp button{
+#btn_grp button{
     border: 1px solid rgb(220, 53, 69);
     background-color: rgb(245, 245, 247);
     color: rgb(220, 53, 69);

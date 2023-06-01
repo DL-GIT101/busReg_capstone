@@ -82,6 +82,28 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
         
     } 
 
+    foreach ($all_business as &$business) {
+        $permit_sql = "SELECT * FROM user_profile WHERE user_id = ? ORDER BY user_id DESC";
+                if ($permit_stmt = $mysqli->prepare($permit_sql)) {
+                    $permit_stmt->bind_param("s", $current_id);
+                    $current_id = $business['id'];
+                    if ($permit_stmt->execute()) {
+                        $result = $permit_stmt->get_result();
+                        if ($result->num_rows === 1) {
+                            $row = $result->fetch_array(MYSQLI_ASSOC);
+                            $permit = $row["permit_status"];
+                            $business['permit'] = $permit;
+                        } else {
+                            $business['permit'] = "None";
+                        }
+                    } else {
+                        echo "Error retrieving data";
+                    }
+                    $permit_stmt->close();
+                }   
+        
+    } 
+
     $mysqli->close();
 
     function validate($data) {
@@ -103,6 +125,16 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
     <title>MSME Management</title>
 </head>
 <body>
+<modal id="user_del" class="hidden">
+        <div class="content fail">
+            <p class="title">Delete File</p>
+            <p class="sentence">Are you sure you want to delete this file? This action cannot be undone</p>
+            <div id="btn_grp" class="flex align-self-center">
+                <a href="" id="user_link">Delete</a>
+                <button>Cancel</button>
+            </div>
+        </div>
+</modal>
 <nav>
         <div id="nav_logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
@@ -132,6 +164,8 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
                         <th>ID</th>
                         <th>Profile</th>
                         <th>Documents</th>
+                        <th>Permit</th>
+                        <th>Delete</th>
                     </tr>
                     <?php 
                     foreach ($all_business as &$business) {
@@ -139,6 +173,8 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
                                     <td>'.$business['id'].'</td>
                                     <td><div class="info '.strtolower($business['profile']) .'">'.$business['profile'].'</div></td>
                                     <td><div class="info '.strtolower($business['documents']) .'">'.$business['documents'].'</div></td>
+                                    <td><div class="info '.strtolower($business['permit']) .'">'.$business['permit'].'</div></td>
+                                    <td><button type="button" class="delete">Delete</button></td>
                                 </tr>';
                 }
                     ?>
