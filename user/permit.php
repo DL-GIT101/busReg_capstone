@@ -292,7 +292,7 @@ function validate($data) {
                             ';
                     }else{
                         echo    '<td><a class="view" target="_blank" href="upload/'.$_SESSION['id'].'/'.$requirements_fetch[$count-1].'">View</a></td>
-                                <td><button value="'.$requirements_fetch[$count-1].'" type="button" class="delete">Delete</td>
+                                <td><button value="'.$requirements_fetch[$count-1].'" type="button" class="delete">Delete</button></td>
                                 <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>';
                     }
                             echo '<td>
