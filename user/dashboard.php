@@ -24,7 +24,7 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 if (!empty($row["logo"])) {
                     $logo_path = "upload/".$_SESSION['id']."/".$row["logo"];
                 } else {
-                    $logo_path = "upload/No_image_available.svg";
+                    $logo_path = "../img/No_image_available.svg";
                 }
                 $business_name = $row["business_name"];
                 $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"];

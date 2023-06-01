@@ -25,7 +25,7 @@ $none = "hidden";
                 if (!empty($row["logo"])) {
                     $logo_path = "../user/upload/".$user_id."/".$row["logo"];
                 } else {
-                    $logo_path = "../user/upload/No_image_available.svg";
+                    $logo_path = "../img/No_image_available.svg";
                 }
                 $business_name = $row["business_name"];
                 $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"];
