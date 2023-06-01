@@ -467,30 +467,12 @@ td .info{
 
 .actions {
     display: flex;
-    justify-content: center;
-}
-
-.actions button {
-    margin:0px 10px;
-    padding: 10px;
+    height: 10%;
+    width: 80%;
+    background-color: white;
+    border: 1px solid rgb(199, 199, 199);
     border-radius: 10px;
-    border: none;
-    font-size: 16px;
-    font-family: 'Noto Serif', serif;
-    color: rgb(245, 245, 247);
-    cursor: pointer;
-}
-
-.delete_btn {
-    background-color: rgb(219, 24, 43);
-}
-
-.edit_btn {
-    background-color: rgb(0, 59, 179);
-}
-
-.actions button:hover{
-    filter: brightness(0.8);
+    padding: 10px;
 }
 
 /* Single Styles */
@@ -517,6 +499,10 @@ td .info{
 
 .flex-grow-15 {
     flex-grow: 15;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
 }
 
 .justify-center {

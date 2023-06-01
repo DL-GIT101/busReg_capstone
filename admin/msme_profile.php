@@ -92,8 +92,11 @@ function validate($data) {
         </ul>
     </nav>
 
-    <main class="flex-grow-1">
+    <main class="flex-grow-1 flex-wrap">
         <p class="title <?= $none ?>">The user has not yet created a profile.</p>
+        <div class="actions">
+            <p class="sentence"> User ID : <?= $user_id ?></p>
+        </div>
         <content class="<?= $profile ?>">
             <section class="flex-grow-2">
                 <subsection class="space-around">
