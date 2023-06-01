@@ -2,9 +2,13 @@
 session_start();
 require_once "../php/connection.php";
 
-if (isset($_GET['id'])) {
-
-$user_id = urldecode($_GET['id']);
+if(isset($_GET['id'])){
+    $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
+}else if(isset($_SESSION['user_id'])){
+    $user_id = $_SESSION['user_id'];
+}else{
+    header("location: msme_management.php");
+}
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
@@ -44,7 +48,7 @@ $none = "hidden";
         $stmt->close();
     }
 $mysqli->close();
-} 
+
 function validate($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -98,8 +102,9 @@ function validate($data) {
             <p class="title">Profile</p>
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
-                <a href="">Edit</a>
-                <a href="" class="delete">Delete</a>
+                <a href="edit_profile.php" class="<?= $none ?>">Add</a>
+                <a href="edit_profile.php" class="<?= $profile ?>">Edit</a>
+                <a href="" class="delete <?= $profile ?>">Delete</a>
             </div>
         </div>
         <content class="<?= $profile ?>">
