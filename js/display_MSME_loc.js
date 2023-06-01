@@ -1,5 +1,5 @@
 let xhr = new XMLHttpRequest();
-xhr.open('POST', 'get_coordinates.php', true);
+xhr.open('POST', 'php/get_coordinates.php', true);
 xhr.onload = function () {
     if (xhr.status === 200) {
     let coordinates = JSON.parse(xhr.responseText);

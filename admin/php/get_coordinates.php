@@ -1,5 +1,5 @@
 <?php 
-require_once "../php/connection.php";
+require_once "/opt/lampp/htdocs/busReg_capstone/php/connection.php";
 $sql = "SELECT business_name, longitude, latitude FROM user_profile";
 if ($stmt = $mysqli->prepare($sql)) {
     if ($stmt->execute()) {
