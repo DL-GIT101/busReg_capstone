@@ -94,8 +94,13 @@ function validate($data) {
 
     <main class="flex-grow-1 flex-wrap">
         <p class="title <?= $none ?>">The user has not yet created a profile.</p>
-        <div class="actions">
+        <div class="actions space-between">
+            <p class="title">Profile</p>
             <p class="sentence"> User ID : <?= $user_id ?></p>
+            <div class="buttons">
+                <a href="">Edit</a>
+                <a href="" class="delete">Delete</a>
+            </div>
         </div>
         <content class="<?= $profile ?>">
             <section class="flex-grow-2">
