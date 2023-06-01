@@ -167,8 +167,8 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
                         <th>Permit</th>
                         <th>Delete</th>
                     </tr>
-                    <tr class="user_info">
-                        <td colspan="5"><a href="" class="info default justify-center">Add Account</a></td>
+                    <tr>
+                        <td colspan="5"><a href="add_msme.php" class="info default justify-center">Add Account</a></td>
                     </tr>
                     <?php 
                     foreach ($all_business as &$business) {
