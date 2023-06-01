@@ -112,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $bus_name = validate($_POST["bus_name"]);
         if(empty($bus_name)){
             $bus_name_err = "Enter Business Name";
-        }elseif(!preg_match("/^[a-zA-Z&*@\\-!#()%+?\"\/~\s]*$/", $bus_name)){
+        }elseif(!preg_match("/^[a-zA-Z0-9&*@\\-!#()%+?\"\/~\s]*$/", $bus_name)){
             $bus_name_err = "Only letters, numbers, and special characters are allowed";
         }else{
             $bus_name = ucwords(strtolower($bus_name));
