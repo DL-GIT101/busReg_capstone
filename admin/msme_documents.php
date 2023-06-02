@@ -2,9 +2,14 @@
 session_start();
 require_once "../php/connection.php";
 
-if (isset($_GET['id'])) {
+if(isset($_GET['id'])){
+    $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
+}else if(isset($_SESSION['user_id'])){
+    $user_id = $_SESSION['user_id'];
+}else{
+    header("location: msme_management.php");
+}
 
-$user_id = urldecode($_GET['id']);
 $document = "";
 $none = "hidden";
     $sql2 = "SELECT * FROM new_documents WHERE user_id = ?";
@@ -36,7 +41,7 @@ $none = "hidden";
     $stmt2->close();
 
     $mysqli->close();
-} 
+
 function validate($data) {
     $data = trim($data);
     $data = stripslashes($data);
@@ -76,7 +81,17 @@ function validate($data) {
         </ul>
     </nav>
 
-    <main class="flex-grow-1">
+    <main class="flex-grow-1 flex-wrap content-center">
+    <div class="actions space-between">
+            <p class="title">Documents</p>
+            <p class="sentence"> User ID : <?= $user_id ?></p>
+            <div class="buttons">
+                <a href="msme_profile.php" class="back">Back</a>
+                <a href="" class="<?= $none ?>">Add</a>
+                <a href="" class="<?= $document ?>">Edit</a>
+                <a href="" class="delete <?= $profile ?>">Delete</a>
+            </div>
+        </div>
     <p class="title <?= $none ?>">The user has not uploaded any documents yet.</p>
         <div class="column_container <?= $document ?>">
             <div class="text-center">
