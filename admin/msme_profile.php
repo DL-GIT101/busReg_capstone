@@ -96,17 +96,19 @@ function validate($data) {
         </ul>
     </nav>
 
-    <main class="flex-grow-1 flex-wrap">
-        <p class="title <?= $none ?>">The user has not yet created a profile.</p>
+    <main class="flex-grow-1 flex-wrap content-center">
+        
         <div class="actions space-between">
             <p class="title">Profile</p>
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
+                <a href="msme_management.php" class="back">Back</a>
                 <a href="edit_profile.php" class="<?= $none ?>">Add</a>
                 <a href="edit_profile.php" class="<?= $profile ?>">Edit</a>
                 <a href="php/msme_delete.php?profile=<?= $user_id ?>" class="delete <?= $profile ?>">Delete</a>
             </div>
         </div>
+        <p class="title <?= $none ?>">The user has not yet created a profile.</p>
         <content class="<?= $profile ?>">
             <section class="flex-grow-2">
                 <subsection class="space-around">

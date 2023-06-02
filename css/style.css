@@ -497,6 +497,11 @@ td .info{
     background-color: rgb(220, 53, 69);  
 }
 
+.actions .buttons > .back {
+    background-color: rgb(255, 204, 0);
+    color: rgb(29, 29, 31); 
+}
+
 /* Single Styles */
 
 .flex, content, .actions .buttons {
@@ -537,6 +542,10 @@ td .info{
 
 .space-around{
     justify-content: space-around;
+}
+
+.content-center{
+    align-content: center;
 }
 
 .align-self-center {
