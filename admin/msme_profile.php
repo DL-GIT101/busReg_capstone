@@ -104,7 +104,7 @@ function validate($data) {
             <div class="buttons">
                 <a href="edit_profile.php" class="<?= $none ?>">Add</a>
                 <a href="edit_profile.php" class="<?= $profile ?>">Edit</a>
-                <a href="" class="delete <?= $profile ?>">Delete</a>
+                <a href="php/msme_delete.php?profile=<?= $user_id ?>" class="delete <?= $profile ?>">Delete</a>
             </div>
         </div>
         <content class="<?= $profile ?>">

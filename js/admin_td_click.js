@@ -20,7 +20,7 @@ rows.forEach( row => {
     row.cells[4].addEventListener('click', () => {
             del_modal.style.display = "block";
             let id = row.cells[0].innerText;
-            user_link.href = "php/msme_delete.php?id=" + encodeURIComponent(id);
+            user_link.href = "php/msme_delete.php?id_user=" + encodeURIComponent(id);
         });
 });
 
