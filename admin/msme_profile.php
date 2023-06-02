@@ -106,6 +106,7 @@ function validate($data) {
                 <a href="edit_profile.php" class="<?= $none ?>">Add</a>
                 <a href="edit_profile.php" class="<?= $profile ?>">Edit</a>
                 <a href="php/msme_delete.php?profile=<?= $user_id ?>" class="delete <?= $profile ?>">Delete</a>
+                <a href="msme_documents.php" class="back">Documents</a>
             </div>
         </div>
         <p class="title <?= $none ?>">The user has not yet created a profile.</p>
