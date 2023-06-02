@@ -475,8 +475,7 @@ td .info{
 .actions {
     display: flex;
     align-items: center;
-    height: 10%;
-    width: 80%;
+    width: 75%;
     background-color: white;
     border: 1px solid rgb(199, 199, 199);
     border-radius: 10px;
