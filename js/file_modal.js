@@ -9,17 +9,22 @@ del_btn.forEach(btn => {
   });
 
 const btn_file_del = document.querySelector('#file_del > .content  button');
+
 btn_file_del.addEventListener('click', () => {
   del_modal.style.display = "none"
 });
 
 const info_img = document.getElementById('info');
 const info_modal = document.getElementById('info_modal'); 
-info_img.addEventListener('click', () => {
-    info_modal.style.display = "block";
-});
+if(info_modal){
+  info_img.addEventListener('click', () => {
+      info_modal.style.display = "block";
+  });
+};
 
 const info_del = document.querySelector('#info_modal > .content  button');
-info_del.addEventListener('click', () => {
-    info_modal.style.display = "none"
-});
+if(info_del){
+  info_del.addEventListener('click', () => {
+      info_modal.style.display = "none"
+  });
+};
