@@ -332,12 +332,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </ul>
     </nav>
 
-    <main class="flex-grow-1">
+    <main class="flex-grow-1 flex-wrap content-center">
+
+    <div class="actions space-between">
+            <p class="title">Profile</p>
+            <p class="sentence"> User ID : <?= $user_id ?></p>
+            <div class="buttons">
+                <a href="msme_profile.php" class="back">Back</a>
+            </div>
+        </div>
         <form class="flex-row" autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
         <section>
             <div class="text-center">
-                <p class="title">Profile - <?= $user_id; ?> </p>
-                <p class="sentence">Enter Informations to make a profile</p>
+                <p class="title">Enter Informations to make a profile</p>
             </div>
                 <!--Owner -->
                 <p class="title text-center">Owner</p>
