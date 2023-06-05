@@ -157,9 +157,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         $stmt->close();
         }
-$mysqli->close();
 }
-
+$mysqli->close();
 function hasProfile($mysqli,$param_id){
     $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
@@ -254,7 +253,7 @@ function validate($data) {
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
     <div class="text-center">
         <p class="title">New Business</p>
-        <p class="sentence">Please upload the photo/file of the following requirements</p>
+        <p class="sentence">Please upload the file of the following requirements</p>
     </div>
         <table>
             <tr>
