@@ -72,9 +72,22 @@ function validate($data) {
      <script src="../js/script.js" defer></script>
     <script src="../js/map.js" defer></script>
     <script src="../js/displayMap.js" defer></script>
+    <script src="../js/admin_td_click.js" defer></script>
     <title>MSME Profile</title>
 </head>
 <body>
+<p id="user_id" class="hidden"><?= $user_id ?></p>
+<modal id="user_del" class="hidden">
+        <div class="content fail">
+            <p class="title">Delete File</p>
+            <p class="sentence">Are you sure you want to delete this Profile? This action cannot be undone</p>
+            <div id="btn_grp" class="flex align-self-center">
+                <a href="" id="user_link">Delete</a>
+                <button>Cancel</button>
+            </div>
+        </div>
+</modal>
+
     <nav>
         <div id="nav_logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
@@ -105,7 +118,7 @@ function validate($data) {
                 <a href="msme_management.php" class="back">Back</a>
                 <a href="edit_profile.php" class="<?= $none ?>">Add</a>
                 <a href="edit_profile.php" class="<?= $profile ?>">Edit</a>
-                <a href="php/msme_delete.php?profile=<?= $user_id ?>" class="delete <?= $profile ?>">Delete</a>
+                <a id="action_dlt" class="delete <?= $profile ?>">Delete</a>
                 <a href="msme_documents.php" class="back">Documents</a>
             </div>
         </div>
