@@ -128,7 +128,7 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
 <modal id="user_del" class="hidden">
         <div class="content fail">
             <p class="title">Delete File</p>
-            <p class="sentence">Are you sure you want to delete this file? This action cannot be undone</p>
+            <p class="sentence">Are you sure you want to delete this user? This action cannot be undone</p>
             <div id="btn_grp" class="flex align-self-center">
                 <a href="" id="user_link">Delete</a>
                 <button>Cancel</button>
