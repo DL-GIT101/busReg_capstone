@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once "../php/connection.php";
+require_once "/opt/lampp/htdocs/busReg_capstone/php/connection.php";
 
 if (isset($_GET['file'])) {
 
@@ -61,7 +61,7 @@ $filePath = 'upload/'.$_SESSION['id'].'/'.$file;
             $param_Stat = $serialized_status;
 
             if($stmt->execute()){
-                header("location: permit.php");
+                header("location: ../permit.php");
             }else{
                 echo "error";
             }
