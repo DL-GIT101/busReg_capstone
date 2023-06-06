@@ -121,6 +121,7 @@ form input, form select, .pre-input{
     border: 1px solid rgb(133, 133, 133);
     background-color: rgb(255, 255, 255);
     font-size: 12px;
+    font-family: 'Noto Serif', serif;
 }
 
 form select {
@@ -376,19 +377,19 @@ subsection > #logo > img {
     text-align: center;
 }
 
-.info.approved {
+.info.approved, table select .approved, table select.approved {
     background-color: rgb(71, 159, 118);
 }
 
-.info.pending, .info.created,.info.incomplete {
+.info.pending, .info.created,.info.incomplete, table select .pending, table select.pending{
     background-color: rgb(255, 176, 57);
 }
 
-.info.denied {
+.info.denied, table select .denied, table select.denied {
     background-color: rgb(227, 93, 106);
 }
 
-.info.none, .info.uploaded {
+.info.none, .info.uploaded, table select .uploaded, table select.uploaded {
     background-color: rgb(206, 212, 218);
 }
 
@@ -427,11 +428,15 @@ table th, table td {
     padding: 10px;
 }
 
-table input[type=file] {
+table input[type=file], table select {
     padding: 0px;
     border: none;
     border-radius: 0;
 }
+
+table select {
+    height: 20px;
+} 
 
 table a, table button{
     font-family: 'Noto Serif', serif;
