@@ -205,7 +205,7 @@ function validate($data) {
 
 <modal id="user_del" class="hidden">
         <div class="content fail">
-            <p class="title">Delete File</p>
+            <p class="title">Delete ALL File</p>
             <p class="sentence">Are you sure you want to delete All documents? This action cannot be undone</p>
             <div id="btn_grp" class="flex align-self-center">
                 <a href="" id="user_link">Delete</a>
@@ -265,8 +265,8 @@ function validate($data) {
                     <th>Requirement</th>
                     <th>View</th>
                     <th>Delete</th>
-                    <!-- make the status a select -->
                     <th>Status</th>
+                    <th>Review</th>
                     <th>File Upload</th>
                 </tr>
                 <?php 
@@ -294,11 +294,22 @@ function validate($data) {
                             echo '  <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                 ';
                         }else{
                             echo    '<td><a class="view" target="_blank" href="../user/upload/'.$user_id.'/'.$requirements_fetch[$count-1].'">View</a></td>
                                     <td><button value="'.$requirements_fetch[$count-1].'" type="button" class="delete">Delete</td>
-                                    <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>';
+                                    <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
+                                    <td>
+                                    <select id="status_admin" name="status" id="status">
+                                        <option class="uploaded" value="Uploaded"'.(($status_fetch[$count-1] === "Uploaded") ? "selected" : "" ).'>Uploaded</option>
+                                        <option class="pending" value="Pending"'.(($status_fetch[$count-1] === "Pending") ? "selected" : "" ).'>Pending</option>
+                                        <option class="denied" value="Denied"'.(($status_fetch[$count-1] === "Denied") ? "selected" : "" ).'>Denied</option>
+                                        <option class="approved" value="Approved"'.(($status_fetch[$count-1] === "Approved") ? "selected" : "" ).'>Approved</option>
+                                    </select>
+                                    <div class="error_msg">'.$gender_err.'</div>
+                                    </td>
+                                    ';
                         }
                         echo '<td>
                                     <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">

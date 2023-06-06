@@ -21,3 +21,22 @@ error_alert.forEach(alert => {
       alert.classList.remove('hidden');
     }
 });
+
+const select_status  = document.getElementById('status_admin');
+
+if(select_status){
+  select_status.addEventListener('change', () => {
+      let selected = select_status.options[select_status.selectedIndex];
+      select_status.className = "";
+        if(selected.innerText == "Uploaded"){
+          select_status.classList.add('uploaded');
+        }else if(selected.innerText == "Pending"){
+          select_status.classList.add('pending');
+        }else if(selected.innerText == "Denied"){
+          select_status.classList.add('denied');
+        }else if(selected.innerText == "Approved"){
+          select_status.classList.add('approved');
+        }
+  });
+
+};
