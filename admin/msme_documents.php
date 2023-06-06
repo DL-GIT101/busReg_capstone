@@ -301,7 +301,7 @@ function validate($data) {
                                     <td><button value="'.$requirements_fetch[$count-1].'" type="button" class="delete">Delete</td>
                                     <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
                                     <td>
-                                    <select id="status_admin" name="status" id="status">
+                                    <select class="select_review" name="status'.$count.'" id="status'.$count.'">
                                         <option class="uploaded" value="Uploaded"'.(($status_fetch[$count-1] === "Uploaded") ? "selected" : "" ).'>Uploaded</option>
                                         <option class="pending" value="Pending"'.(($status_fetch[$count-1] === "Pending") ? "selected" : "" ).'>Pending</option>
                                         <option class="denied" value="Denied"'.(($status_fetch[$count-1] === "Denied") ? "selected" : "" ).'>Denied</option>

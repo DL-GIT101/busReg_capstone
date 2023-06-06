@@ -22,21 +22,36 @@ error_alert.forEach(alert => {
     }
 });
 
-const select_status  = document.getElementById('status_admin');
+const select_review  = document.querySelectorAll('.select_review');
 
-if(select_status){
-  select_status.addEventListener('change', () => {
-      let selected = select_status.options[select_status.selectedIndex];
-      select_status.className = "";
-        if(selected.innerText == "Uploaded"){
-          select_status.classList.add('uploaded');
-        }else if(selected.innerText == "Pending"){
-          select_status.classList.add('pending');
-        }else if(selected.innerText == "Denied"){
-          select_status.classList.add('denied');
-        }else if(selected.innerText == "Approved"){
-          select_status.classList.add('approved');
-        }
+if(select_review){
+
+  const colorReview = (review) => {
+    let selected = review.options[review.selectedIndex];
+    review.className = "";
+    review.className = "select_review";
+      if(selected.innerText == "Uploaded"){
+        review.classList.add('uploaded');
+      }else if(selected.innerText == "Pending"){
+        review.classList.add('pending');
+      }else if(selected.innerText == "Denied"){
+        review.classList.add('denied');
+      }else if(selected.innerText == "Approved"){
+        review.classList.add('approved');
+      }
+  };
+
+    select_review.forEach(review => {
+      if(review.value == "Uploaded"){
+        review.classList.add('uploaded');
+      }else if(review.value == "Pending"){
+        review.classList.add('pending');
+      }else if(review.value == "Denied"){
+        review.classList.add('denied');
+      }else if(review.value == "Approved"){
+        review.classList.add('approved');
+      }
+      review.addEventListener('change', () => colorReview(review));
   });
-
 };
+
