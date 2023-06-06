@@ -1,7 +1,8 @@
 const rows = document.querySelectorAll(".user_info");
 const action_del_btn = document.getElementById('action_dlt');
+const page_admin = document.getElementById('page');
 
-const del_modal = document.getElementById('user_del');
+const del_modal_user = document.getElementById('user_del');
 const user_link = document.getElementById('user_link');
 
 if(rows){
@@ -20,7 +21,7 @@ if(rows){
             });
         //Delete msme
         row.cells[4].addEventListener('click', () => {
-                del_modal.style.display = "block";
+            del_modal_user.style.display = "block";
                 let id = row.cells[0].innerText;
                 user_link.href = "php/msme_delete.php?id_user=" + encodeURIComponent(id);
             });
@@ -29,15 +30,24 @@ if(rows){
 
 if(action_del_btn){
     const user_id = document.getElementById('user_id');
+    
     action_del_btn.addEventListener('click', () => {
         let id = user_id.innerText;
-        del_modal.style.display = "block";
-        user_link.href = "php/msme_delete.php?profile=" + encodeURIComponent(id);
+        del_modal_user.style.display = "block";
+        if(page_admin.innerText == "Profile"){
+            user_link.href = "php/msme_delete.php?profile=" + encodeURIComponent(id);
+        }else if(page_admin.innerText == "Documents"){
+            user_link.href = "php/msme_delete.php?documents=" + encodeURIComponent(id);
+        }
+        
     });
 };
 
 const btn_user_del = document.querySelector('#user_del > .content  button');
-btn_user_del.addEventListener('click', () => {
-  del_modal.style.display = "none"
-});
+if(btn_user_del){
+    btn_user_del.addEventListener('click', () => {
+        del_modal_user.style.display = "none"
+    });
+};
+
 
