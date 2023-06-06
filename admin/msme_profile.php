@@ -66,10 +66,10 @@ function validate($data) {
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
      crossorigin=""/>
-     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
      crossorigin=""></script>
-     <script src="../js/script.js" defer></script>
+    <script src="../js/script.js" defer></script>
     <script src="../js/map.js" defer></script>
     <script src="../js/displayMap.js" defer></script>
     <script src="../js/admin_td_click.js" defer></script>
@@ -112,7 +112,7 @@ function validate($data) {
     <main class="flex-grow-1 flex-wrap content-center">
         
         <div class="actions space-between">
-            <p class="title">Profile</p>
+            <p id="page" class="title">Profile</p>
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
                 <a href="msme_management.php" class="back">Back</a>

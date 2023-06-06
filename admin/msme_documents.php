@@ -179,6 +179,7 @@ function validate($data) {
     <script src="../js/form.js" defer></script>
     <script src="../js/modal.js" defer></script>
     <script src="../js/file_modal.js" defer></script>
+    <script src="../js/admin_td_click.js" defer></script>
     <title>MSME Documents</title>
 </head>
 <body>
@@ -236,7 +237,7 @@ function validate($data) {
 
     <main class="flex-grow-1 flex-wrap content-center">
     <div class="actions space-between">
-            <p class="title">Documents</p>
+            <p id="page" class="title">Documents</p>
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
                 <a href="msme_profile.php" class="back">Back</a>

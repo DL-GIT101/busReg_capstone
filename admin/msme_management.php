@@ -158,7 +158,7 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
     <main class="flex-grow-1">
         <content class="justify-center">
             <div class="column_container"> 
-                    <p class="title text-center">MSME Management</p>
+                    <p id="page" class="title text-center">Management</p>
                 <table>   
                     <tr>
                         <th>ID</th>
