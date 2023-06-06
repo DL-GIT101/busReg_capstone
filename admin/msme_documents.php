@@ -102,6 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             } else {
                 if(!empty($requirements_fetch[$i-1])){
+                    //start from here as this is where the requirement has a file before
                     array_push($requirements,$requirements_fetch[$i-1]);
                     array_push($status,$status_fetch[$i-1]);
                 }else{
@@ -301,13 +302,12 @@ function validate($data) {
                                     <td><button value="'.$requirements_fetch[$count-1].'" type="button" class="delete">Delete</td>
                                     <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
                                     <td>
-                                    <select class="select_review" name="status'.$count.'" id="status'.$count.'">
+                                    <select class="select_review" name="status_'.$count.'" id="status_'.$count.'">
                                         <option class="uploaded" value="Uploaded"'.(($status_fetch[$count-1] === "Uploaded") ? "selected" : "" ).'>Uploaded</option>
                                         <option class="pending" value="Pending"'.(($status_fetch[$count-1] === "Pending") ? "selected" : "" ).'>Pending</option>
                                         <option class="denied" value="Denied"'.(($status_fetch[$count-1] === "Denied") ? "selected" : "" ).'>Denied</option>
                                         <option class="approved" value="Approved"'.(($status_fetch[$count-1] === "Approved") ? "selected" : "" ).'>Approved</option>
                                     </select>
-                                    <div class="error_msg">'.$gender_err.'</div>
                                     </td>
                                     ';
                         }
