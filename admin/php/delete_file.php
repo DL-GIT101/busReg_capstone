@@ -10,10 +10,11 @@ if(isset($_GET['id'])){
     header("location: ../msme_management.php");
 }
 
-
+if (isset($_GET['file'])) {
+    
 $file = urldecode($_GET['file']);
-$filePath = '../user/upload/'.$user_id.'/'.$file;
- 
+$filePath = '/opt/lampp/htdocs/busReg_capstone/user/upload/'.$user_id.'/'.$file;
+
     $sql = "SELECT * FROM new_documents WHERE user_id = ?";
    
     if($stmt = $mysqli->prepare($sql)){
@@ -76,7 +77,7 @@ $filePath = '../user/upload/'.$user_id.'/'.$file;
         }
     }
     $mysqli->close();
-
+}
 function validate($data) {
     $data = trim($data);
     $data = stripslashes($data);
