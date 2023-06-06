@@ -11,7 +11,7 @@ if(isset($_GET['id'])){
 }
 $modal = "hidden";
 $document = "";
-$none = "hidden";
+
     $sql = "SELECT * FROM new_documents WHERE user_id = ?";
    
     if($stmt = $mysqli->prepare($sql)){
@@ -33,7 +33,6 @@ $none = "hidden";
                 $update = 1;            
             }else{
                 $document = "hidden";
-                $none = "";
                 $update = 0;
             }
         }else {
@@ -256,9 +255,8 @@ function validate($data) {
                 <a id="action_dlt" class="delete <?= $document ?>">Delete All</a>
             </div>
         </div>
-    <p class="title <?= $none ?>">The user has not uploaded any documents yet.</p>
 
-    <form class="<?= $document ?>" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
             <div class="text-center">
                 <p class="sentence">Check the uploaded file of the following requirements</p>
             </div>
