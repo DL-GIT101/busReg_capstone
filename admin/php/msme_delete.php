@@ -13,6 +13,12 @@ if(isset($_GET['id_user'])){
         LEFT JOIN new_documents ON user_profile.user_id = new_documents.user_id
         WHERE user_profile.user_id = ?";
     $page = "profile";
+}else if(isset($_GET['documents'])){
+    $user_id = validate($_GET['documents']);
+    $sql = "DELETE FROM new_documents WHERE user_id = ?";
+    $page = "documents";
+}else{
+    header("location: ../msme_management.php");
 }
 
 $userDirectory = '/opt/lampp/htdocs/busReg_capstone/user/upload/' . $user_id;
@@ -21,12 +27,14 @@ if ($stmt = $mysqli->prepare($sql)) {
     $stmt->bind_param("s", $param_id);
     $param_id = $user_id;
     if ($stmt->execute()) {
-        echo "User has been deleted";
+       
         deleteDirectory($userDirectory,$page);
         if($page === "profile"){
             header("location: ../msme_profile.php?id=".$user_id);
         }else if($page === "management") {
             header("location: ../msme_management.php");
+        } else if($page === "documents"){
+            header("location: ../msme_documents.php?id=".$user_id);
         }
     } else {
         echo "Error deleting user";
@@ -57,9 +65,7 @@ function deleteDirectory($directory,$page) {
         }
     }
 
-    if($page === "profile"){
-       
-    }else if($page === "management") {
+    if($page === "management"){
         rmdir($directory);
     }
 }
