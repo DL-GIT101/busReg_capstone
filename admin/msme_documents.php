@@ -183,6 +183,7 @@ function validate($data) {
     <title>MSME Documents</title>
 </head>
 <body>
+<p id="user_id" class="hidden"><?= $user_id ?></p>
 <modal class="<?= $modal ?>">
         <div class="content <?= $status_modal ?>">
             <p class="title"><?= $title ?></p>
@@ -200,6 +201,17 @@ function validate($data) {
                 <button>Cancel</button>
             </div>
                 
+        </div>
+</modal>
+
+<modal id="user_del" class="hidden">
+        <div class="content fail">
+            <p class="title">Delete File</p>
+            <p class="sentence">Are you sure you want to delete All documents? This action cannot be undone</p>
+            <div id="btn_grp" class="flex align-self-center">
+                <a href="" id="user_link">Delete</a>
+                <button>Cancel</button>
+            </div>
         </div>
 </modal>
 
@@ -241,7 +253,7 @@ function validate($data) {
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
                 <a href="msme_profile.php" class="back">Back</a>
-                <a href="" class="delete <?= $document ?>">Delete All</a>
+                <a id="action_dlt" class="delete <?= $document ?>">Delete All</a>
             </div>
         </div>
     <p class="title <?= $none ?>">The user has not uploaded any documents yet.</p>
