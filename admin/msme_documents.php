@@ -102,9 +102,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             } else {
                 if(!empty($requirements_fetch[$i-1])){
-                    //start from here as this is where the requirement has a file before
                     array_push($requirements,$requirements_fetch[$i-1]);
-                    array_push($status,$status_fetch[$i-1]);
+                    $review = validate($_POST["status_".$i]);
+                    array_push($status,$review);
                 }else{
                     array_push($requirements,null);
                     array_push($status,null);
