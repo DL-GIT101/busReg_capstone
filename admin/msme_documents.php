@@ -49,7 +49,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
         $requirements = array();
         $status = array();
+        $denied_msg = array();
+
         $error_count = 0;
+
         for ($i = 1; $i <= $file_inputs_count; $i++) {
             $errorMsg = 'errorMsg_' . $i;
     
@@ -69,30 +72,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             if ($fileSize <= 2097152) {
                                 if(move_uploaded_file($_FILES['requirement_' . $i]['tmp_name'], $targetFilePath)){
                                     array_push($requirements,$new_fileName);
-                                    array_push($status,'Uploaded');   
+                                    array_push($status,'Uploaded');
+                                    array_push($denied_msg,null);    
                                 }else{
                                     $$errorMsg  = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
                                     $error_count++;
-                                    array_push($requirements,null);
-                                    array_push($status,null);
+                                    pushNullValues($requirements, $status, $denied_msg);
                                 }
                             } else {
                                 $$errorMsg = 'File size should be 2MB or less.';
                                 $error_count++;
-                                array_push($requirements,null);
-                                array_push($status,null);
+                                pushNullValues($requirements, $status, $denied_msg);
                             }
                         } else {
                             $$errorMsg = 'Only JPG, JPEG, PNG and PDF files are allowed.';
                             $error_count++;
-                            array_push($requirements,null);
-                            array_push($status,null);
+                            pushNullValues($requirements, $status, $denied_msg);
                         } 
                     } else {
                         $$errorMsg = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
                         $error_count++;
-                        array_push($requirements,null);
-                        array_push($status,null);
+                        pushNullValues($requirements, $status, $denied_msg);
                     }
                 }else{
                     $$errorMsg = 'Delete first the uploaded file';
@@ -106,32 +106,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $review = validate($_POST["status_".$i]);
                     array_push($status,$review);
                 }else{
-                    array_push($requirements,null);
-                    array_push($status,null);
+                    pushNullValues($requirements, $status, $denied_msg);
                 }
             }
         }
           
             $serialized_requirements = serialize($requirements);
             $serialized_status = serialize($status);
+            $serialized_msg = serialize($denied_msg);
     
             if($update === 1){
-                $sql = "UPDATE new_documents SET requirements = ?, status = ? WHERE user_id = ?";
+                $sql = "UPDATE new_documents SET requirements = ?, status = ? , message = ? WHERE user_id = ?";
             }else{
-                $sql = "INSERT INTO new_documents (user_id, requirements, status) VALUES (?, ?, ?)";
+                $sql = "INSERT INTO new_documents (user_id, requirements, status, message) VALUES (?, ?, ?, ?)";
             }
             
             if($stmt = $mysqli->prepare($sql)){
     
                 if($update === 1){
-                    $stmt->bind_param('sss',$param_req, $param_Stat, $param_id);
+                    $stmt->bind_param('ssss',$param_req, $param_Stat,$param_msg, $param_id);
                 }else{
-                    $stmt->bind_param('sss', $param_id, $param_req, $param_Stat);
+                    $stmt->bind_param('ssss', $param_id, $param_req, $param_Stat,$param_msg);
                 }
     
                 $param_id = $user_id;
                 $param_req = $serialized_requirements;
                 $param_Stat = $serialized_status;
+                $param_msg = $serialized_msg;
     
                 if($stmt->execute()){
     
@@ -160,6 +161,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     $mysqli->close();
+
+    function pushNullValues(&$array1, &$array2, &$array3) {
+        array_push($array1, null);
+        array_push($array2, null);
+        array_push($array3, null);
+    }
 
 function validate($data) {
     $data = trim($data);
