@@ -42,8 +42,53 @@ $modal = "hidden";
     }
     
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+
+        $length = 12;
+
+        $status = array();
+        $denied_msg = array();
+
+        for($i = 1; $i <= $length; $i++){
+            $errorMsg = 'errorMsg_' . $i;
+
+           $status_review = validate($_POST['status_'.$i]);
+           if(!empty($status_review)){
+            array_push($status, $status_review);
+           }else{
+            array_push($status, null);
+           }
+
+           array_push($denied_msg, null);
+
+        }
+
+        $serialized_status = serialize($status);
+        $serialized_denied = serialize($denied_msg);
+
+        $sql = "UPDATE new_documents SET status = ? , message = ? WHERE user_id = ?";
        
+        if($stmt = $mysqli->prepare($sql)){
+            $stmt->bind_param('sss',$param_Stat,$param_msg, $param_id);
+
+            $param_id = $user_id;
+            $param_Stat = $serialized_status;
+            $param_msg = $serialized_denied;
+
+            if($stmt->execute()){
+                $modal = "";
+                $status_modal = "success";
+                $title = "Successful";
+                $message = "All changes has been updated";
+                $button = '<a href="document_review.php">OK</a>';
+            }else{
+                $modal = "";
+                $status_modal = "fail";
+                $title = "Updating Error";
+                $message = "Try again later";
+                $button = '<a href="msme_manangement.php">OK</a>';
+            }
+            $stmt->close();
+        }
     }
 
     $mysqli->close();
@@ -147,6 +192,16 @@ function validate($data) {
                         'Tax Order of Payment',
                         'Tax Order of Payment Official Receipt'
                     );
+                    $message_array = array(
+                        'Incorrect/Outdated Information',
+                        'Insufficient Detail',
+                        'Incorrect Document',
+                        'Low Image Resolution',
+                        'Overexposure/Underexposure',
+                        'Misleading/Manipulated Visuals',
+                        'File Corruption',
+                        'Invalid File Extension'
+                    );
                     $count = 1;
                     foreach($requirements_names as $fileName){
                             $errorMsg = 'errorMsg_' . $count;
@@ -168,8 +223,21 @@ function validate($data) {
                                         <option class="denied" value="Denied"'.(($status_fetch[$count-1] === "Denied") ? "selected" : "" ).'>Denied</option>
                                         <option class="approved" value="Approved"'.(($status_fetch[$count-1] === "Approved") ? "selected" : "" ).'>Approved</option>
                                     </select>
-                                    </td>
-                                    <td>'.$denied_msg.'</td>';
+                                    </td>';
+                                if($status_fetch[$count-1] === "Denied"){
+                            echo    '<td>
+                                    <select id="denied_message" name="denied_message">
+                                    <option value="" disabled selected>Select Message...</option>';
+                                    foreach($message_array as $denied){
+                                        echo "<option value='$denied' " . ($message_fetch[$count-1] === $denied ? "selected" : "") . ">$denied</option>";
+                                    }
+                            echo    '</select>
+                                    <div class="error_msg">'.$denied_err.'</div>
+                                    </td>';
+                                }else{
+                                    echo '<td></td>';
+                                }
+                            
                         }
                         echo '</tr>';
                     $count++;
