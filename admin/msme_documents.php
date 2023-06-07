@@ -28,8 +28,10 @@ $document = "";
 
                 $serialized_requirements_fetch = $row["requirements"];
                 $serialized_status_fetch = $row["status"];
+                $serialized_denied_fetch = $row['message'];
                 $requirements_fetch = unserialize($serialized_requirements_fetch);
                 $status_fetch = unserialize($serialized_status_fetch);    
+                $denied_fetch = unserialize($serialized_denied_fetch);
                 $update = 1;            
             }else{
                 $document = "hidden";
@@ -99,11 +101,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $error_count++;
                     array_push($requirements,$requirements_fetch[$i-1]);
                     array_push($status,$status_fetch[$i-1]);
+                    array_push($denied_msg,$denied_fetch[$i-1]);  
                 }
             } else {
                 if(!empty($requirements_fetch[$i-1])){
                     array_push($requirements,$requirements_fetch[$i-1]);
                     array_push($status,$status_fetch[$i-1]);
+                    array_push($denied_msg,$denied_fetch[$i-1]);  
                 }else{
                     pushNullValues($requirements, $status, $denied_msg);
                 }
