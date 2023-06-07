@@ -103,8 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 if(!empty($requirements_fetch[$i-1])){
                     array_push($requirements,$requirements_fetch[$i-1]);
-                    $review = validate($_POST["status_".$i]);
-                    array_push($status,$review);
+                    array_push($status,$status_fetch[$i-1]);
                 }else{
                     pushNullValues($requirements, $status, $denied_msg);
                 }
@@ -260,6 +259,7 @@ function validate($data) {
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
                 <a href="msme_profile.php" class="back">Back</a>
+                <a href="document_review.php" class="">Review</a>
                 <a id="action_dlt" class="delete <?= $document ?>">Delete All</a>
             </div>
         </div>
@@ -274,7 +274,6 @@ function validate($data) {
                     <th>View</th>
                     <th>Delete</th>
                     <th>Status</th>
-                    <th>Review</th>
                     <th>File Upload</th>
                 </tr>
                 <?php 
@@ -302,20 +301,11 @@ function validate($data) {
                             echo '  <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td></td>
                                 ';
                         }else{
                             echo    '<td><a class="view" target="_blank" href="../user/upload/'.$user_id.'/'.$requirements_fetch[$count-1].'">View</a></td>
                                     <td><button value="'.$requirements_fetch[$count-1].'" type="button" class="delete">Delete</td>
                                     <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
-                                    <td>
-                                    <select class="select_review" name="status_'.$count.'" id="status_'.$count.'">
-                                        <option class="uploaded" value="Uploaded"'.(($status_fetch[$count-1] === "Uploaded") ? "selected" : "" ).'>Uploaded</option>
-                                        <option class="pending" value="Pending"'.(($status_fetch[$count-1] === "Pending") ? "selected" : "" ).'>Pending</option>
-                                        <option class="denied" value="Denied"'.(($status_fetch[$count-1] === "Denied") ? "selected" : "" ).'>Denied</option>
-                                        <option class="approved" value="Approved"'.(($status_fetch[$count-1] === "Approved") ? "selected" : "" ).'>Approved</option>
-                                    </select>
-                                    </td>
                                     ';
                         }
                         echo '<td>
@@ -327,7 +317,7 @@ function validate($data) {
                     }
                 ?>  
             </table>
-            <input type="submit" value="Apply Changes">
+            <input type="submit" value="Upload">
         </form>   
     </main>
 </div>
