@@ -50,7 +50,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $requirements = array();
     $status = array();
+    $denied_msg = array();
+
     $error_count = 0;
+
     for ($i = 1; $i <= $file_inputs_count; $i++) {
         $errorMsg = 'errorMsg_' . $i;
 
@@ -70,30 +73,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if ($fileSize <= 2097152) {
                             if(move_uploaded_file($_FILES['requirement_' . $i]['tmp_name'], $targetFilePath)){
                                 array_push($requirements,$new_fileName);
-                                array_push($status,'Uploaded');   
+                                array_push($status,'Uploaded');  
+                                array_push($denied_msg,null);  
                             }else{
                                 $$errorMsg  = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
                                 $error_count++;
-                                array_push($requirements,null);
-                                array_push($status,null);
+                                pushNullValues($requirements, $status, $denied_msg);
                             }
                         } else {
                             $$errorMsg = 'File size should be 2MB or less.';
                             $error_count++;
-                            array_push($requirements,null);
-                            array_push($status,null);
+                            pushNullValues($requirements, $status, $denied_msg);
                         }
                     } else {
                         $$errorMsg = 'Only JPG, JPEG, PNG and PDF files are allowed.';
                         $error_count++;
-                        array_push($requirements,null);
-                        array_push($status,null);
+                        pushNullValues($requirements, $status, $denied_msg);
                     } 
                 } else {
                     $$errorMsg = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
                     $error_count++;
-                    array_push($requirements,null);
-                    array_push($status,null);
+                    pushNullValues($requirements, $status, $denied_msg);
                 }
             }else{
                 $$errorMsg = 'Delete first the uploaded file';
@@ -106,8 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 array_push($requirements,$requirements_fetch[$i-1]);
                 array_push($status,$status_fetch[$i-1]);
             }else{
-                array_push($requirements,null);
-                array_push($status,null);
+                pushNullValues($requirements, $status, $denied_msg);
             }
         }
     }
@@ -180,6 +179,12 @@ function hasProfile($mysqli,$param_id){
         }
     $stmt->close();
     }
+}
+
+function pushNullValues(&$array1, &$array2, &$array3) {
+    array_push($array1, null);
+    array_push($array2, null);
+    array_push($array3, null);
 }
 
 function validate($data) {
