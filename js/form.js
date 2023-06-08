@@ -27,12 +27,14 @@ const denied_message  = document.querySelectorAll('.denied_message');
 if(select_review && denied_message){
 
   select_review.forEach((review, index )=> {
+    denied = denied_message[index];
       if(review.value == "Uploaded"){
         review.classList.add('uploaded');
       }else if(review.value == "Pending"){
         review.classList.add('pending');
       }else if(review.value == "Denied"){
-        review.classList.add('denied');   
+        review.classList.add('denied');
+        denied.classList.remove('hidden');   
       }else if(review.value == "Approved"){
         review.classList.add('approved');
       }
