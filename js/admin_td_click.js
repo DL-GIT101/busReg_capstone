@@ -23,7 +23,7 @@ if(rows){
         row.cells[4].addEventListener('click', () => {
             del_modal_user.style.display = "block";
                 let id = row.cells[0].innerText;
-                user_link.href = "php/msme_delete.php?id_user=" + encodeURIComponent(id);
+                user_link.href = "../php/msme_delete.php?id_user=" + encodeURIComponent(id);
             });
     });
 };
@@ -35,9 +35,9 @@ if(action_del_btn){
         let id = user_id.innerText;
         del_modal_user.style.display = "block";
         if(page_admin.innerText == "Profile"){
-            user_link.href = "php/msme_delete.php?profile=" + encodeURIComponent(id);
+            user_link.href = "../php/msme_delete.php?profile=" + encodeURIComponent(id);
         }else if(page_admin.innerText == "Documents"){
-            user_link.href = "php/msme_delete.php?documents=" + encodeURIComponent(id);
+            user_link.href = "../php/msme_delete.php?documents=" + encodeURIComponent(id);
         }
         
     });
