@@ -223,10 +223,9 @@ function validate($data) {
                                         <option class="denied" value="Denied"'.(($status_fetch[$count-1] === "Denied") ? "selected" : "" ).'>Denied</option>
                                         <option class="approved" value="Approved"'.(($status_fetch[$count-1] === "Approved") ? "selected" : "" ).'>Approved</option>
                                     </select>
-                                    </td>';
-                                if($status_fetch[$count-1] === "Denied"){
-                            echo    '<td>
-                                    <select id="denied_message" name="denied_message">
+                                    </td>
+                                    <td>
+                                    <select class="denied_message hidden" id="denied_message_'.$count.'" name="denied_message_'.$count.'">
                                     <option value="" disabled selected>Select Message...</option>';
                                     foreach($message_array as $denied){
                                         echo "<option value='$denied' " . ($message_fetch[$count-1] === $denied ? "selected" : "") . ">$denied</option>";
@@ -234,9 +233,7 @@ function validate($data) {
                             echo    '</select>
                                     <div class="error_msg">'.$denied_err.'</div>
                                     </td>';
-                                }else{
-                                    echo '<td></td>';
-                                }
+                               
                             
                         }
                         echo '</tr>';
