@@ -9,6 +9,7 @@ if(isset($_GET['id'])){
 }else{
     header("location: msme_management.php");
 }
+
 $modal = "hidden";
 $document = "";
 
@@ -45,6 +46,7 @@ $document = "";
     
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
+    if(hasProfile($mysqli,$user_id) === 1){
         $allowTypes = array('jpg', 'jpeg', 'png', 'pdf');
     
         $file_inputs_count = count($_FILES);
@@ -161,15 +163,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             $stmt->close();
             }
+        }else{
+            $modal = "";
+            $status_modal = "warning";
+            $title = "Profile not found for the user.";
+            $message = "Create user profile first <br>";
+            $message .= "Or wait for the user to create profile";
+            $button = '<button class="close">OK</button>';
+        }
     }
 
     $mysqli->close();
 
-    function pushNullValues(&$array1, &$array2, &$array3) {
+function hasProfile($mysqli,$param_id){
+        $sql = "SELECT * FROM user_profile WHERE user_id = ?";
+    
+        if($stmt = $mysqli->prepare($sql)){
+            $stmt->bind_param("s",$param_id);
+    
+            $param_id = validate($_SESSION['id']);
+    
+            if($stmt->execute()){
+                $result = $stmt->get_result();
+    
+                if($result->num_rows == 1){
+                    return 1;
+                }else {
+                    return 0;
+                }
+            }else{
+                echo "Oops! Something went wrong. Please try again later";
+            }
+        $stmt->close();
+        }
+}
+
+function pushNullValues(&$array1, &$array2, &$array3) {
         array_push($array1, null);
         array_push($array2, null);
         array_push($array3, null);
-    }
+}
 
 function validate($data) {
     $data = trim($data);
