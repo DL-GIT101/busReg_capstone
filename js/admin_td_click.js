@@ -10,13 +10,13 @@ if(rows){
         //Profile
         row.cells[1].addEventListener('click', () => {
                 let id = row.cells[0].innerText;
-                let url = "msme_profile.php?id=" + encodeURIComponent(id);
+                let url = "profiles.php?id=" + encodeURIComponent(id);
                 window.location.href = url;
             });
         //Documents
         row.cells[2].addEventListener('click', () => {
                 let id = row.cells[0].innerText;
-                let url = "msme_documents.php?id=" + encodeURIComponent(id);
+                let url = "documents.php?id=" + encodeURIComponent(id);
                 window.location.href = url;
             });
         //Delete msme
