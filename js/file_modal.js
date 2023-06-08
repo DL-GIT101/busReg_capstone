@@ -10,10 +10,11 @@ del_btn.forEach(btn => {
 
 const btn_file_del = document.querySelector('#file_del > .content  button');
 
-btn_file_del.addEventListener('click', () => {
-  del_modal.style.display = "none"
-});
-
+if(btn_file_del){
+  btn_file_del.addEventListener('click', () => {
+    del_modal.style.display = "none"
+  });
+};
 const info_img = document.getElementById('info');
 const info_modal = document.getElementById('info_modal'); 
 if(info_modal){
