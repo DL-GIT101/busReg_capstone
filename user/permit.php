@@ -28,8 +28,10 @@ require_once "../php/connection.php";
 
                 $serialized_requirements_fetch = $row["requirements"];
                 $serialized_status_fetch = $row["status"];
+                $serialized_message_fetch = $row["message"];
                 $requirements_fetch = unserialize($serialized_requirements_fetch);
                 $status_fetch = unserialize($serialized_status_fetch);
+                $message_fetch = unserialize($serialized_message_fetch);
                 $update = 1;
                 
             }else {
@@ -100,11 +102,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $error_count++;
                 array_push($requirements,$requirements_fetch[$i-1]);
                 array_push($status,$status_fetch[$i-1]);
+                array_push($denied_msg,$message_fetch[$i-1]);
             }
         } else {
             if(!empty($requirements_fetch[$i-1])){
                 array_push($requirements,$requirements_fetch[$i-1]);
                 array_push($status,$status_fetch[$i-1]);
+                array_push($denied_msg,$message_fetch[$i-1]);
             }else{
                 pushNullValues($requirements, $status, $denied_msg);
             }
@@ -266,6 +270,7 @@ function validate($data) {
                 <th>View</th>
                 <th>Delete</th>
                 <th>Status</th>
+                <th>Message</th>
                 <th>File Upload</th>
             </tr>
             <?php 
@@ -293,11 +298,13 @@ function validate($data) {
                         echo '  <td></td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
                             ';
                     }else{
                         echo    '<td><a class="view" target="_blank" href="upload/'.$_SESSION['id'].'/'.$requirements_fetch[$count-1].'">View</a></td>
                                 <td><button value="'.$requirements_fetch[$count-1].'" type="button" class="delete">Delete</button></td>
-                                <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>';
+                                <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
+                                <td>'.$message_fetch[$count-1].'</td>';
                     }
                             echo '<td>
                                     <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
