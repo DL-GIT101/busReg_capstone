@@ -191,7 +191,14 @@ $mysqli->close();
         </ul>
     </nav>
 
-    <main class="flex-grow-1"> 
+    <main class="flex-grow-1 flex-wrap content-center"> 
+    <div class="actions space-between">
+            <p id="page" class="title">Add Account</p>
+            <div class="buttons">
+                <a href="msme_management.php" class="back">Back</a>
+            </div>
+        </div>
+
         <div class="column_container">      
             <div class="text-center">
                 <p class="title">Create an Account</p>
