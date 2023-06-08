@@ -42,7 +42,8 @@ $modal = "hidden";
     }
     
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
+        $errorMsg = 'errorMsg_' . $i;
+        $errorCount = 0;
         $length = 12;
 
         $status = array();
@@ -53,15 +54,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
            $status_review = validate($_POST['status_'.$i]);
            if(!empty($status_review)){
-            array_push($status, $status_review);
+
+                if($status_review === "Denied"){
+
+                    $message_review = validate($_POST['denied_message_'.$i]);
+                    if(!empty($message_review)){
+                        array_push($status, $status_review);
+                        array_push($denied_msg, $message_review);
+                    }else{
+                        $$errorMsg = "Denied Document must have a message";
+                        $errorCount++;
+                    }
+
+                }else{
+                    array_push($status, $status_review);
+                    array_push($denied_msg, null);
+                }
+            
            }else{
-            array_push($status, null);
+                array_push($status, null);
+                array_push($denied_msg, null);
            }
-
-           array_push($denied_msg, null);
-
         }
 
+    if($errorCount === 0){
         $serialized_status = serialize($status);
         $serialized_denied = serialize($denied_msg);
 
@@ -90,6 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->close();
         }
     }
+}
 
     $mysqli->close();
 
@@ -231,7 +248,7 @@ function validate($data) {
                                         echo "<option value='$denied' " . ($message_fetch[$count-1] === $denied ? "selected" : "") . ">$denied</option>";
                                     }
                             echo    '</select>
-                                    <div class="error_msg">'.$denied_err.'</div>
+                                    <div class="error_msg">'.${$errorMsg}.'</div>
                                     </td>';
                                
                             
