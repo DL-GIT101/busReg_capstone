@@ -296,7 +296,7 @@ function validate($data) {
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
                 <a href="msme_profile.php" class="back">Back</a>
-                <a href="document_review.php" class="">Review</a>
+                <a href="document_review.php" class="<?= $document ?>">Review</a>
                 <a id="action_dlt" class="delete <?= $document ?>">Delete All</a>
             </div>
         </div>
