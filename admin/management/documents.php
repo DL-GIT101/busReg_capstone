@@ -295,7 +295,7 @@ function validate($data) {
             <p id="page" class="title">Documents</p>
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
-                <a href="profiles.php" class="back">Back</a>
+                <a href="profiles.php" class="back">Profile</a>
                 <a id="action_dlt" class="delete <?= $document ?>">Delete All</a>
             </div>
         </div>

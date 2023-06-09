@@ -338,7 +338,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p class="title">Profile</p>
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
-                <a href="profiles.php" class="back">Back</a>
+                <a href="profiles.php" class="back">View Profile</a>
             </div>
         </div>
         <form class="flex-row" autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">

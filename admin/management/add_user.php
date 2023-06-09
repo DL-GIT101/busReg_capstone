@@ -195,7 +195,7 @@ $mysqli->close();
     <div class="actions space-between">
             <p id="page" class="title">Add Account</p>
             <div class="buttons">
-                <a href="users.php" class="back">Back</a>
+                <a href="users.php" class="back">Management</a>
             </div>
         </div>
 
