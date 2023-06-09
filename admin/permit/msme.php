@@ -69,14 +69,16 @@ $user_sql = "SELECT users.id FROM users
                         $result = $document_stmt->get_result();
                         if ($result->num_rows === 1) {
                             $row = $result->fetch_array(MYSQLI_ASSOC);
+                            
                             $serializedRequirements = $row["requirements"];
                             $requirements = unserialize($serializedRequirements);
                             
-                            if (in_array(null, $requirements)) {
-                                $business['documents'] = "Incomplete";
-                            } else {
-                                $business['documents'] = "Complete";
-                            }
+                            $totalRequirements = count($requirements);
+                            $completedRequirements = count(array_filter($requirements, function ($value) {
+                                return !is_null($value);
+                            }));
+
+                            $business['documents'] = $completedRequirements . '/' . $totalRequirements;
                         } else {
                             $business['documents'] = "None";
                         }
