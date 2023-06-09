@@ -7,7 +7,7 @@ if(isset($_GET['id'])){
 }else if(isset($_SESSION['user_id'])){
     $user_id = $_SESSION['user_id'];
 }else{
-    header("location: msme_management.php");
+    header("location: users.php");
 }
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
@@ -103,7 +103,7 @@ function validate($data) {
     <nav id="sidebar">
         <ul>
             <li ><img src="../../img/dashboard.png" alt=""><a href="dashboard.php">Dashboard</a></li>
-            <li class="current"><img src="../../img/register.png" alt=""><a href="msme_management.php">MSME Management</a></li>
+            <li class="current"><img src="../../img/register.png" alt=""><a href="users.php">MSME Management</a></li>
             <li><img src="../../img/list.png" alt=""><a href="">MSME Permit</a></li>
             
         </ul>
