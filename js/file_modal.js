@@ -1,10 +1,17 @@
 const del_modal = document.getElementById('file_del');
 const file_link = document.getElementById('file_link');
 const del_btn = document.querySelectorAll('td > .delete');
+
 del_btn.forEach(btn => {
   btn.addEventListener('click', () => {
       del_modal.style.display = "block";
-      file_link.href = "php/delete_file.php?file=" + encodeURIComponent(btn.value);
+
+      if(pathLevels-1 === 1){
+        file_link.href = "php/delete_file.php?file=" + encodeURIComponent(btn.value);
+      }else if(pathLevels-1 === 2){
+        file_link.href = "../php/delete_file.php?file=" + encodeURIComponent(btn.value);
+      }
+  
     });
   });
 
