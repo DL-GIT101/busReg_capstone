@@ -457,7 +457,7 @@ table .view {
     background-color: rgb(0, 59, 179);
 }
 
-table #info, .user_info > td > *, .actions .buttons > *{
+table #info, .user_info > td > *, .actions .buttons > *, .msme_details{
     cursor: pointer;
 }
 
