@@ -1,12 +1,12 @@
-const rows = document.querySelectorAll(".user_info");
+const rows_user = document.querySelectorAll(".user_info");
 const action_del_btn = document.getElementById('action_dlt');
 const page_admin = document.getElementById('page');
 
 const del_modal_user = document.getElementById('user_del');
 const user_link = document.getElementById('user_link');
 
-if(rows){
-    rows.forEach( row => {
+if(rows_user){
+    rows_user.forEach( row => {
         //Profile
         row.cells[1].addEventListener('click', () => {
                 let id = row.cells[0].innerText;
@@ -50,4 +50,14 @@ if(btn_user_del){
     });
 };
 
+const msme_list = document.querySelectorAll(".msme_details");
 
+if(msme_list){
+    msme_list.forEach( row => {
+        row.addEventListener('click', () => {
+                let id = row.cells[0].innerText;
+                let url = "review.php?id=" + encodeURIComponent(id);
+                window.location.href = url;
+        });
+    });
+};
