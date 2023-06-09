@@ -328,7 +328,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <ul>
             <li ><img src="../../img/dashboard.png" alt=""><a href="dashboard.php">Dashboard</a></li>
             <li class="current"><img src="../../img/register.png" alt=""><a href="users.php">MSME Management</a></li>
-            <li><img src="../../img/list.png" alt=""><a href="">MSME Permit</a></li>
+            <li><img src="../../img/list.png" alt=""><a href="../permit/msme.php">MSME Permit</a></li>
         </ul>
     </nav>
 
