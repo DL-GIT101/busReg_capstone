@@ -473,7 +473,7 @@ td .info{
     padding: 1px 6px;
 }
 
-.user_info:hover {
+.user_info:hover, .msme_details:hover {
     background-color: rgb(214, 214, 214);
 }
 
