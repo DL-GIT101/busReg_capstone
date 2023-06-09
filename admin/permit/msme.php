@@ -155,11 +155,11 @@ $user_sql = "SELECT users.id FROM users
                     </tr>
                     <?php 
                     foreach ($all_business as &$business) {
-                        echo '  <tr class="user_info">  
+                        echo '  <tr class="msme_details">  
                                     <td>'.$business['id'].'</td>
                                     <td>'.$business['name'].'</td>
                                     <td>'.$business['activity'].'</td>
-                                    <td><div class="info '.strtolower($business['documents']) .'">'.$business['documents'].'</div></td>
+                                    <td><div class="info none">'.$business['documents'].'</div></td>
                                     <td><div class="info '.strtolower($business['permit']) .'">'.$business['permit'].'</div></td>
                                 </tr>';
                 }
