@@ -168,7 +168,7 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
                         <th>Delete</th>
                     </tr>
                     <tr>
-                        <td colspan="5"><a href="add_msme.php" class="info default justify-center">Add Account</a></td>
+                        <td colspan="5"><a href="add_user.php" class="info default justify-center">Add Account</a></td>
                     </tr>
                     <?php 
                     foreach ($all_business as &$business) {
