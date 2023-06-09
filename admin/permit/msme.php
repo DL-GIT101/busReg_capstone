@@ -10,7 +10,10 @@ require_once "../../php/connection.php";
 
 $all_business = array();
 
-$user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
+$user_sql = "SELECT users.id FROM users
+             INNER JOIN user_profile ON users.id = user_profile.user_id
+             WHERE users.id <> ?
+             ORDER BY users.id DESC";
     if($user_stmt = $mysqli->prepare($user_sql)){
         $user_stmt->bind_param("s", $adminID);
         $adminID = validate($_SESSION['id']);
@@ -30,29 +33,32 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
         
     }
 
-   foreach ($all_business as &$business) {
-        $profile_sql = "SELECT COUNT(*) FROM user_profile WHERE user_id = ? ORDER BY user_id DESC";
-            if ($profile_stmt = $mysqli->prepare($profile_sql)) {
-               $profile_stmt->bind_param("s", $current_id);
-               $current_id = $business['id'];
-                 if ($profile_stmt->execute()) {
-                     $profile_stmt->bind_result($profile_check);
-             
-                     if ($profile_stmt->fetch()) {
-                         if ($profile_check === 1) {
-                             $business['profile'] = "Created";
-                         } else {
-                             $business['profile'] = "None";
-                         }
-                     }
-             
-                     $profile_stmt->close(); 
-                 } else {
-                     echo "Oops! Something went wrong with the second query. Please try again later";
-                 }
-             }
+    foreach ($all_business as &$business) {
+        $permit_sql = "SELECT * FROM user_profile WHERE user_id = ? ORDER BY user_id DESC";
+                if ($permit_stmt = $mysqli->prepare($permit_sql)) {
+                    $permit_stmt->bind_param("s", $current_id);
+                    $current_id = $business['id'];
+                    if ($permit_stmt->execute()) {
+                        $result = $permit_stmt->get_result();
+                        if ($result->num_rows === 1) {
+                            $row = $result->fetch_array(MYSQLI_ASSOC);
+
+                            $name = $row["business_name"];
+                            $business['name'] = $name;
+                            $activity = $row["activity"];
+                            $business['activity'] = $activity;
+                            $permit = $row["permit_status"];
+                            $business['permit'] = $permit;
+                        } else {
+                            $business['permit'] = "None";
+                        }
+                    } else {
+                        echo "Error retrieving data";
+                    }
+                    $permit_stmt->close();
+                }   
         
-   }
+    } 
    
    foreach ($all_business as &$business) {
         $document_sql = "SELECT * FROM new_documents WHERE user_id = ? ORDER BY user_id DESC";
@@ -78,28 +84,6 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
                         echo "Error retrieving data";
                     }
                     $document_stmt->close();
-                }   
-        
-    } 
-
-    foreach ($all_business as &$business) {
-        $permit_sql = "SELECT * FROM user_profile WHERE user_id = ? ORDER BY user_id DESC";
-                if ($permit_stmt = $mysqli->prepare($permit_sql)) {
-                    $permit_stmt->bind_param("s", $current_id);
-                    $current_id = $business['id'];
-                    if ($permit_stmt->execute()) {
-                        $result = $permit_stmt->get_result();
-                        if ($result->num_rows === 1) {
-                            $row = $result->fetch_array(MYSQLI_ASSOC);
-                            $permit = $row["permit_status"];
-                            $business['permit'] = $permit;
-                        } else {
-                            $business['permit'] = "None";
-                        }
-                    } else {
-                        echo "Error retrieving data";
-                    }
-                    $permit_stmt->close();
                 }   
         
     } 
@@ -171,8 +155,8 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
                     foreach ($all_business as &$business) {
                         echo '  <tr class="user_info">  
                                     <td>'.$business['id'].'</td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>'.$business['name'].'</td>
+                                    <td>'.$business['activity'].'</td>
                                     <td><div class="info '.strtolower($business['documents']) .'">'.$business['documents'].'</div></td>
                                     <td><div class="info '.strtolower($business['permit']) .'">'.$business['permit'].'</div></td>
                                 </tr>';
