@@ -1,13 +1,13 @@
 <?php
 session_start();
-require_once "../php/connection.php";
+require_once "../../php/connection.php";
 
 if(isset($_GET['id'])){
     $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
 }else if(isset($_SESSION['user_id'])){
     $user_id = $_SESSION['user_id'];
 }else{
-    header("location: msme_management.php");
+    header("location: ../management.php");
 }
 $modal = "hidden";
 
@@ -95,13 +95,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $status_modal = "success";
                 $title = "Successful";
                 $message = "All changes has been updated";
-                $button = '<a href="document_review.php">OK</a>';
+                $button = '<a href="review.php">OK</a>';
             }else{
                 $modal = "";
                 $status_modal = "fail";
                 $title = "Updating Error";
                 $message = "Try again later";
-                $button = '<a href="msme_manangement.php">OK</a>';
+                $button = '<a href="../manangement.php">OK</a>';
             }
             $stmt->close();
         }
@@ -123,12 +123,12 @@ function validate($data) {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="../js/script.js" defer></script>
-    <script src="../js/form.js" defer></script>
-    <script src="../js/modal.js" defer></script>
-    <script src="../js/file_modal.js" defer></script>
-    <script src="../js/admin_td_click.js" defer></script>
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/script.js" defer></script>
+    <script src="../../js/form.js" defer></script>
+    <script src="../../js/modal.js" defer></script>
+    <script src="../../js/file_modal.js" defer></script>
+    <script src="../../js/admin_td_click.js" defer></script>
     <title>Denied Documents</title>
 </head>
 <body>
@@ -154,11 +154,11 @@ function validate($data) {
 </modal>
     <nav>
         <div id="nav_logo">
-                <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+                <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
                 <p>Tarlac City BPLO - ADMIN</p>  
         </div>
         <div id="account">
-             <a href="../php/logout.php">Logout</a>
+             <a href="../../php/logout.php">Logout</a>
         </div>
     </nav>
 
@@ -166,9 +166,9 @@ function validate($data) {
 
     <nav id="sidebar">
         <ul>
-            <li ><img src="../img/dashboard.png" alt=""><a href="dashboard.php">Dashboard</a></li>
-            <li class="current"><img src="../img/register.png" alt=""><a href="msme_management.php">MSME Management</a></li>
-            <li><img src="../img/list.png" alt=""><a href="">MSME Permit</a></li>
+            <li ><img src="../../img/dashboard.png" alt=""><a href="../dashboard.php">Dashboard</a></li>
+            <li class="current"><img src="../../img/register.png" alt=""><a href="../management/users.php">MSME Management</a></li>
+            <li><img src="../../img/list.png" alt=""><a href="">MSME Permit</a></li>
             
         </ul>
     </nav>
@@ -178,7 +178,8 @@ function validate($data) {
             <p id="page" class="title">Review Documents</p>
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
-                <a href="msme_documents.php" class="back">Back</a>
+                <a href="../management/documents.php" class="back">Documents</a>
+                <a href="documents.php" class="back">Documents</a>
             </div>
         </div>
 
