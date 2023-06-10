@@ -173,7 +173,7 @@ function validate($data) {
     <script src="../../js/form.js" defer></script>
     <script src="../../js/modal.js" defer></script>
     <script src="../../js/file_modal.js" defer></script>
-    <script src="../../js/contentTwo.js" defer></script>
+    <script src="../../js/contentSwitch.js" defer></script>
     <title>Review Information</title>
 </head>
 <body>
@@ -213,7 +213,7 @@ function validate($data) {
         <ul>
             <li ><img src="../../img/dashboard.png" alt=""><a href="../dashboard.php">Dashboard</a></li>
             <li ><img src="../../img/register.png" alt=""><a href="../management/users.php">MSME Management</a></li>
-            <li class="current"><img src="../../img/list.png" alt=""><a href="permit.php">MSME Permit</a></li>
+            <li class="current"><img src="../../img/list.png" alt=""><a href="msme.php">MSME Permit</a></li>
             
         </ul>
     </nav>
@@ -226,15 +226,15 @@ function validate($data) {
             <div class="buttons">
                 <a href="msme.php" class="back">List</a>
 
-                <a href="../management/edit_profile.php">Edit</a>
-                <a href="" class="back">Document</a>
+                <a id="content_1_edit" href="../management/edit_profile.php">Edit</a>
+                <a id="content_1_document" class="back">Document</a>
                 
-                <a href="../management/documents.php">Upload</a>
-                <a href="" class="back">Profile</a>
+                <a id="content_2_upload" class="hidden" href="../management/documents.php">Upload</a>
+                <a id="content_2_profile" class="back hidden">Profile</a>
             </div>
         </div>
 
-        <content>
+        <content id="content_1">
             <section class="flex-grow-2">
                 <subsection class="space-around">
                     <p class="sentence">Business Profile</p>
@@ -271,7 +271,7 @@ function validate($data) {
             </section>
         </content>
 
-    <form class="hidden" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+    <form id="content_2" class="hidden" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
             <div class="text-center">
                 <p class="sentence">Review the following documents carefully</p>
             </div>
@@ -282,12 +282,12 @@ function validate($data) {
                     <th>Status</th>
                     <th>Review</th>
                     <th>Message</th>
-                </tr>
+                </tr>one
                 <?php 
                     $requirements_names = array(
                         'Barangay Clearance for business',
                         'DTI Certificate of Registration',
-                        'On the Place of Business <img id="info" src="../img/info.png" alt="">',
+                        'On the Place of Business <img id="info" src="../../img/info.png" alt="">',
                         'Community Tax Certificate',
                         'Certificate of Zoning Compliance',
                         'Business Inspection Clearance',
@@ -306,7 +306,7 @@ function validate($data) {
                         'Overexposure/Underexposure',
                         'Misleading/Manipulated Visuals',
                         'File Corruption',
-                        'Invalid File Extension'
+                        'Invalid Foneile Extension'
                     );
                     $count = 1;
                     foreach($requirements_names as $fileName){
