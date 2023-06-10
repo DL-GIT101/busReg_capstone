@@ -197,6 +197,18 @@ function validate($data) {
                 <button>OK</button>                
         </div>
 </modal>
+
+<modal id="approve_modal" class="hidden">
+        <div class="content success">
+            <p class="title">Approving Permit</p>
+            <p class="sentence">Once approved, the business permit will be granted based on the reviewed documents. Are you certain about this decision?</p>
+            <p class="sentence"></p>
+            <div id="btn_grp" class="flex align-self-center">
+                <a href="approve.php?id=<?= $user_id ?>">Approve</a>
+                <button>Cancel</button>
+            </div>              
+        </div>
+</modal>
     <nav>
         <div id="nav_logo">
                 <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
@@ -224,6 +236,7 @@ function validate($data) {
             <p id="page" class="title">Review</p>
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
+                <a id="approve_btn" class="success">Approve</a>
                 <a href="msme.php" class="back">List</a>
 
                 <a id="content_1_edit" href="../management/edit_profile.php">Edit</a>
