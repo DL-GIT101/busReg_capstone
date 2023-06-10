@@ -36,3 +36,15 @@ if(info_del){
       info_modal.style.display = "none"
   });
 };
+
+const approve = document.getElementById('approve_modal');
+const approve_btn = document.getElementById('approve_btn');
+const approve_cancel = document.querySelector('#approve_modal > .content  button');
+
+approve_btn.addEventListener('click', () => {
+    approve.className = "";
+});
+
+approve_cancel.addEventListener('click', () => {
+    approve.className = "hidden";
+});
