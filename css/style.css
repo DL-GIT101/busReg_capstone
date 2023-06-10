@@ -210,7 +210,7 @@ modal > .content {
 
 modal > .content > * {
    margin-left: 10px;
-   color: rgb(216, 173, 0);
+   color: rgb(167, 133, 0);
 }
 
 modal > .content  a,modal > .content  button  {
@@ -500,6 +500,10 @@ td .info{
 
 .actions .buttons > .delete {
     background-color: rgb(220, 53, 69);  
+}
+
+.actions .buttons > .success {
+    background-color: rgb(71, 159, 118);
 }
 
 .actions .buttons > .back {
