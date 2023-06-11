@@ -250,7 +250,6 @@ function validate($data) {
             <p id="page" class="title">Review</p>
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
-                <a href="approve.php?id=<?= $user_id ?>" class="success">Approve</a>
                 <a href="msme.php" class="back">List</a>
 
                 <a id="content_1_edit" href="../management/edit_profile.php">Edit</a>
@@ -258,6 +257,8 @@ function validate($data) {
                 
                 <a id="content_2_upload" class="hidden" href="../management/documents.php">Upload</a>
                 <a id="content_2_profile" class="back hidden">Profile</a>
+                
+                <a href="approve.php?id=<?= $user_id ?>" class="back">Approve</a>
             </div>
         </div>
 
