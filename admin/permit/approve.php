@@ -131,11 +131,13 @@ function validate($data) {
             <p class="title">Approving Permit</p>
             <p class="sentence">Once approved, the business permit will be granted based on the reviewed documents. Are you certain about this decision?</p>
             <p class="sentence"></p>
-            <div id="btn_grp" class="flex align-self-center">
-                <a href="approve.php?id=<?= $user_id ?>">Approve</a>
-                <button>Cancel</button>
-            </div>              
-        </div>
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+                <div id="btn_grp" class="flex align-self-center success">
+                    <input type="submit" value="Approve">
+                    <button>Cancel</button>
+                </div> 
+            </form>
+        </div> 
 </modal>
 
     <nav>
@@ -166,7 +168,7 @@ function validate($data) {
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
                 <a href="review.php" class="back">Review</a>
-                <a id="approve_btn" class="success">Approve</a>
+                
             </div>
         </div>
 
@@ -189,16 +191,17 @@ function validate($data) {
                     </div>
                 </subsection>
             </section>
-            <section>
+            <section class="content_50">
                 <subsection>
                         <p class="title">Business Permit</p>
-
+                        <p class="p_container">As the admin, it is crucial to carefully consider the reviewed documents and their compliance with the necessary requirements. Once approved, the business permit will be granted, and it will signify that the reviewed documents have met the necessary criteria for permit issuance. Please ensure you have thoroughly assessed the documents and are confident in your decision to proceed with the approval.</p>
+                        <button id="approve_btn" class="approve">Approve</button>
                 </subsection>
                 <subsection class="space-around">
-                    <p class="sentence">Documents</p> 
-                    <div class="info title"><?= $approvedReq ?>/12</div>
+                    <p class="title">Approved Documents</p> 
+                    <div class="info title approved"><?= $approvedReq ?>/12</div>
 
-                    <p class="sentence">Business Permit Status</p> 
+                    <p class="title">Business Permit Status</p> 
                     <div class="info title <?= strtolower($permit_status)?>" id="permit_status"><?= $permit_status ?></div>
                 </subsection>
             </section>
