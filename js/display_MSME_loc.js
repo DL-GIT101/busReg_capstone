@@ -1,5 +1,11 @@
 let xhr = new XMLHttpRequest();
-xhr.open('POST', 'php/get_coordinates.php', true);
+let link;
+if(pathLevels === 1){
+    link = 'php/get_coordinates.php';
+}else if(pathLevels === 2){
+    link = '../php/get_coordinates.php';
+}
+xhr.open('POST', link, true);
 xhr.onload = function () {
     if (xhr.status === 200) {
     let coordinates = JSON.parse(xhr.responseText);
@@ -15,4 +21,3 @@ xhr.onload = function () {
     }  
 };
 xhr.send();
-
