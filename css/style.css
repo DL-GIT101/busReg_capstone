@@ -284,6 +284,16 @@ modal > .content.warning button {
     color: rgb(220, 53, 69);
 }
 
+#btn_grp.success input{
+    color: rgb(245, 245, 247);
+    background-color: rgb(25,135,84);
+    border: none;
+}
+
+modal form{
+    align-self: center;
+}
+
 map {
     height: 75%;
     width: 75%;
@@ -367,6 +377,30 @@ subsection > #logo > img {
     width: auto;
     height: auto;
     align-self: center;
+}
+
+subsection button.approve {
+    align-self: center;
+    font-family: 'Jost', sans-serif;
+    font-size: 20px;
+    width: 25%;
+    margin-top: 10px;
+    padding: 5px 0;
+    background-color: rgb(71, 159, 118);
+    color: rgb(245, 245, 247);
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+section.content_50 {
+    width: 50%;
+}
+
+.p_container {
+    width: 90%;
+    align-self: center;
+    text-align: justify;
 }
 
 .info {
