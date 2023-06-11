@@ -31,6 +31,7 @@
     <!-- Javascript -->
     <script src="js/script.js" defer></script>
     <script src="js/map.js" defer></script>
+    <script src="js/display_MSME_loc.js" defer></script>
     <title>BPLO</title>
 </head>
 <body>
