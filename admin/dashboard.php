@@ -52,7 +52,16 @@ if ($stmt3 = $mysqli->prepare($sql3)) {
     }
     $stmt3->close();
 }    
-    
+
+$sql4 = "SELECT COUNT(*) FROM permit";
+if($stmt4 = $mysqli->prepare($sql4)){
+    if($stmt4->execute()){
+        $stmt4->bind_result($permitApproved);
+        $stmt4->fetch();
+    }else{
+        echo "Oops! Something went wrong. Please try again later";
+    }$stmt4->close();
+}   
     $mysqli->close();
 
     function validate($data) {
@@ -118,35 +127,27 @@ if ($stmt3 = $mysqli->prepare($sql3)) {
                 <subsection class="space-around">
                     <p class="sentence">Documents</p> 
                     <div class="info none title flex space-between">
+                        <p>None</p>
+                        <p><?= $noneReqCount ?></p>
+                    </div>
+                    <div class="info none title flex space-between">
                         <p>Incomplete</p>
                         <p><?= $incompleteCount ?></p>
                     </div>  
                     <div class="info none title flex space-between">
                         <p>Complete</p>
                         <p><?= $completeCount ?></p>
-                    </div>
-                    <div class="info none title flex space-between">
-                        <p>None</p>
-                        <p><?= $noneReqCount ?></p>
                     </div>        
                 </subsection>
                 <subsection class="space-around">
                     <p class="sentence">Permit</p> 
                     <div class="info none title flex space-between">
-                        <p>Pending</p>
-                        <p>0</p>
-                    </div>  
-                    <div class="info none title flex space-between">
-                        <p>Approved</p>
-                        <p>0</p>
+                        <p>None</p>
+                        <p><?= $userCount-$permitApproved ?></p>
                     </div>
                     <div class="info none title flex space-between">
-                        <p>Denied</p>
-                        <p>0</p>
-                    </div> 
-                    <div class="info none title flex space-between">
-                        <p>None</p>
-                        <p>0</p>
+                        <p>Approved</p>
+                        <p><?= $permitApproved ?></p>
                     </div>      
                 </subsection>
             </section>
