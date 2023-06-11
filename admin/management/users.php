@@ -83,7 +83,7 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
     } 
 
     foreach ($all_business as &$business) {
-        $permit_sql = "SELECT * FROM user_profile WHERE user_id = ? ORDER BY user_id DESC";
+        $permit_sql = "SELECT * FROM permit WHERE user_id = ? ORDER BY user_id DESC";
                 if ($permit_stmt = $mysqli->prepare($permit_sql)) {
                     $permit_stmt->bind_param("s", $current_id);
                     $current_id = $business['id'];
@@ -91,7 +91,7 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
                         $result = $permit_stmt->get_result();
                         if ($result->num_rows === 1) {
                             $row = $result->fetch_array(MYSQLI_ASSOC);
-                            $permit = $row["permit_status"];
+                            $permit = $row["status"];
                             $business['permit'] = $permit;
                         } else {
                             $business['permit'] = "None";
