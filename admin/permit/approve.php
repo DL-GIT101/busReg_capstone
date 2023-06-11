@@ -94,6 +94,43 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
         $stmt3->close();
     }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    if($approvedReq === 12){
+
+        $sql = "INSERT INTO permit (user_id, status) VALUES (?,?)";
+
+        if($stmt = $mysqli->prepare($sql)){
+            $stmt->bind_param("ss", $param_id, $param_Status);
+
+            $param_id = $user_id;
+            $param_Status = "Approved";
+
+            if($stmt->execute()){
+                $modal = "";
+                $status_modal = "success";
+                $title = "Permit has been Approved";
+                $message = "Status can now be seen";
+                $button = '<a href="review.php">OK</a>';
+            }else{
+                $modal = "";
+                $status_modal = "fail";
+                $title = "Approving Permit Error";
+                $message = "Try again later";
+                $button = '<a href="review.php">OK</a>';
+            }
+        }
+
+    }else{
+        $modal = "";
+        $status_modal = "fail";
+        $title = "Incomplete Documents";
+        $message = "All documents must be approved";
+        $button = '<button class="close">OK</button>';
+    }
+    $stmt->close();
+}
+
     $mysqli->close();
 
 function validate($data) {
