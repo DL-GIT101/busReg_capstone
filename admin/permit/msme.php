@@ -34,12 +34,12 @@ $user_sql = "SELECT users.id FROM users
     }
 
     foreach ($all_business as &$business) {
-        $permit_sql = "SELECT * FROM user_profile WHERE user_id = ? ORDER BY user_id DESC";
-                if ($permit_stmt = $mysqli->prepare($permit_sql)) {
-                    $permit_stmt->bind_param("s", $current_id);
+        $profile_sql = "SELECT * FROM user_profile WHERE user_id = ? ORDER BY user_id DESC";
+                if ($profile_stmt = $mysqli->prepare($profile_sql)) {
+                    $profile_stmt->bind_param("s", $current_id);
                     $current_id = $business['id'];
-                    if ($permit_stmt->execute()) {
-                        $result = $permit_stmt->get_result();
+                    if ($profile_stmt->execute()) {
+                        $result = $profile_stmt->get_result();
                         if ($result->num_rows === 1) {
                             $row = $result->fetch_array(MYSQLI_ASSOC);
 
@@ -47,7 +47,25 @@ $user_sql = "SELECT users.id FROM users
                             $business['name'] = $name;
                             $activity = $row["activity"];
                             $business['activity'] = $activity;
-                            $permit = $row["permit_status"];
+                        }
+                    } else {
+                        echo "Error retrieving data";
+                    }
+                    $profile_stmt->close();
+                }   
+        
+    } 
+
+    foreach ($all_business as &$business) {
+        $permit_sql = "SELECT * FROM permit WHERE user_id = ? ORDER BY user_id DESC";
+                if ($permit_stmt = $mysqli->prepare($permit_sql)) {
+                    $permit_stmt->bind_param("s", $current_id);
+                    $current_id = $business['id'];
+                    if ($permit_stmt->execute()) {
+                        $result = $permit_stmt->get_result();
+                        if ($result->num_rows === 1) {
+                            $row = $result->fetch_array(MYSQLI_ASSOC);
+                            $permit = $row["status"];
                             $business['permit'] = $permit;
                         } else {
                             $business['permit'] = "None";
