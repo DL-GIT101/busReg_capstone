@@ -9,6 +9,7 @@ if(isset($_GET['id'])){
 }else{
     header("location: ../management.php");
 }
+
 $modal = "hidden";
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
@@ -24,17 +25,9 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
             if($result->num_rows == 1){
                 $row = $result->fetch_array(MYSQLI_ASSOC);
 
-                if (!empty($row["logo"])) {
-                    $logo_path = "../../user/upload/".$user_id."/".$row["logo"];
-                } else {
-                    $logo_path = "../../img/No_image_available.svg";
-                }
                 $business_name = $row["business_name"];
                 $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"]." ".$row["suffix"];
                 $business_activity = $row["activity"];
-                $permit_status = $row["permit_status"];
-                $latitude = $row["latitude"];
-                $longitude = $row["longitude"];
                 $gender = $row['gender'];
                 $contact = $row['contact_number'];
                 $address = $row["address_1"]." ".$row["address_2"];
@@ -59,18 +52,17 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
        
         if($stmt2->execute()){
             $result = $stmt2->get_result();
-            if($result->num_rows == 1){
-           
+            if($result->num_rows === 1){
                $row = $result->fetch_array(MYSQLI_ASSOC);
 
-                $serialized_requirements_fetch = $row["requirements"];
                 $serialized_status_fetch = $row["status"];
-                $serialized_message_fetch = $row["message"];
-                $requirements_fetch = unserialize($serialized_requirements_fetch);
-                $status_fetch = unserialize($serialized_status_fetch);
-                $message_fetch = unserialize($serialized_message_fetch);              
-            }else{
-                
+                $status_fetch = unserialize($serialized_status_fetch);     
+                $approvedReq = 0;
+                foreach($status_fetch as $status){
+                    if($status === "Approved"){
+                        $approvedReq++;
+                    }
+                }
             }
         }else {
             echo "error retrieving data";
@@ -78,72 +70,29 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
     $stmt2->close();
     }
     
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $errorMsg = 'errorMsg_' . $i;
-        $errorCount = 0;
-        $length = 12;
+    $sql3 = "SELECT * FROM permit WHERE user_id = ?";
 
-        $status = array();
-        $denied_msg = array();
+    if($stmt3 = $mysqli->prepare($sql3)){
+        $stmt3->bind_param("s",$param_id);
 
-        for($i = 1; $i <= $length; $i++){
-            $errorMsg = 'errorMsg_' . $i;
+        $param_id = $user_id;
 
-           $status_review = validate($_POST['status_'.$i]);
-           if(!empty($status_review)){
+        if($stmt3->execute()){
+            $result = $stmt3->get_result();
 
-                if($status_review === "Denied"){
+            if($result->num_rows == 1){
+                $row = $result->fetch_array(MYSQLI_ASSOC);
 
-                    $message_review = validate($_POST['denied_message_'.$i]);
-                    if(!empty($message_review)){
-                        array_push($status, $status_review);
-                        array_push($denied_msg, $message_review);
-                    }else{
-                        $$errorMsg = "Denied Document must have a message";
-                        $errorCount++;
-                    }
-
-                }else{
-                    array_push($status, $status_review);
-                    array_push($denied_msg, null);
-                }
-            
-           }else{
-                array_push($status, null);
-                array_push($denied_msg, null);
-           }
-        }
-
-    if($errorCount === 0){
-        $serialized_status = serialize($status);
-        $serialized_denied = serialize($denied_msg);
-
-        $sql = "UPDATE new_documents SET status = ? , message = ? WHERE user_id = ?";
-       
-        if($stmt = $mysqli->prepare($sql)){
-            $stmt->bind_param('sss',$param_Stat,$param_msg, $param_id);
-
-            $param_id = $user_id;
-            $param_Stat = $serialized_status;
-            $param_msg = $serialized_denied;
-
-            if($stmt->execute()){
-                $modal = "";
-                $status_modal = "success";
-                $title = "Successful";
-                $message = "All changes has been updated";
-                $button = '<a href="review.php">OK</a>';
-            }else{
-                $modal = "";
-                $status_modal = "fail";
-                $title = "Updating Error";
-                $message = "Try again later";
-                $button = '<a href="../manangement.php">OK</a>';
+                $permit_status = $row['status'];
+                
+            }else {
+                $permit_status = "None";
             }
-            $stmt->close();
+        }else{
+            echo "Oops! Something went wrong. Please try again later";
         }
+        $stmt3->close();
     }
-}
 
     $mysqli->close();
 
@@ -161,19 +110,10 @@ function validate($data) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../css/style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
-     integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
-     crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
-     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
-     crossorigin=""></script>
     <script src="../../js/script.js" defer></script>
-    <script src="../../js/map.js" defer></script>
-    <script src="../../js/displayMap.js" defer></script>
     <script src="../../js/form.js" defer></script>
     <script src="../../js/modal.js" defer></script>
     <script src="../../js/file_modal.js" defer></script>
-    <script src="../../js/contentSwitch.js" defer></script>
     <title>Approve</title>
 </head>
 <body>
@@ -186,6 +126,17 @@ function validate($data) {
         </div>
 </modal>
 
+<modal id="approve_modal" class="hidden">
+        <div class="content success">
+            <p class="title">Approving Permit</p>
+            <p class="sentence">Once approved, the business permit will be granted based on the reviewed documents. Are you certain about this decision?</p>
+            <p class="sentence"></p>
+            <div id="btn_grp" class="flex align-self-center">
+                <a href="approve.php?id=<?= $user_id ?>">Approve</a>
+                <button>Cancel</button>
+            </div>              
+        </div>
+</modal>
 
     <nav>
         <div id="nav_logo">
@@ -211,20 +162,47 @@ function validate($data) {
     <main class="flex-grow-1 flex-wrap content-center">
 
     <div class="actions space-between">
-            <p id="page" class="title">Review</p>
+            <p id="page" class="title">Approve</p>
             <p class="sentence"> User ID : <?= $user_id ?></p>
             <div class="buttons">
-                <a href="msme.php" class="back">List</a>
-
-                <a id="content_1_edit" href="../management/edit_profile.php">Edit</a>
-                <a id="content_1_document" class="back">Document</a>
-                
-                <a id="content_2_upload" class="hidden" href="../management/documents.php">Upload</a>
-                <a id="content_2_profile" class="back hidden">Profile</a>
+                <a href="review.php" class="back">Review</a>
+                <a id="approve_btn" class="success">Approve</a>
             </div>
         </div>
 
-        
+        <content>
+            <section>
+                <subsection class="space-around">
+                    <p class="sentence">Business Profile</p>
+                    <div class="text-center">
+                        <p class="title"><?= $business_name ?></p>
+                        <p class="sentence"><?= $business_activity ?></p> 
+                        <p class="sentence"><?= $address ?></p>
+                    </div>
+                </subsection>
+                <subsection class="space-around">
+                <p class="sentence">Business Owner</p> 
+                    <div class="text-center">
+                        <p class="title"><?= $name ?></p> 
+                        <p class="sentence"><?= $gender ?></p> 
+                        <p class="sentence"><?= $contact ?></p>
+                    </div>
+                </subsection>
+            </section>
+            <section>
+                <subsection>
+                        <p class="title">Business Permit</p>
+
+                </subsection>
+                <subsection class="space-around">
+                    <p class="sentence">Documents</p> 
+                    <div class="info title"><?= $approvedReq ?>/12</div>
+
+                    <p class="sentence">Business Permit Status</p> 
+                    <div class="info title <?= strtolower($permit_status)?>" id="permit_status"><?= $permit_status ?></div>
+                </subsection>
+            </section>
+        </content>
     </main>
 </div>
 </body>
