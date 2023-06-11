@@ -29,7 +29,6 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 $business_name = $row["business_name"];
                 $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"];
                 $business_activity = $row["activity"];
-                $permit_status = $row["permit_status"];
                 $latitude = $row["latitude"];
                 $longitude = $row["longitude"];
 
@@ -44,6 +43,32 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
     }
 
     $stmt->close();
+
+    $sql2 = "SELECT * FROM permit WHERE user_id = ?";
+
+    if($stmt2 = $mysqli->prepare($sql2)){
+        $stmt2->bind_param("s",$param_id);
+
+        $param_id = validate($_SESSION['id']);
+
+        if($stmt2->execute()){
+            $result = $stmt2->get_result();
+
+            if($result->num_rows == 1){
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+
+                $permit_status = $row['status'];
+                
+            }else {
+                $permit_status = "None";
+            }
+        }else{
+            echo "Oops! Something went wrong. Please try again later";
+        }
+
+    }
+
+    $stmt2->close();
     
     $mysqli->close();
 
