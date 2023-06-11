@@ -32,7 +32,6 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 $business_name = $row["business_name"];
                 $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"]." ".$row["suffix"];
                 $business_activity = $row["activity"];
-                $permit_status = $row["permit_status"];
                 $latitude = $row["latitude"];
                 $longitude = $row["longitude"];
                 $gender = $row['gender'];
@@ -77,12 +76,38 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
         }
     $stmt2->close();
     }
+
+    $sql3 = "SELECT * FROM permit WHERE user_id = ?";
+
+    if($stmt3 = $mysqli->prepare($sql3)){
+        $stmt3->bind_param("s",$param_id);
+
+        $param_id = $user_id;
+
+        if($stmt3->execute()){
+            $result = $stmt3->get_result();
+
+            if($result->num_rows == 1){
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+
+                $permit_status = $row['status'];ini_set('display_errors', 1);
+                
+            }else {
+                $permit_status = "None";
+            }
+        }else{
+            echo "Oops! Something went wrong. Please try again later";
+        }
+        $stmt3->close();
+    }
+
+    
     
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errorMsg = 'errorMsg_' . $i;
         $errorCount = 0;
         $length = 12;
-
+        ini_set('display_errors', 1);
         $status = array();
         $denied_msg = array();
 
@@ -140,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $message = "Try again later";
                 $button = '<a href="../manangement.php">OK</a>';
             }
-            $stmt->close();
+            $stmt->close();ini_set('display_errors', 1);
         }
     }
 }
@@ -158,7 +183,7 @@ function validate($data) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">ini_set('display_errors', 1);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
