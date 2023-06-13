@@ -4,7 +4,9 @@ session_start();
 
 require_once "../../php/connection.php";
 require_once "../../php/validate.php";
+require_once "../../php/checkPermit.php";
 
+if(checkPermit($mysqli) !== "Approved"){
 if (isset($_GET['file'])) {
 
 $file = urldecode($_GET['file']);
@@ -71,9 +73,17 @@ $filePath = 'upload/'.$_SESSION['id'].'/'.$file;
             $stmt->close();
         }
     }
-    
+    $mysqli->close();
 } 
-
-$mysqli->close();
-
+}else{
+    $message = '<modal>
+                    <div class="content success">
+                        <p class="title">Documents cannot be deleted</p>
+                        <p class="sentence">The permit has already been approved</p>
+                        <a href="permit.php">OK</a>
+                    </div>
+                </modal>
+    ';
+    header("location: ../permit.php?message=". urlencode($message));
+}
 ?>
