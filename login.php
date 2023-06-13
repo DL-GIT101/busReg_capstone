@@ -8,6 +8,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 }
 
 require_once "php/connection.php";
+require_once "php/validate.php";
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
 //email
@@ -68,15 +69,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
         }
     }
-$mysqli->close();
+    
 }
 
-function validate($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-        return $data;
-}
+$mysqli->close();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

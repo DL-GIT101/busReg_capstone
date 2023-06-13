@@ -1,6 +1,9 @@
 <?php
+
 session_start();
-require_once "/opt/lampp/htdocs/busReg_capstone/php/connection.php";
+
+require_once "../../php/connection.php";
+require_once "../../php/validate.php";
 
 if (isset($_GET['file'])) {
 
@@ -68,12 +71,9 @@ $filePath = 'upload/'.$_SESSION['id'].'/'.$file;
             $stmt->close();
         }
     }
-    $mysqli->close();
+    
 } 
-function validate($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-        return $data;
-}
+
+$mysqli->close();
+
 ?>

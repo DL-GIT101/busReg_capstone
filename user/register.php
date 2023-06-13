@@ -8,6 +8,8 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 }
 
 require_once "../php/connection.php";
+require_once "../php/validate.php";
+
 $hidden = "hidden";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -143,17 +145,11 @@ if(!empty($id)) {
         $stmt->close();
         }
     }
+}
+
 $mysqli->close();
-}
 
-function validate($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-        return $data;
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
