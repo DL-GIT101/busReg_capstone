@@ -1,11 +1,14 @@
 <?php
+
 session_start();
 
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== "admin"){
     header("location: ../login.php");
     exit;
 }
+
 require_once "../php/connection.php";
+require_once "../php/validate.php";
 
 $sql1 = "SELECT COUNT(*) FROM users WHERE id <> ?";
     if($stmt1 = $mysqli->prepare($sql1)){
@@ -64,12 +67,6 @@ if($stmt4 = $mysqli->prepare($sql4)){
 }   
     $mysqli->close();
 
-    function validate($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-            return $data;
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">

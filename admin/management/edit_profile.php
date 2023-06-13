@@ -7,6 +7,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== "admin"){
 }
 
 require_once "../../php/connection.php";
+require_once "../../php/validate.php";
+
 $modal = "hidden";
 $user_id = validate($_SESSION['user_id']);
 
@@ -271,15 +273,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     } 
        
-    }
-    $mysqli->close();
+}
 
-    function validate($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-            return $data;
-    }
+$mysqli->close();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

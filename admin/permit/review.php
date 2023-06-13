@@ -1,6 +1,9 @@
 <?php
+
 session_start();
+
 require_once "../../php/connection.php";
+require_once "../../php/validate.php";
 
 if(isset($_GET['id'])){
     $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
@@ -170,14 +173,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-    $mysqli->close();
+$mysqli->close();
 
-function validate($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-        return $data;
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">

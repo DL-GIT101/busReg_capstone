@@ -73,12 +73,6 @@ $none = "hidden";
 
 $mysqli->close();
 
-function validate($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-        return $data;
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">

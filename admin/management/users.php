@@ -7,6 +7,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== "admin"){
 }
 
 require_once "../../php/connection.php";
+require_once "../../php/validate.php";
 
 $all_business = array();
 
@@ -104,14 +105,8 @@ $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
         
     } 
 
-    $mysqli->close();
+$mysqli->close();
 
-    function validate($data) {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-            return $data;
-    }
 ?>
 <!DOCTYPE html>
 <html lang="en">

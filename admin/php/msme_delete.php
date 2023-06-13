@@ -1,6 +1,6 @@
 <?php 
-require_once "/opt/lampp/htdocs/busReg_capstone/php/connection.php";
-ini_set('display_errors', 1);
+require_once "../../php/connection.php";
+require_once "../../php/validate.php";
 
 if(isset($_GET['id_user'])){
     $user_id = urldecode($_GET['id_user']);
@@ -42,14 +42,8 @@ if ($stmt = $mysqli->prepare($sql)) {
     }
     $stmt->close();
 }
-$mysqli->close();
 
-function validate($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-        return $data;
-}
+$mysqli->close();
 
 function deleteDirectory($directory,$page) {
     if (!is_dir($directory)) {

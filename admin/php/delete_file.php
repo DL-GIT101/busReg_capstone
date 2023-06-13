@@ -1,6 +1,7 @@
 <?php
 session_start();
-require_once "/opt/lampp/htdocs/busReg_capstone/php/connection.php";
+require_once "../../php/connection.php";
+require_once "../../php/validate.php";
 
 if(isset($_GET['id'])){
     $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
@@ -13,7 +14,7 @@ if(isset($_GET['id'])){
 if (isset($_GET['file'])) {
     
 $file = urldecode($_GET['file']);
-$filePath = '/opt/lampp/htdocs/busReg_capstone/user/upload/'.$user_id.'/'.$file;
+$filePath = '../../user/upload/'.$user_id.'/'.$file;
 
     $sql = "SELECT * FROM new_documents WHERE user_id = ?";
    
@@ -76,12 +77,8 @@ $filePath = '/opt/lampp/htdocs/busReg_capstone/user/upload/'.$user_id.'/'.$file;
             $stmt->close();
         }
     }
-    $mysqli->close();
 }
-function validate($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-        return $data;
-}
+
+$mysqli->close();
+
 ?>
