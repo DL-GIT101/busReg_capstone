@@ -1,6 +1,10 @@
 <?php 
+
 session_start();
+
 require_once "../php/connection.php";
+require_once "../php/validate.php";
+require_once "../php/checkPermit.php";
 
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         header("location: ../login.php");
@@ -12,6 +16,11 @@ require_once "../php/connection.php";
         exit;
     }
 
+    if(isset($_GET['message'])){
+        $modal_get = urldecode($_GET['message']);
+        echo $modal_get;
+    }
+    
     $modal = "hidden";
     $sql = "SELECT * FROM new_documents WHERE user_id = ?";
    
@@ -45,7 +54,7 @@ require_once "../php/connection.php";
     
    
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
+    if(checkPermit($mysqli) !== "Approved"){
     $allowTypes = array('jpg', 'jpeg', 'png', 'pdf');
 
     $file_inputs_count = count($_FILES);
@@ -160,9 +169,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         $stmt->close();
         }
+    }else{
+        $modal = "";
+        $status_modal = "success";
+        $title = "Profile cannot be updated";
+        $message = "The permit has already been approved";
+        $button = '<a href="permit.php">OK</a>';
+    }     
 }
 $mysqli->close();
+
 function hasProfile($mysqli,$param_id){
+
     $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
     if($stmt = $mysqli->prepare($sql)){
@@ -191,12 +209,6 @@ function pushNullValues(&$array1, &$array2, &$array3) {
     array_push($array3, null);
 }
 
-function validate($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-        return $data;
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
