@@ -3,6 +3,7 @@ session_start();
 
 require_once "../php/connection.php";
 require_once "../php/validate.php";
+require_once "../php/checkPermit.php";
 
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: ../login.php");
@@ -62,7 +63,8 @@ if($stmt = $mysqli->prepare($sql)){
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $modal = "hidden";
+    if(checkPermit($mysqli) !== "Approved"){
+        $modal = "hidden";
         //FIRST NAME
         $fname = validate($_POST["fname"]);
         if(empty($fname)){
@@ -210,31 +212,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if(move_uploaded_file($_FILES["logo"]["tmp_name"], $targetFilePath)){
 
-                    $param_logo = $new_fileName;
+                        $param_logo = $new_fileName;
 
-                    if(!empty($logo)){
-                        unlink($logo);
-                    }
-                    
-                    if($stmt->execute()){
-                        $modal = "";
-                        $status = "success";
-                        if($submit_btn === "Update Profile"){
-                            $title = "Profile Information Updated";
-                            $message = "Your Profile has been updated <br>";
-                        }else{
-                            $title = "Profile Creation Success";
-                            $message = "You can now view your profile and use our services  <br>";
+                        if(!empty($logo)){
+                            unlink($logo);
                         }
-                        $message .= "You can view your profile now";
-                        $button = '<a href="dashboard.php">Go to Dashboard</a>';
-                    } else{
-                        $modal = "";
-                        $status = "fail";
-                        $title = "Profile Information Error";
-                        $message = "Try again later";
-                        $button = '<a href="../index.php">OK</a>';
-                    }
+                        
+                        if($stmt->execute()){
+                            $modal = "";
+                            $status = "success";
+                            if($submit_btn === "Update Profile"){
+                                $title = "Profile Information Updated";
+                                $message = "Your Profile has been updated <br>";
+                            }else{
+                                $title = "Profile Creation Success";
+                                $message = "You can now view your profile and use our services  <br>";
+                            }
+                            $message .= "You can view your profile now";
+                            $button = '<a href="dashboard.php">Go to Dashboard</a>';
+                        } else{
+                            $modal = "";
+                            $status = "fail";
+                            $title = "Profile Information Error";
+                            $message = "Try again later";
+                            $button = '<a href="../index.php">OK</a>';
+                        }
                 }else{
                     $logo_err = "Error uploading" . $_FILES['logo']['error'];
                 }
@@ -273,7 +275,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $stmt->close();
     } 
-       
+
+    }else{
+        $modal = "";
+        $status = "success";
+        $title = "Profile cannot be updated";
+        $message = "The permit has already been approved";
+        $button = '<a href="dashboard.php">OK</a>';
+    }  
 }
 
     $mysqli->close();
