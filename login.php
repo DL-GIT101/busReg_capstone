@@ -90,13 +90,14 @@ $mysqli->close();
 <body>
 
     <nav>
-        <div id="nav_logo">
+        <div class="logo">
             <img src="img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
             <p>Tarlac City Business Permit & Licensing Office</p>  
-            </div>
-            <div id="account">
-                <a href="user/register.php">Register</a>
-            </div>
+        </div>
+        <div class="button-group">
+            <a href="user/register.php">Register</a>
+        </div>
+        <img id="toggle" src="img/navbar-toggle.svg" alt="Navbar Toggle">
     </nav>
 
     <main id="content">

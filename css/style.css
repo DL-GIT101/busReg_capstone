@@ -1,6 +1,9 @@
 /* 
 color: rgb(29, 29, 31); - for black 
-color: rgb(245, 245, 247); - for white
+
+WHITE
+    color: rgb(245, 245, 247); - 
+    color: rgb(189, 189, 191); - dark
 
 color: rgb(66, 66, 69); - gray
 color: rgb(23, 23, 26); - dark gray
@@ -24,52 +27,69 @@ font-family: 'Noto Serif', serif; for sentence
     margin: 0;
 }
 
+html {
+    font-size: 14px;
+}
+
 body {
     background-color: rgb(245, 245, 247);
     color: rgb(29, 29, 31);
     font-family: 'Noto Serif', serif;
-    height: 100vh;
-    width: 100vw;
-    font-size: 14px;
-}
-/*For hovering effect of buttons and links  */
-a:hover, form input[type=submit]:hover, button:hover{
-    filter: brightness(0.8);
 }
 
+/* Nav Bar */
 nav {
     background-color: rgb(0, 59, 179);
     display: flex;
-    height: 6vh;
     justify-content: space-between;
     align-items: center;
-    font-family: 'Jost', sans-serif;
-    color: rgb(245, 245, 247);
-    font-size: 20px;
+    padding: 5px 15px;
 }
 
-#nav_logo, #account, a {
+nav .logo{
     display: flex;
     align-items: center;
-    height: 100%;
+    cursor: pointer;
 }
 
-#nav_logo > img {
-    height: 80%;
-    object-fit: cover;
-    padding: 0px 10px;
+nav .logo:hover {
+    filter: brightness(0.9);
 }
 
-#account > a , subsection >.service {
-    height: 70%;
-    padding: 0px 10px;
-    margin: 0px 10px;
+nav .logo > img {
+    width: 32px;
+    padding-right: 10px;
+}
+
+nav .logo > p {
+    color: rgb(245, 245, 247);
+    font-size: 1.1rem;
+    font-family: 'Jost', sans-serif; 
+}
+
+nav .button-group{
+    display: flex;
+    align-items: center;
+}
+
+nav .button-group > a {
+    height: 1.25rem;
+    padding: 0px 15px;
     text-decoration: none;
-    color: rgb(29, 29, 31);
-    background-color: rgb(255, 204, 0);
-    border-radius: 10px;
+    color: rgb(245, 245, 247);
+    font-family: 'Jost', sans-serif; 
 }
 
+nav a:hover{
+    color: rgb(189, 189, 191);
+}
+
+nav #toggle {
+    display: none;
+    width: 32px;
+}
+
+/* -------- */
 main {
     display: flex;
     justify-content: center;
@@ -602,3 +622,15 @@ td .info{
 .text-center {
     text-align: center;
 }
+
+/* For  responsive*/
+
+@media only screen and (max-width: 767px) {
+    nav .button-group{
+        display: none;
+    }
+
+    nav #toggle {
+        display: block;
+    }
+  }
