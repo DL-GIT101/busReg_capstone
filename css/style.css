@@ -36,7 +36,16 @@ body {
     color: rgb(29, 29, 31);
     font-family: 'Noto Serif', serif;
 }
+/* Font */
+.title {
+    font-weight: bold;
+    font-size: 1.5rem;
+    font-family: 'Jost', sans-serif;
+}
 
+.sentence {
+    color: rgb(66,66,69);
+}
 /* Nav Bar */
 nav {
     background-color: rgb(0, 59, 179);
@@ -96,35 +105,27 @@ nav #toggle {
     width: 32px;
 }
 
-/* -------- */
+/* main */
 main {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-content {
-    height: 80%;
-    width: 80%;
-}
-
-.column_container, form ,form .input-group, section, subsection {
+.column-container{
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    height: 90vh;
 }
 
-.column_container > * {
+.column-container > * {
     margin: 10px;
 }
-
-.title {
-    font-weight: bold;
-    font-size: 24px;
-    font-family: 'Jost', sans-serif;
-}
-
-.sentence {
-    color: rgb(66,66,69);
+/* form */
+form {
+    display: flex;
+    flex-direction: column;
 }
 
 form > * {
@@ -155,8 +156,8 @@ form select {
 }
 
 form input:focus, form select:focus {
-    outline: 1px solid rgb(0, 59, 179);
-    border: 1px solid rgb(0, 59, 179);
+    outline: 1px solid rgb(155, 188, 255);
+    border: 1px solid rgb(155, 188, 255);
 }
 
 .pre-input {
