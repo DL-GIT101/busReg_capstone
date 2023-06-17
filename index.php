@@ -41,6 +41,7 @@
             <img src="img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
             <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
+        <img id="toggle" src="img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
                 <li><a href="login.php">Login</a></li>
