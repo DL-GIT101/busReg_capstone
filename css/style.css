@@ -46,6 +46,11 @@ body {
 .sentence {
     color: rgb(66,66,69);
 }
+/* map */
+map {
+    height: 75vh;
+    width: 75vw;
+}
 /* Nav Bar */
 nav {
     background-color: rgb(0, 59, 179);
@@ -321,10 +326,7 @@ modal form{
     align-self: center;
 }
 
-map {
-    height: 75%;
-    width: 75%;
-}
+
 
 section map {
     height: 100%;
