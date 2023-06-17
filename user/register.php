@@ -173,17 +173,20 @@ $mysqli->close();
     </modal>
     
     <nav>
-        <div id="nav_logo">
-                <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City Business Permit & Licensing Office</p>  
+        <div class="logo">
+            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <div id="account">
-             <a href="../login.php">Login</a>
+        <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a href="../login.php">Login</a></li>
+            </ul>
         </div>
     </nav>
      
      <main> 
-        <div class="column_container">      
+        <div class="column-container">      
             <div class="text-center">
                 <p class="title">Create an Account</p>
                 <p class="sentence">Please enter your email and password to create an account.</p>
