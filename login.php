@@ -102,8 +102,8 @@ $mysqli->close();
         </div>
     </nav>
 
-    <main id="content">
-        <div class="column_container">      
+    <main>
+        <div class="column-container">      
             <div>
                 <p class="title text-center">Welcome</p>
                 <p class="sentence">Sign in to your account to continue</p>
