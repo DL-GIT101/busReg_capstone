@@ -646,6 +646,7 @@ td .info{
         padding: 10px;
         max-height: 0;
         transition: max-height 0.3s ease;
+        z-index: 1000;
     }
 
     nav .button-group ul {
