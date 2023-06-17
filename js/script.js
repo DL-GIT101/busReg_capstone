@@ -1,11 +1,11 @@
-const nav_logo = document.getElementById('nav_logo');
+const navLogo = document.querySelector('nav .logo');
 
 const filePath = window.location.pathname;
 const directoryPath = filePath.substring(0, filePath.lastIndexOf('/'));
 const pathLevels = directoryPath.split('/').length - 1;
 
-nav_logo.style.cursor = 'pointer';
-nav_logo.addEventListener('click', () => {
+navLogo.style.cursor = 'pointer';
+navLogo.addEventListener('click', () => {
     
     if(pathLevels === 1){
         window.location.href = 'index.php';
@@ -15,3 +15,23 @@ nav_logo.addEventListener('click', () => {
         window.location.href = '../../index.php';
     }
 });
+
+const navIcon = document.querySelector('nav #toggle');
+const navButtonGrp = document.querySelector('nav .button-group');
+const navButtonGrpStyle = window.getComputedStyle(navButtonGrp);
+console.log(navButtonGrpStyle.maxHeight);
+if(navIcon){
+    navIcon.addEventListener('click', () => {
+        if(navButtonGrpStyle.display === "none"){
+            navButtonGrp.style.display = "block";
+            setTimeout(() => {
+                navButtonGrp.style.maxHeight = '60px';
+            }, 10);
+        }else{
+            navButtonGrp.style.maxHeight = '0';
+            setTimeout(() => {
+                navButtonGrp.style.display = "none";
+            },400);
+        }
+    });
+};
