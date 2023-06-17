@@ -37,17 +37,22 @@
 <body>
 
     <nav>
-        <div id="nav_logo">
-                <img src="img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City Business Permit & Licensing Office</p>  
+        <div class="logo">
+            <img src="img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <div id="account">
-            <?= $logged ?>
+        <div class="button-group">
+            <ul>
+                <li><a href="login.php">Login</a></li>
+                <li><a href="user/register.php">Register</a></li>
+            </ul>
         </div>
     </nav>
 
     <main>
-        <map id="map"></map>
+        <div class="column-container">
+            <map id="map"></map>
+        </div>
     </main>
 </body>
 </html>
