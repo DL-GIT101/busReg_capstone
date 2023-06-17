@@ -72,7 +72,14 @@ nav .button-group{
     align-items: center;
 }
 
-nav .button-group > a {
+nav .button-group > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+nav .button-group > ul > li > a {
     height: 1.25rem;
     padding: 0px 15px;
     text-decoration: none;
@@ -94,7 +101,6 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 94vh;
 }
 
 content {
@@ -626,11 +632,25 @@ td .info{
 /* For  responsive*/
 
 @media only screen and (max-width: 767px) {
+
     nav .button-group{
+        background-color: rgb(0, 59, 179);
         display: none;
+        position: absolute;
+        top: 55px;
+        left: 0;
+        right: 0;
+        padding: 10px;
+        max-height: 0;
+        transition: max-height 0.3s ease;
+    }
+
+    nav .button-group ul {
+        flex-direction: column;
     }
 
     nav #toggle {
         display: block;
     }
+
   }
