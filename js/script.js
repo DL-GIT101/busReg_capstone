@@ -28,9 +28,9 @@ if(navIcon){
                 navButtonGrp.style.maxHeight = '60px';
             }, 10);
         }else{
-            navButtonGrp.style.maxHeight = '0';
+            navButtonGrp.style.maxHeight = '';
             setTimeout(() => {
-                navButtonGrp.style.display = "none";
+                navButtonGrp.style.display = "";
             },400);
         }
     });
