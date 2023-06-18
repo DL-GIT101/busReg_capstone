@@ -10,8 +10,13 @@ if(checkRole($_SESSION["role"]) === "user") {
             ';
 }elseif(checkRole($_SESSION["role"]) === "admin") {
     $links = '
-                <li><a href="admin/dashboard.php">Profile</a></li>
+                <li><a href="admin/dashboard.php">Dashboard</a></li>
                 <li><a href="php/logout.php">Logout</a></li>
+            ';
+}else{
+    $links = '
+                <li><a href="login.php">Login</a></li>
+                <li><a href="user/register.php">Register</a></li>
             ';
 }
 
