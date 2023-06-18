@@ -1,16 +1,17 @@
 <?php
-
 session_start();
+require_once "../php/connection.php";
+require_once "../php/functions.php";
 
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+if(checkRole($_SESSION["role"]) === "user") {
     header("location: dashboard.php");
+    exit;
+}elseif(checkRole($_SESSION["role"]) === "admin") {
+    header("location: ../admin/dashboard.php");
     exit;
 }
 
-require_once "../php/connection.php";
-require_once "../php/validate.php";
-
-$hidden = "hidden";
+$modal_display = "hidden";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // email
@@ -69,9 +70,6 @@ $password = validate($_POST["password"]);
 $cPassword = validate($_POST["cPassword"]);
     if(empty($cPassword)) {
         $cPassword_error = "Enter confirm password";
-        if(empty($pword_error)) {
-            $pword_error = "Confirm password is empty";
-        }
     } else {
         if(!empty($pword_error)) {
             $cPassword_error = "Invalid Password";
@@ -127,20 +125,20 @@ if(!empty($id)) {
                 $directory = 'upload/'. $id;
                 mkdir($directory, 0777, true);
 
-                $title = "Registration Successful";
-                $message = "Your account has been successfully created <br>";
-                $message .= "You can now log in using your credentials";
-                $button = '<a href="../login.php">Go to Login</a>';
+                $modal_title = "Registration Successful";
+                $modal_message = "Your account has been successfully created <br>";
+                $modal_message .= "You can now log in using your credentials";
+                $modal_button = '<a href="../login.php">Login</a>';
 
-                $status = "success";
-                $hidden = "";
+                $modal_status = "success";
+                $modal_display = "";
             } else {
-                $title = "Registration Fail";
-                $message = "Try again later <br>";
-                $button = '<a href="../index.php">OK</a>';
+                $modal_title = "Registration Fail";
+                $modal_message = "Try again later <br>";
+                $modal_button = '<a href="../index.php">OK</a>';
 
-                $status = "fail";
-                $hidden = "";
+                $modal_status = "fail";
+                $modal_display = "";
             }
         $stmt->close();
         }
@@ -164,11 +162,11 @@ $mysqli->close();
 </head>
 
 <body>
-    <modal class="<?= $hidden ?>">
-        <div class="content <?= $status ?>">
-            <p class="title"><?= $title ?></p>
-            <p class="sentence"><?= $message ?></p>
-            <?= $button ?>
+    <modal class="<?= $modal_display ?>">
+        <div class="content <?= $modal_status ?>">
+            <p class="title"><?= $modal_title ?></p>
+            <p class="sentence"><?= $modal_message ?></p>
+            <?= $modal_button ?>
         </div>
     </modal>
     
@@ -186,13 +184,15 @@ $mysqli->close();
     </nav>
      
      <main> 
-        <div class="column-container">      
+        <div class="column-container">   
+
             <div class="text-center">
                 <p class="title">Create an Account</p>
-                <p class="sentence">Please enter your email and password to create an account.</p>
+                <p class="sentence">Enter your email and password to create an account.</p>
             </div>
 
             <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email Address" value=<?= $email; ?>>
                 <div class="error_msg"><?= $email_err; ?></div>
