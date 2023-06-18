@@ -1,19 +1,21 @@
 <?php 
-    session_start();
+session_start();
+require_once "php/functions.php";
 
-    if($_SESSION["loggedin"] === true){
-        $logged = '<a href="user/dashboard.php">Hi, '.$_SESSION['email'].'</a> 
-              <a href="php/logout.php">Logout</a>';
-    } elseif($_SESSION["loggedin"] === "admin"){
-        $logged = '<a href="admin/dashboard.php">Hi, '.$_SESSION['email'].'</a> 
-              <a href="php/logout.php">Logout</a>';
-    }
-    else {
-        $logged = ' <a href="user/register.php">Register</a>
-                    <a href="login.php">Login</a>';
-    }
+
+if(checkRole($_SESSION["role"]) === "user") {
+    $links = '
+                <li><a href="user/dashboard.php">Dashboard</a></li>
+                <li><a href="php/logout.php">Logout</a></li>
+            ';
+}elseif(checkRole($_SESSION["role"]) === "admin") {
+    $links = '
+                <li><a href="admin/dashboard.php">Profile</a></li>
+                <li><a href="php/logout.php">Logout</a></li>
+            ';
+}
+
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,8 +46,7 @@
         <img id="toggle" src="img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
-                <li><a href="login.php">Login</a></li>
-                <li><a href="user/register.php">Register</a></li>
+                <?= $links ?>
             </ul>
         </div>
     </nav>
