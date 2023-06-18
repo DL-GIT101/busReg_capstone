@@ -19,7 +19,7 @@ navLogo.addEventListener('click', () => {
 const navIcon = document.querySelector('nav #toggle');
 const navButtonGrp = document.querySelector('nav .button-group');
 const navButtonGrpStyle = window.getComputedStyle(navButtonGrp);
-console.log(navButtonGrpStyle.maxHeight);
+
 if(navIcon){
     navIcon.addEventListener('click', () => {
         if(navButtonGrpStyle.display === "none"){
