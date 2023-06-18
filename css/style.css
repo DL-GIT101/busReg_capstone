@@ -107,8 +107,8 @@ nav .button-group > ul > li > a {
     font-family: 'Jost', sans-serif; 
 }
 
-nav a:hover{
-    color: rgb(189, 189, 191);
+nav .button-group > ul > li > a:hover {
+    filter: brightness(0.8);
 }
 
 nav #toggle {
