@@ -51,6 +51,12 @@ map {
     height: 75vh;
     width: 75vw;
 }
+
+section > subsection > map {
+    height: 100%;
+    width: 100%;
+}
+
 /* Nav Bar */
 nav {
     background-color: rgb(0, 59, 179);
@@ -126,6 +132,13 @@ main {
 
 .column-container > * {
     margin: 10px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
 }
 /* form */
 form {
@@ -347,11 +360,6 @@ modal form{
     align-self: center;
 }
 
-section map {
-    height: 100%;
-    width: 100%;
-}
-
 #sidebar {
     background-color: rgb(255, 204, 0);
     display: flex;
@@ -394,11 +402,17 @@ form > section {
     height: 75vh;
     width: 40vw;
 }
-
+/* section */
 section {
-    flex-grow: 1;
-    justify-content: space-around;
-    margin: 10px;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    height: 500px;
+    width: 180px;
+}
+
+section.map-container {
+    width: 370px;
 }
 
 subsection {
@@ -408,23 +422,29 @@ subsection {
     border-radius: 10px;
     flex-grow: 1;
     border: 1px solid rgb(199, 199, 199);
+    display: flex;
+    flex-direction: column;
 }
 
-subsection > #logo {
+subsection .sentence {
+    margin-bottom: 5px;
+}
+
+subsection .logo {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 150px;
     height: 150px;
     align-self: center;
+    margin-bottom: 10px;
 }
 
-subsection > #logo > img {
+subsection > .logo > img {
     max-width: 100%;
     max-height: 100%;
     width: auto;
     height: auto;
-    align-self: center;
 }
 
 subsection button.approve {
@@ -451,42 +471,28 @@ section.content_50 {
     text-align: justify;
 }
 
-.info {
+section subsection .info {
     background-color: rgb(255, 204, 0);
     border-radius: 10px;
     padding: 10px;
-    font-size: 14px;
+    font-size: 1rem;
     text-align: center;
+    margin-top: 10px;
 }
 
-.info.approved, table select .approved, table select.approved {
-    background-color: rgb(71, 159, 118);
-}
-
-.info.pending, .info.created,.info.incomplete, table select .pending, table select.pending{
-    background-color: rgb(255, 176, 57);
-}
-
-.info.denied, table select .denied, table select.denied {
-    background-color: rgb(227, 93, 106);
-}
-
-.info.none, .info.uploaded, table select .uploaded, table select.uploaded {
-    background-color: rgb(206, 212, 218);
-}
-
-.info.default {
-    background-color: rgb(0, 59, 179);
-}
-
-subsection >.service {
-    height: 5%;
+section subsection >.service {
     background-color: rgb(0, 59, 179);
     color: rgb(245, 245, 247);
     font-family: 'Jost', sans-serif;
-    font-size: 16px;
-    justify-content: center;
-    margin: 0px;
+    font-size: 1rem;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 10px;
+    padding: 5px 0px;
+}
+
+section subsection >.service:hover {
+    filter: brightness(0.8);
 }
 
 table {
@@ -595,7 +601,7 @@ td .info{
 
 /* Single Styles */
 
-.flex, content, .actions .buttons {
+.flex, .actions .buttons {
     display: flex;
 }
 
@@ -605,18 +611,6 @@ td .info{
 
 .flex-column {
     flex-direction: column;
-}
-
-.flex-grow-1 {
-    flex-grow: 1;
-}
-
-.flex-grow-2 {
-    flex-grow: 2;
-}
-
-.flex-grow-15 {
-    flex-grow: 15;
 }
 
 .flex-wrap {
@@ -686,4 +680,18 @@ td .info{
         font-size: 1.2rem;
     }
 
+    .container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    section {
+        height: auto;
+        width: 300px;
+    }
+
+    section.map-container {
+        height: 500px;
+        width: 300px;
+    }
   }
