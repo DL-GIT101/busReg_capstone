@@ -1,13 +1,13 @@
 <?php 
 session_start();
+require_once "../php/connection.php";
+require_once "../php/functions.php";
 
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: ../login.php");
+
+if(checkRole($_SESSION["role"]) !== "user"){
+    header("location: ../index.php");
     exit;
 }
-
-require_once "../php/connection.php";
-require_once "../php/validate.php";
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
