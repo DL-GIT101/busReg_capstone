@@ -13,13 +13,11 @@ for (let i = 0; i < inputs.length; i++) {
     error_msg[i].classList.add('hidden');
   });  
 }
-
-const error_alert = document.querySelectorAll('form .error_alert');
-error_alert.forEach(alert => {
-    if(alert.textContent.trim().length > 0){
-      alert.classList.remove('hidden');
-    }
-});
+// Form Error Alert
+const error_alert = document.querySelector('form .error-alert');
+  if(error_alert.textContent.trim().length > 0){
+    error_alert.classList.remove('hidden');
+  };
 
 const select_review  = document.querySelectorAll('.select_review');
 const denied_message  = document.querySelectorAll('.denied_message');
