@@ -90,7 +90,7 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
     <script src="../js/script.js" defer></script>
     <script src="../js/map.js" defer></script>
     <script src="../js/showLocation.js" defer></script>
-    
+    <script src="../js/profile.js" defer></script>
     <title>Welcome</title>
 </head>
 <body>
@@ -127,7 +127,7 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 </subsection>
                 <subsection>
                     <p class="sentence">Business Permit Status</p> 
-                    <div class="info title" id="permit_status"><?= $permit_status ?></div>
+                    <div class="info title" id="permit-status"><?= $permit_status ?></div>
                 </subsection>
             </section>
             <section class="map-container">
