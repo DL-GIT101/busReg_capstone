@@ -15,8 +15,6 @@ function checkRole($role) {
         return "admin";
     }elseif($role === "user"){
         return "user";
-    }else{
-        header("location: /opt/lampp/htdocs/busReg_capstone/index.php");
     }
 }
 
