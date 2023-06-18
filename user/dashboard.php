@@ -84,64 +84,67 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
      crossorigin=""/>
-     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
      crossorigin=""></script>
-     <script src="../js/script.js" defer></script>
+    <script src="../js/script.js" defer></script>
     <script src="../js/map.js" defer></script>
-    <script src="../js/displayMap.js" defer></script>
+    <script src="../js/showLocation.js" defer></script>
+    
     <title>Welcome</title>
 </head>
 <body>
     <nav>
-        <div id="nav_logo">
+        <div class="logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
                 <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <div id="account">
-             <a href="profile.php">Profile</a>
-             <a href="../php/logout.php">Logout</a>
+        <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a href="profile.php">Profile</a></li>
+                <li><a href="../php/logout.php">Logout</a></li>
+            </ul>
         </div>
     </nav>
 
     <main>    
-        <content>
-            <section class="flex-grow-2">
-                <subsection class="space-around">
+        <div class="container">
+            <section>
+                <subsection class="space-between">
                     <p class="sentence">Business Profile</p>
-                    <div id="logo"> 
-                        <img src="<?= $logo_path ?>" alt="Logo">
+                    <div class="logo"> 
+                        <img src="<?= $logo_path ?>" alt="Business Logo">
                     </div>
                     <div class="text-center">
                         <p class="title"><?= $business_name ?></p>
                         <p class="sentence"><?= $name ?></p> 
                     </div>
                 </subsection>
-                <subsection class="space-around">
+                <subsection>
                     <p class="sentence">Business Activity</p> 
                     <div class="info title"><?= $business_activity ?></div>
                 </subsection>
-                <subsection class="space-around">
+                <subsection>
                     <p class="sentence">Business Permit Status</p> 
-                    <div class="info title <?= strtolower($permit_status)?>" id="permit_status"><?= $permit_status ?></div>
+                    <div class="info title" id="permit_status"><?= $permit_status ?></div>
                 </subsection>
             </section>
-            <section class="flex-grow-15">
+            <section class="map-container">
                 <subsection>
                         <p class="title">Location</p>
-                        <map id="map">
-                            <p id="latitude" class="hidden"><?= $latitude ?></p>
-                            <p id="longitude" class="hidden"><?= $longitude ?></p>
-                        </map>
+                        <map id="map"></map>
+                        <p id="latitude" class="hidden"><?= $latitude ?></p>
+                        <p id="longitude" class="hidden"><?= $longitude ?></p>
                 </subsection>
             </section>
             <section>
                 <subsection>
                         <p class="title">Services</p>
-                        <a href="permit.php" class="service">New Business Permit</a>
+                        <a href="permit.php" class="service">Upload Documents</a>
                </subsection>        
             </section>
-        </content>
+        </div>
     </main>
 </body>
 </html>
