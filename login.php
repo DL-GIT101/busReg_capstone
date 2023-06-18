@@ -1,10 +1,13 @@
 <?php 
 session_start();
 require_once "php/connection.php";
-require_once "php/validate.php";
+require_once "php/functions.php";
 
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
+if(checkRole($_SESSION["role"]) === "user") {
     header("location: user/dashboard.php");
+    exit;
+}elseif(checkRole($_SESSION["role"]) === "admin") {
+    header("location: admin/dashboard.php");
     exit;
 }
 
