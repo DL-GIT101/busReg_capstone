@@ -1,14 +1,12 @@
 <?php 
-
 session_start();
+require_once "php/connection.php";
+require_once "php/validate.php";
 
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
     header("location: user/dashboard.php");
     exit;
 }
-
-require_once "php/connection.php";
-require_once "php/validate.php";
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
 //email
@@ -45,14 +43,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                             session_start();
 
                             $_SESSION["id"] = $id;
-                            // the name before @ as a substitute for username
-                            $_SESSION["email"] = substr($email, 0, strpos($email, '@'));
 
-                            if($_SESSION["id"] == "ADMIN"){
-                                $_SESSION["loggedin"] = "admin";
+                            if($_SESSION["id"] === "ADMIN"){
+                                $_SESSION["role"] = "admin";
                                 header("location: admin/dashboard.php");
                             }else{
-                                $_SESSION["loggedin"] = true;
+                                $_SESSION["role"] = "user";
                                 header("location: user/dashboard.php");
                             }
 
@@ -103,13 +99,17 @@ $mysqli->close();
     </nav>
 
     <main>
-        <div class="column-container">      
+        <div class="column-container">   
+
             <div>
                 <p class="title text-center">Welcome</p>
                 <p class="sentence">Sign in to your account to continue</p>
             </div>
+
             <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-                <div class="error_alert hidden"><?= $login_err; ?></div>
+
+                <div class="error-alert hidden"><?= $login_err; ?></div>
+
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email Address" value=<?= $email; ?>>
                 <div class="error_msg"><?= $email_err; ?></div>
@@ -121,6 +121,7 @@ $mysqli->close();
                 <input type="submit" value="Login">
                 <a href="user/register.php">Don't have an account? Click Here</a>
             </form>
+
         </div>
     </main>
 </body>
