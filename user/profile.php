@@ -346,7 +346,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <section class="height-auto">
                 <!--Owner -->
                 <p class="title text-center">Owner</p>
-                <div class="flex">
+                <div class="input-row">
 
                     <div class="input-group">
                         <label for="fname">First Name</label>
@@ -361,7 +361,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
 
-                <div class="flex">
+                <div class="input-row">
 
                     <div class="input-group">
                         <label for="mname">Middle Name<span>(Optional)</span></label>
@@ -376,7 +376,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
                 </div>
 
-                <div class="flex">
+                <div class="input-row">
                     <div class="input-group">
                         <label for="gender">Gender</label>
                         <select name="gender" id="gender">
@@ -390,7 +390,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 <!--BUSINESS -->
             <p class="title text-center">Business</p>
-            <div class="flex">
+            <div class="input-row">
 
                 <div class="input-group">
                     <label for="bus_name">Name</label>
@@ -405,7 +405,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
 
-            <div class="flex">
+            <div class="input-row">
 
                 <div class="input-group">
                     <label for="activity">Activity</label>
@@ -423,7 +423,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
             </div>
 
-            <div class="flex">
+            <div class="input-row">
 
                 <div class="input-group">
                     <label for="address_1">House/Unit No./Building/Street</label>
