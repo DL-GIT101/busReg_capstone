@@ -10,7 +10,7 @@ if(checkRole($_SESSION["role"]) !== "user"){
     exit;
 }
 
-$modal = "hidden";
+$modal_display = "hidden";
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 if($stmt = $mysqli->prepare($sql)){
@@ -47,25 +47,25 @@ if($stmt = $mysqli->prepare($sql)){
 
             }else {
                 $submit_btn = "Create Profile";
-                $modal = "";
-                $status = "";
-                $title = "Create Profile";
-                $message = "Please create your profile before accessing our services";
-                $button = '<button class="close">Close</button>';
+                $modal_display = "";
+                $modal_status = "";
+                $modal_title = "Create Profile";
+                $modal_message = "Please create your profile before accessing our services";
+                $modal_button = '<button class="close">Close</button>';
             }
         }else{
-            $modal = "";
-            $status = "fail";
-            $title = "Profile Information Error";
-            $message = "Profile cannot be retrieve";
-            $button = '<a href="../index.php">OK</a>';
+            $modal_display = "";
+            $modal_status = "fail";
+            $modal_title = "Profile Information Error";
+            $modal_message = "Profile cannot be retrieve";
+            $modal_button = '<a href="../index.php">OK</a>';
         }
     $stmt->close();
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(checkPermit($mysqli) !== "Approved"){
-        $modal = "hidden";
+        $modal_display = "hidden";
         //FIRST NAME
         $fname = validate($_POST["fname"]);
         if(empty($fname)){
@@ -220,23 +220,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         }
                         
                         if($stmt->execute()){
-                            $modal = "";
-                            $status = "success";
+                            $modal_display = "";
+                            $modal_status = "success";
                             if($submit_btn === "Update Profile"){
-                                $title = "Profile Information Updated";
+                                $modal_title = "Profile Information Updated";
                                 $message = "Your Profile has been updated <br>";
                             }else{
                                 $title = "Profile Creation Success";
-                                $message = "You can now view your profile and use our services  <br>";
+                                $modal_message = "You can now view your profile and use our services  <br>";
                             }
-                            $message .= "You can view your profile now";
-                            $button = '<a href="dashboard.php">Go to Dashboard</a>';
+                            $modal_message .= "You can view your profile now";
+                            $modal_button = '<a href="dashboard.php">Go to Dashboard</a>';
                         } else{
-                            $modal = "";
-                            $status = "fail";
-                            $title = "Profile Information Error";
-                            $message = "Try again later";
-                            $button = '<a href="../index.php">OK</a>';
+                            $modal_display = "";
+                            $modal_status = "fail";
+                            $modal_title = "Profile Information Error";
+                            $modal_message = "Try again later";
+                            $modal_button = '<a href="../index.php">OK</a>';
                         }
                 }else{
                     $logo_err = "Error uploading" . $_FILES['logo']['error'];
@@ -253,23 +253,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
            $param_logo = null;  
             if($stmt->execute()){
-                $modal = "";
-                        $status = "success";
+                $modal_display = "";
+                        $modal_status = "success";
                         if($submit_btn === "Update Profile"){
-                            $title = "Profile Information Updated";
-                            $message = "Your Profile has been updated <br>";
+                            $modal_title = "Profile Information Updated";
+                            $modal_message = "Your Profile has been updated <br>";
                         }else{
-                            $title = "Profile Creation Success";
-                            $message = "You can now view your profile and use our services  <br>";
+                            $modal_title = "Profile Creation Success";
+                            $modal_message = "You can now view your profile and use our services  <br>";
                         }
-                        $message .= "You can view your profile now";
-                        $button = '<a href="dashboard.php">Go to Dashboard</a>';
+                        $modal_message .= "You can view your profile now";
+                        $modal_button = '<a href="dashboard.php">Go to Dashboard</a>';
             } else{
-                $modal = "";
-                $status = "fail";
-                $title = "Profile Information Error";
-                $message = "Try again later";
-                $button = '<a href="../index.php">OK</a>';
+                $modal_display = "";
+                $modal_status = "fail";
+                $modal_title = "Profile Information Error";
+                $modal_message = "Try again later";
+                $modal_button = '<a href="../index.php">OK</a>';
             }
           }
            
@@ -278,11 +278,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } 
 
     }else{
-        $modal = "";
-        $status = "success";
-        $title = "Profile cannot be updated";
-        $message = "The permit has already been approved";
-        $button = '<a href="dashboard.php">OK</a>';
+        $modal_display = "";
+        $modal_status = "success";
+        $modal_title = "Profile cannot be updated";
+        $modal_message = "The permit has already been approved";
+        $modal_button = '<a href="dashboard.php">OK</a>';
     }  
 }
 
@@ -313,11 +313,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-    <modal class="<?= $modal ?>">
-        <div class="content <?= $status ?>">
-            <p class="title"><?= $title ?></p>
-            <p class="sentence"><?= $message ?></p>
-            <?= $button ?>
+    <modal class="<?= $modal_display ?>">
+        <div class="content <?= $modal_status ?>">
+            <p class="title"><?= $modal_title ?></p>
+            <p class="sentence"><?= $modal_message ?></p>
+            <?= $modal_button ?>
         </div>
     </modal>
 
