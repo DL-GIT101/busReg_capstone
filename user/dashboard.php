@@ -141,7 +141,7 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
             <section>
                 <subsection>
                         <p class="title">Services</p>
-                        <a href="permit.php" class="service">Upload Documents</a>
+                        <a href="documents.php" class="service">Upload Documents</a>
                </subsection>        
             </section>
         </div>
