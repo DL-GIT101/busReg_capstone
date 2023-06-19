@@ -244,6 +244,10 @@ form .input-group input, form .input-group select {
 form > section {
     width: 450px;
 }
+
+form .input-row{
+    display: flex;
+}
 /* Modal */
 modal {
     position: fixed; 
@@ -707,5 +711,21 @@ td .info{
     section.map-container {
         height: 500px;
         width: 300px;
+    }
+
+    form section {
+        width: 300px;
+    }
+
+    form .input-row{
+        flex-direction: column;
+    }
+
+    form .input-group{
+        width: 100%;
+    }
+
+    form .input-group select {
+        width: 100%;
     }
   }
