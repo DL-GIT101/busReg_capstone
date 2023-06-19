@@ -2,13 +2,14 @@
 session_start();
 
 require_once "../php/connection.php";
-require_once "../php/validate.php";
+require_once "../php/functions.php";
 require_once "../php/checkPermit.php";
 
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: ../login.php");
+if(checkRole($_SESSION["role"]) !== "user"){
+    header("location: ../index.php");
     exit;
 }
+
 $modal = "hidden";
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
@@ -321,78 +322,97 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </modal>
 
     <nav>
-        <div id="nav_logo">
+        <div class="logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
                 <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <div id="account">
-             <a href="dashboard.php">Dashboard</a>
-             <a href="../php/logout.php">Logout</a>
+        <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="../php/logout.php">Logout</a></li>
+            </ul>
         </div>
     </nav>
 
     <main>
-        <form class="flex-row" autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
-        <section>
+        <div class="column-container height-auto">   
             <div class="text-center">
                 <p class="title">Profile</p>
                 <p class="sentence">Enter your informations to make a profile</p>
             </div>
+
+            <form class="long-form" autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+            <section class="height-auto">
                 <!--Owner -->
                 <p class="title text-center">Owner</p>
-            <div class="flex">
-                <div class="input-group">
-                    <label for="fname">First Name</label>
-                    <input type="text" id="fname" name="fname" placeholder="First Name" value="<?= $fname; ?>">
-                    <div class="error_msg"><?= $fname_err; ?></div>
+                <div class="flex">
+
+                    <div class="input-group">
+                        <label for="fname">First Name</label>
+                        <input type="text" id="fname" name="fname" placeholder="First Name" value="<?= $fname; ?>">
+                        <div class="error_msg"><?= $fname_err; ?></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="lname">Surname</label>
+                        <input type="text" id="lname" name="lname" placeholder="Surname" value="<?= $lname; ?>">
+                        <div class="error_msg"><?= $lname_err; ?></div>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="lname">Surname</label>
-                    <input type="text" id="lname" name="lname" placeholder="Surname" value="<?= $lname; ?>">
-                    <div class="error_msg"><?= $lname_err; ?></div>
+
+                <div class="flex">
+
+                    <div class="input-group">
+                        <label for="mname">Middle Name<span>(Optional)</span></label>
+                        <input type="text" id="mname" name="mname" placeholder="Middle Name" value="<?= $mname; ?>">
+                        <div class="error_msg"><?= $mname_err; ?></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="suffix">Suffix<span>(Optional)</span></label>
+                        <input type="text" id="suffix" name="suffix" placeholder="Suffix" value="<?= $suffix; ?>">
+                        <div class="error_msg"><?= $suffix_err; ?></div>
+                    </div>
                 </div>
-            </div>
-            <div class="flex">
-                <div class="input-group">
-                    <label for="mname">Middle Name<span>(Optional)</span></label>
-                    <input type="text" id="mname" name="mname" placeholder="Middle Name" value="<?= $mname; ?>">
-                    <div class="error_msg"><?= $mname_err; ?></div>
+
+                <div class="flex">
+                    <div class="input-group">
+                        <label for="gender">Gender</label>
+                        <select name="gender" id="gender">
+                            <option value="" disabled selected>Select Gender..</option>
+                            <option value="Male" <?= $gender === "Male" ? "selected" : "" ?>>Male</option>
+                            <option value="Female" <?= $gender === "Female" ? "selected" : "" ?>>Female</option>
+                        </select>
+                        <div class="error_msg"><?= $gender_err; ?></div>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="suffix">Suffix<span>(Optional)</span></label>
-                    <input type="text" id="suffix" name="suffix" placeholder="Suffix" value="<?= $suffix; ?>">
-                    <div class="error_msg"><?= $suffix_err; ?></div>
-                </div>
-                <div class="input-group">
-                    <label for="gender">Gender</label>
-                    <select name="gender" id="gender">
-                        <option value="" disabled selected>Select Gender..</option>
-                        <option value="Male" <?= $gender === "Male" ? "selected" : "" ?>>Male</option>
-                        <option value="Female" <?= $gender === "Female" ? "selected" : "" ?>>Female</option>
-                    </select>
-                    <div class="error_msg"><?= $gender_err; ?></div>
-                </div>
-            </div>
+
                 <!--BUSINESS -->
             <p class="title text-center">Business</p>
             <div class="flex">
+
                 <div class="input-group">
                     <label for="bus_name">Name</label>
                     <input type="text" id="bus_name" name="bus_name" placeholder="Business Name" value="<?= $bus_name; ?>">
                     <div class="error_msg"><?= $bus_name_err; ?></div>
                 </div>
+
                 <div class="input-group">
                     <label for="logo">Logo<span>(Optional)</span></label>
                     <input type="file" id="logo" name="logo">
                     <div class="error_msg"><?= $logo_err; ?></div>
                 </div>
             </div>
+
             <div class="flex">
+
                 <div class="input-group">
                     <label for="activity">Activity</label>
                     <input type="text" id="activity" name="activity" placeholder="Business Activity" value="<?= $activity; ?>">
                     <div class="error_msg"><?= $activity_err; ?></div>
                 </div>
+
                 <div class="input-group">
                     <label for="contact">Contact Number</label>
                     <div class="flex">
@@ -402,12 +422,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="error_msg"><?= $contact_err; ?></div>
                 </div>
             </div>
+
             <div class="flex">
+
                 <div class="input-group">
-                    <label for="address_1">House No./Unit No./Building/Street</label>
+                    <label for="address_1">House/Unit No./Building/Street</label>
                     <input type="text" id="address_1" name="address_1" placeholder="House No./Unit No./Building/Street" value="<?= $address_1; ?>">
                     <div class="error_msg"><?= $address_1_err; ?></div>
                 </div>
+
                 <div class="input-group">
                     <label for="address_2">Barangay</label>
                     <select id="address_2" name="address_2">
@@ -438,16 +461,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         </section>
 
-        <section>
+        <section class="height-auto">
         
             <p class="title text-center">Pin Location</p>
             <map id="map"></map>
-            <input type="text" id="latitude" name="latitude" value="<?= $latitude; ?>" hidden> 
-            <input type="text" id="longitude" name="longitude" value="<?= $longitude; ?>" hidden>
-            <div class="error_msg"><?= $latlang_err; ?></div>
+                <input type="text" id="latitude" name="latitude" value="<?= $latitude; ?>" hidden> 
+                <input type="text" id="longitude" name="longitude" value="<?= $longitude; ?>" hidden>
+                <div class="error_msg"><?= $latlang_err; ?></div>
             <input type="submit" value="<?= $submit_btn; ?>">
         </section>
+        
         </form>
+        </div>
     </main>
 </body>
 </html>
