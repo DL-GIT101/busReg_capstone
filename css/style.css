@@ -57,6 +57,11 @@ section > subsection > map {
     width: 100%;
 }
 
+section map {
+    height: 500px;
+    width: 100%;
+}
+
 /* Nav Bar */
 nav {
     background-color: rgb(0, 59, 179);
@@ -64,6 +69,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     padding: 5px 15px;
+    margin-bottom: 20px;
 }
 
 nav .logo{
@@ -156,8 +162,8 @@ form label {
 
 form label > span {
     color: rgb(66, 66, 69);
-    font-size: 12px;
-    margin-left: 2px;
+    font-size: 0.8rem;
+    margin-left: 5px;
 }
 
 form input, form select, .pre-input{
@@ -165,12 +171,8 @@ form input, form select, .pre-input{
     border-radius: 10px;
     border: 1px solid rgb(133, 133, 133);
     background-color: rgb(255, 255, 255);
-    font-size: 12px;
+    font-size: 0.9rem;
     font-family: 'Noto Serif', serif;
-}
-
-form select {
-    height: 37px;
 }
 
 form input:focus, form select:focus {
@@ -180,14 +182,14 @@ form input:focus, form select:focus {
 
 .pre-input {
     width: 25px;
-    height: 18px;
-    padding: 8px 10px;
-    margin-right: 5px;
+    height: 19px;
+    padding: 9px 10px;
+    margin: 5px 5px 0px 0px ;
     background-color: rgb(206, 206, 206);
 }
 
 form input[type=file] {
-    padding: 7px 10px;
+    padding: 8px 10px;
 }
 
 form input[type=submit]{
@@ -225,8 +227,22 @@ form .error-alert {
 }
 
 form .input-group {
-   margin-right: 5px;
-   flex-grow: 1;
+    width: 50%;
+    padding: 10px 10px 10px 0;
+}
+
+form .input-group input, form .input-group select {
+    margin-top: 5px;
+    width: 90%;
+ }
+
+ form .input-group select {
+    height: 39px;
+    width: 215.5px;
+ }
+
+form > section {
+    width: 450px;
 }
 /* Modal */
 modal {
@@ -396,12 +412,6 @@ modal form{
     width: 16px; 
 }
 
-form > section {
-    justify-content: space-around;
-    padding: 10px;
-    height: 75vh;
-    width: 40vw;
-}
 /* section */
 section {
     margin: 5px;
@@ -601,7 +611,11 @@ td .info{
 
 /* Single Styles */
 
-.flex, .actions .buttons {
+.height-auto {
+    height: auto;
+}
+
+.flex{
     display: flex;
 }
 
