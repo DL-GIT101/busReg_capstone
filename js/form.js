@@ -15,10 +15,12 @@ for (let i = 0; i < inputs.length; i++) {
 }
 // Form Error Alert
 const error_alert = document.querySelector('form .error-alert');
+if(error_alert){
   if(error_alert.textContent.trim().length > 0){
     error_alert.classList.remove('hidden');
   };
-
+};
+  
 const select_review  = document.querySelectorAll('.select_review');
 const denied_message  = document.querySelectorAll('.denied_message');
 
