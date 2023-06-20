@@ -1,25 +1,23 @@
 <?php 
-
 session_start();
-
 require_once "../php/connection.php";
-require_once "../php/validate.php";
+require_once "../php/functions.php";
 require_once "../php/checkPermit.php";
 
-    if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-        header("location: ../login.php");
-        exit;
-    }
+if(checkRole($_SESSION["role"]) !== "user"){
+    header("location: ../index.php");
+    exit;
+}
 
-    if(hasProfile($mysqli,$_SESSION['id']) === 0){
-        header("location: profile.php");
-        exit;
-    }
+if(hasProfile($mysqli,$_SESSION['id']) === 0){
+    header("location: profile.php");
+    exit;
+}
 
-    if(isset($_GET['message'])){
-        $modal_get = urldecode($_GET['message']);
-        echo $modal_get;
-    }
+if(isset($_GET['message'])){
+    $modal_get = urldecode($_GET['message']);
+    echo $modal_get;
+}
     
     $modal = "hidden";
     $sql = "SELECT * FROM new_documents WHERE user_id = ?";
@@ -158,7 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $status_modal = "success";
                     $title = "Upload Successful";
                     $message = "All Uploaded files will be reviewed";
-                    $button = '<a href="permit.php">OK</a>';
+                    $button = '<a href="documents.php">OK</a>';
                 }
             }else{
                 $modal = "";
@@ -174,7 +172,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $status_modal = "success";
         $title = "Profile cannot be updated";
         $message = "The permit has already been approved";
-        $button = '<a href="permit.php">OK</a>';
+        $button = '<a href="documents.php">OK</a>';
     }     
 }
 $mysqli->close();
@@ -220,7 +218,6 @@ function pushNullValues(&$array1, &$array2, &$array3) {
     <script src="../js/script.js" defer></script>
     <script src="../js/form.js" defer></script>
     <script src="../js/modal.js" defer></script>
-    <script src="../js/file_modal.js" defer></script>
     <title>New Permit</title>
 </head>
 <body>
@@ -233,103 +230,111 @@ function pushNullValues(&$array1, &$array2, &$array3) {
         </div>
 </modal>
 
-<modal id="file_del" class="hidden">
-        <div class="content fail">
+<modal class="delete hidden">
+        <div class="content error">
             <p class="title">Delete File</p>
-            <p class="sentence">Are you sure you want to delete this file? This action cannot be undone</p>
-            <div id="btn_grp" class="flex align-self-center">
-                <a href="" id="file_link">Delete</a>
-                <button>Cancel</button>
+            <p class="sentence">Are you sure you want to delete this file? <br> This action cannot be undone</p>
+            <div class=" button-group">
+                <a href="" >Delete</a>
+                <button class="close">Cancel</button>
             </div>
                 
         </div>
 </modal>
 
-<modal id="info_modal" class="hidden">
-        <div class="content">
+<modal class="info hidden">
+        <div class="content warning">
             <p class="title">On the Place of Business</p>
             <p class="sentence">
-                - Building/Occupancy Certificate, if owned	<br>
-                - Lease of Contract, if rented	 <br>
-                - Notice of Award/Award Sheet, if inside a Mall<br>
-                - Homeowners/Neighborhood Certification of No Objection, if inside a subdivision or housing facility</p>
-                <button>OK</button>                
+                - Building/Occupancy Certificate<br>
+                - Lease of Contract <br>
+                - Notice of Award/Award Sheet<br>
+                - Homeowners/Neighborhood Certification of No Objection
+            </p>
+            <button class="close">Cancel</button>           
         </div>
 </modal>
 
-<nav>
-        <div id="nav_logo">
+    <nav>
+        <div class="logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
                 <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <div id="account">
-             <a href="dashboard.php">Dashboard</a>
-             <a href="../php/logout.php">Logout</a>
+        <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="../php/logout.php">Logout</a></li>
+            </ul>
         </div>
-</nav>
+    </nav>
 
 <main>
-        
-    
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
-    <div class="text-center">
-        <p class="title">New Business</p>
-        <p class="sentence">Please upload the file of the following requirements</p>
-    </div>
-        <table>
-            <tr>
-                <th>Requirement</th>
-                <th>View</th>
-                <th>Delete</th>
-                <th>Status</th>
-                <th>Message</th>
-                <th>File Upload</th>
-            </tr>
-            <?php 
-                $requirements_names = array(
-                    'Barangay Clearance for business',
-                    'DTI Certificate of Registration',
-                    'On the Place of Business <img id="info" src="../img/info.png" alt="">',
-                    'Community Tax Certificate',
-                    'Certificate of Zoning Compliance',
-                    'Business Inspection Clearance',
-                    'Valid Fire Safety Inspection Certificate/Official Receipt',
-                    'Sanitary Permit',
-                    'Environmental Compliance Clearance',
-                    'Latest 2x2 picture',
-                    'Tax Order of Payment',
-                    'Tax Order of Payment Official Receipt'
-                );
-                $count = 1;
-                foreach($requirements_names as $fileName){
-                        $errorMsg = 'errorMsg_' . $count;
-                    echo '  <tr>
-                                <td>'.$fileName.'</td>';
+    <div class="column-container height-auto">
+        <div class="text-center">
+            <p class="title">New Business</p>
+            <p class="sentence">Please upload the file of the following requirements</p>
+        </div>
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <th>Requirement</th>
+                    <th>Actions</th>
+                    <th>Status</th>
+                    <th>Message</th>
+                    <th>File Upload</th>
+                </tr>
+                <?php 
+                    $requirements_names = array(
+                        'Barangay Clearance for business',
+                        'DTI Certificate of Registration',
+                        'On the Place of Business <img class="info" src="../img/info.svg" alt="Info">',
+                        'Community Tax Certificate',
+                        'Certificate of Zoning Compliance',
+                        'Business Inspection Clearance',
+                        'Fire Safety Inspection Certificate',
+                        'Sanitary Permit',
+                        'Environmental Compliance Clearance',
+                        'Latest 2x2 picture',
+                        'Tax Order of Payment',
+                        'Tax Order of Payment Official Receipt'
+                    );
+                    $count = 1;
+                    foreach($requirements_names as $fileName){
+                            $errorMsg = 'errorMsg_' . $count;
+                        echo '  <tr>
+                                    <td>'.$fileName.'</td>';
 
-                    if(empty($requirements_fetch[$count-1])){
-                        echo '  <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            ';
-                    }else{
-                        echo    '<td><a class="view" target="_blank" href="upload/'.$_SESSION['id'].'/'.$requirements_fetch[$count-1].'">View</a></td>
-                                <td><button value="'.$requirements_fetch[$count-1].'" type="button" class="delete">Delete</button></td>
-                                <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
-                                <td>'.$message_fetch[$count-1].'</td>';
+                        if(empty($requirements_fetch[$count-1])){
+                            echo '  <td></td>
+                                    <td></td>
+                                    <td></td>
+                                ';
+                        }else{
+                            echo    '<td class="table-actions">
+                            
+                                    <a class="view" target="_blank" href="upload/'.$_SESSION['id'].'/'.$requirements_fetch[$count-1].'"><img src="../img/view.svg" alt="View"></a>
+
+                                    <img class="delete" src="../img/delete.svg" alt="Delete">
+                            </td>
+
+                                    <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
+
+                                    <td>'.$message_fetch[$count-1].'</td>';
+                        }
+                                echo '<td>
+                                        <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
+                                        <div class="error_msg">'.${$errorMsg}.'</div>
+                                    </td>
+                                </tr>';
+                    $count++;
                     }
-                            echo '<td>
-                                    <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
-                                    <div class="error_msg">'.${$errorMsg}.'</div>
-                                </td>
-                            </tr>';
-                $count++;
-                }
-            ?>
-            
-        </table>
-        <input type="submit" value="Upload">
-    </form>       
+                ?>
+                
+            </table>
+            <input type="submit" value="Upload">
+        </form>   
+    </div>    
 </main>
 </body>
 </html>
