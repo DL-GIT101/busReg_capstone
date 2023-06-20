@@ -218,6 +218,7 @@ function pushNullValues(&$array1, &$array2, &$array3) {
     <script src="../js/script.js" defer></script>
     <script src="../js/form.js" defer></script>
     <script src="../js/modal.js" defer></script>
+    <script src="../js/table.js" defer></script>
     <title>New Permit</title>
 </head>
 <body>
@@ -226,21 +227,12 @@ function pushNullValues(&$array1, &$array2, &$array3) {
         <div class="content <?= $status_modal ?>">
             <p class="title"><?= $title ?></p>
             <p class="sentence"><?= $message ?></p>
-            <?= $button ?>
-        </div>
-</modal>
-
-<modal class="delete hidden">
-        <div class="content error">
-            <p class="title">Delete File</p>
-            <p class="sentence">Are you sure you want to delete this file? <br> This action cannot be undone</p>
-            <div class=" button-group">
-                <a href="" >Delete</a>
-                <button class="close">Cancel</button>
+            <div class="button-group">
+                <?= $button ?>
             </div>
-                
         </div>
 </modal>
+<!--
 
 <modal class="info hidden">
         <div class="content warning">
@@ -251,10 +243,10 @@ function pushNullValues(&$array1, &$array2, &$array3) {
                 - Notice of Award/Award Sheet<br>
                 - Homeowners/Neighborhood Certification of No Objection
             </p>
-            <button class="close">Cancel</button>           
+            <button class="close">Close</button>           
         </div>
 </modal>
-
+-->
     <nav>
         <div class="logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
@@ -312,15 +304,15 @@ function pushNullValues(&$array1, &$array2, &$array3) {
                                 ';
                         }else{
                             echo    '<td class="table-actions">
-                            
+
                                     <a class="view" target="_blank" href="upload/'.$_SESSION['id'].'/'.$requirements_fetch[$count-1].'"><img src="../img/view.svg" alt="View"></a>
 
                                     <img class="delete" src="../img/delete.svg" alt="Delete">
                             </td>
 
-                                    <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
+                                    <td><div class="status">'.$status_fetch[$count-1].'</div></td>
 
-                                    <td>'.$message_fetch[$count-1].'</td>';
+                                    <td><div class="message">'.$message_fetch[$count-1].'</div></td>';
                         }
                                 echo '<td>
                                         <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
