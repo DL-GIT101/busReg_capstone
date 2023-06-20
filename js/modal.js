@@ -1,31 +1,43 @@
-const modals = document.querySelectorAll('modal');
-const close_btn = document.querySelectorAll('modal .close');
+const modal = document.querySelector('modal');
+let content = document.querySelector('modal .content');
+let title = document.querySelector('modal .title');
+let sentence = document.querySelector('modal .sentence');
+let button_grp = document.querySelector('modal .button-group');
 
-if(close_btn){
-  close_btn.forEach(btn => {
-      btn.addEventListener('click', () => {
-          modals.forEach(modal => {
-            modal.style.display = "none";
-          });
-      });
-  });
-};
-
-const delete_modal = document.querySelector('modal.delete');
-const delete_link = document.querySelector('modal.delete a');
 const delete_btn = document.querySelectorAll('table img.delete');
 
-if(delete_modal && delete_btn){
+if(delete_btn){
   delete_btn.forEach(btn => {
     btn.addEventListener('click', () => {
-      delete_modal.style.display = "flex";
+
+      modal.className = "";
+  
+      content.className = "content error";
+
+      title.innerText = "Delete File";
+
+      sentence.innerHTML = '<p class="sentence">Are you sure you want to delete this file? <br> This action cannot be undone</p>';
+
       let td = btn.parentNode;
       let view = td.firstElementChild;
       let href = view.getAttribute('href');
       let lastIndex = href.lastIndexOf('/');
       let fileName = href.substring(lastIndex + 1);
+      let link = document.createElement('a');
+      link.href = "../php/deleteFile.php?file=" + encodeURIComponent(fileName);
+      link.textContent = 'Delete';
+      
+      let close_button = document.createElement('button');
+      close_button.textContent = 'Cancel';
+      close_button.className = 'close';
+    
+      button_grp.innerHTML = '';
+      button_grp.appendChild(link);
+      button_grp.appendChild(close_button);
 
-      delete_link.href = "../php/deleteFile.php?file=" + encodeURIComponent(fileName);
+      close_button.addEventListener('click', () => {
+          modal.className = "hidden";
+      });
     });
   });
 };
