@@ -653,7 +653,6 @@ table td.table-actions {
     }
 
     modal > .content {
-        height: 120px;
         width: 250px;
         font-size: 0.8rem;
     }
