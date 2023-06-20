@@ -14,3 +14,5 @@ This is our capstone project about Business Registration on Tarlac City
     The LGU can then check the information and the documents then approve the permit.
 
 - Credits for Boundary.Now for the coordinates and geoJSON file
+
+- Credits for www..svgrepo.com for the svg
