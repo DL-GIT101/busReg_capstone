@@ -112,8 +112,8 @@ nav .button-group > ul > li > a {
     font-family: 'Jost', sans-serif; 
 }
 
-nav .button-group > ul > li > a.current {
-    text-decoration: underline;
+nav .button-group > ul > li.current {
+    border-bottom: 1px solid rgb(245, 245, 247);
 }
 
 nav .button-group > ul > li > a:hover {
@@ -671,5 +671,13 @@ table td.table-actions {
 
     nav .button-group #subnav-links li:first-child {
         border-top: 2px solid rgb(245, 245, 247);
+    }
+
+    nav .button-group > ul > li.current {
+        border: none;
+    }
+
+    nav .button-group > ul > li.current > a {
+        text-decoration: underline;
     }
   }
