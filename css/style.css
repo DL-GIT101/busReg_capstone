@@ -302,9 +302,6 @@ modal > .content  button  {
     font-family: 'Jost', sans-serif;
     color: rgb(29, 29, 31);
     cursor: pointer;
-}
-
-modal > .content > button {
     border: none;
     margin-bottom: 5px;
 }
@@ -689,5 +686,9 @@ table td.table-actions {
 
     form .input-group select {
         width: 100%;
+    }
+
+    table {
+        font-size: 0.8rem;
     }
   }
