@@ -1,14 +1,12 @@
 <?php
-
 session_start();
+require_once "../php/connection.php";
+require_once "../php/functions.php";
 
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== "admin"){
-    header("location: ../login.php");
+if(checkRole($_SESSION["role"]) !== "admin"){
+    header("location: ../index.php");
     exit;
 }
-
-require_once "../php/connection.php";
-require_once "../php/validate.php";
 
 $sql1 = "SELECT COUNT(*) FROM users WHERE id <> ?";
     if($stmt1 = $mysqli->prepare($sql1)){
@@ -88,75 +86,84 @@ if($stmt4 = $mysqli->prepare($sql4)){
 </head>
 <body>
     <nav>
-        <div id="nav_logo">
-                <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City BPLO - ADMIN</p>  
+        <div class="logo">
+            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <div id="account">
-             <a href="../php/logout.php">Logout</a>
+        <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a class="current" href="dashboard.php">Dashboard</a></li>
+                <li><a href="management/users.php">Management</a></li>
+                <li><a href="permit/msme.php">Permit</a></li>
+                <li><a href="../php/logout.php">Logout</a></li>
+            </ul>
+            <ul id="subnav-links">
+
+            </ul>
         </div>
     </nav>
 
-<div class="flex">
-
-    <nav id="sidebar">
-        <ul>
-            <li class="current"><img src="../img/dashboard.png" alt=""><a href="dashboard.php">Dashboard</a></li>
-            <li><img src="../img/register.png" alt=""><a href="management/users.php">MSME Management</a></li>
-            <li><img src="../img/list.png" alt=""><a href="permit/msme.php">MSME Permit</a></li>
-        </ul>
+    <nav id="subnav">
+        <div class="logo">
+            <img src="../img/admin.svg" alt="Tarlac City Seal">
+            <p>Admin</p>  
+        </div>
+        <div class="button-group">
+            <ul>
+                
+            </ul>
+        </div>
     </nav>
 
-    <main class="flex-grow-1">
-        <content>
+    <main>
+        <div class="container">
             <section>
-                 <subsection class="space-around">
+                 <subsection>
                     <p class="sentence">Users</p>   
-                    <div class="info none title flex space-between">
+                    <div class="info title data-display">
                         <p>Total</p>
                         <p><?= $userCount ?></p>
                     </div>  
-                    <div class="info none title flex space-between">
+                    <div class="info title data-display">
                         <p>Profile</p>
                         <p><?= $profileCount ?></p>
                     </div>     
                 </subsection>
-                <subsection class="space-around">
+                <subsection>
                     <p class="sentence">Documents</p> 
-                    <div class="info none title flex space-between">
+                    <div class="info title data-display">
                         <p>None</p>
                         <p><?= $noneReqCount ?></p>
                     </div>
-                    <div class="info none title flex space-between">
+                    <div class="info title data-display">
                         <p>Incomplete</p>
                         <p><?= $incompleteCount ?></p>
                     </div>  
-                    <div class="info none title flex space-between">
+                    <div class="info title data-display">
                         <p>Complete</p>
                         <p><?= $completeCount ?></p>
                     </div>        
                 </subsection>
-                <subsection class="space-around">
+                <subsection>
                     <p class="sentence">Permit</p> 
-                    <div class="info none title flex space-between">
+                    <div class="info title data-display">
                         <p>None</p>
                         <p><?= $userCount-$permitApproved ?></p>
                     </div>
-                    <div class="info none title flex space-between">
+                    <div class="info title data-display">
                         <p>Approved</p>
                         <p><?= $permitApproved ?></p>
                     </div>      
                 </subsection>
             </section>
-            <section class="flex-grow-15">
+            <section class="map-container">
                 <subsection>
                     <p class="title">Business Location</p>
                     <map id="map"></map>
                 </subsection>
             </section>
-        </content>
+        </div>
     </main>
-</div>
-
 </body>
 </html>
