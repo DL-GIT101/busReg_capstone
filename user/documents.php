@@ -232,21 +232,7 @@ function pushNullValues(&$array1, &$array2, &$array3) {
             </div>
         </div>
 </modal>
-<!--
 
-<modal class="info hidden">
-        <div class="content warning">
-            <p class="title">On the Place of Business</p>
-            <p class="sentence">
-                - Building/Occupancy Certificate<br>
-                - Lease of Contract <br>
-                - Notice of Award/Award Sheet<br>
-                - Homeowners/Neighborhood Certification of No Objection
-            </p>
-            <button class="close">Close</button>           
-        </div>
-</modal>
--->
     <nav>
         <div class="logo">
                 <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
@@ -273,7 +259,6 @@ function pushNullValues(&$array1, &$array2, &$array3) {
                     <th>Requirement</th>
                     <th>Actions</th>
                     <th>Status</th>
-                    <th>Message</th>
                     <th>File Upload</th>
                 </tr>
                 <?php 
@@ -300,8 +285,7 @@ function pushNullValues(&$array1, &$array2, &$array3) {
                         if(empty($requirements_fetch[$count-1])){
                             echo '  <td></td>
                                     <td></td>
-                                    <td></td>
-                                ';
+                                   ';
                         }else{
                             echo    '<td class="table-actions">
 
@@ -310,9 +294,10 @@ function pushNullValues(&$array1, &$array2, &$array3) {
                                     <img class="delete" src="../img/delete.svg" alt="Delete">
                             </td>
 
-                                    <td><div class="status">'.$status_fetch[$count-1].'</div></td>
-
-                                    <td><div class="message">'.$message_fetch[$count-1].'</div></td>';
+                                    <td>
+                                        <div class="status">'.$status_fetch[$count-1].'</div>
+                                        <div class="message">'.$message_fetch[$count-1].'</div>
+                                    </td>';
                         }
                                 echo '<td>
                                         <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
