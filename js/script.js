@@ -4,7 +4,6 @@ const filePath = window.location.pathname;
 const directoryPath = filePath.substring(0, filePath.lastIndexOf('/'));
 const pathLevels = directoryPath.split('/').length - 1;
 
-navLogo.style.cursor = 'pointer';
 navLogo.addEventListener('click', () => {
     
     if(pathLevels === 1){
@@ -13,6 +12,16 @@ navLogo.addEventListener('click', () => {
         window.location.href = '../index.php';
     }else if(pathLevels === 3){
         window.location.href = '../../index.php';
+    }
+});
+
+const adminLogo = document.querySelector('nav#subnav .logo');
+adminLogo.addEventListener('click', () => {
+
+    if(pathLevels === 2){
+        window.location.href = 'dashboard.php';
+    }else if(pathLevels === 3){
+        window.location.href = '../dashboard.php';
     }
 });
 
@@ -25,7 +34,7 @@ if(navIcon){
         if(navButtonGrpStyle.display === "none"){
             navButtonGrp.style.display = "block";
             setTimeout(() => {
-                navButtonGrp.style.maxHeight = '60px';
+                navButtonGrp.style.maxHeight = '100px';
             }, 10);
         }else{
             navButtonGrp.style.maxHeight = '';
