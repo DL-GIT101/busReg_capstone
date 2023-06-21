@@ -42,11 +42,28 @@ if(delete_btn){
   });
 };
 
-const info_modal = document.querySelector('modal.info');
 const info_btn = document.querySelector('table img.info');
 
-if(info_modal && info_btn){
+if(info_btn){
   info_btn.addEventListener('click', () => {
-    info_modal.style.display = "flex";
-  });
+
+      modal.className = "";
+  
+      content.className = "content";
+
+      title.innerText = "On the Place of Business";
+
+      sentence.innerHTML = '<p class="sentence">- Building/Occupancy Certificate<br>      - Lease of Contract <br>      - Notice of Award/Award Sheet<br>      - Homeowners/Neighborhood Certification of No Objection  </p>';
+      
+      let close_button = document.createElement('button');
+      close_button.textContent = 'Close';
+      close_button.className = 'close';
+    
+      button_grp.innerHTML = '';
+      button_grp.appendChild(close_button);
+
+      close_button.addEventListener('click', () => {
+          modal.className = "hidden";
+      });
+    });
 };
