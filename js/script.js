@@ -34,7 +34,7 @@ if(navIcon){
         if(navButtonGrpStyle.display === "none"){
             navButtonGrp.style.display = "block";
             setTimeout(() => {
-                navButtonGrp.style.maxHeight = '100px';
+                navButtonGrp.style.maxHeight = '300px';
             }, 10);
         }else{
             navButtonGrp.style.maxHeight = '';
