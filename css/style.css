@@ -69,7 +69,6 @@ nav {
     justify-content: space-between;
     align-items: center;
     padding: 5px 15px;
-    margin-bottom: 20px;
 }
 
 nav .logo{
@@ -113,6 +112,10 @@ nav .button-group > ul > li > a {
     font-family: 'Jost', sans-serif; 
 }
 
+nav .button-group > ul > li > a.current {
+    text-decoration: underline;
+}
+
 nav .button-group > ul > li > a:hover {
     filter: brightness(0.8);
 }
@@ -121,8 +124,13 @@ nav #toggle {
     display: none;
     width: 32px;
 }
+/* subnav Bar */
 
-/* main */
+nav #subnav-links {
+    display: none;
+}
+
+/* containers */
 main {
     display: flex;
     justify-content: center;
@@ -134,6 +142,7 @@ main {
     flex-direction: column;
     justify-content: center;
     height: 90vh;
+    margin-top: 20px;
 }
 
 .column-container > * {
@@ -365,42 +374,6 @@ modal form{
     align-self: center;
 }
 
-#sidebar {
-    background-color: rgb(255, 204, 0);
-    display: flex;
-    flex-direction: column;
-    height: 94vh;
-    width: 18vw;
-}
-
-#sidebar > ul {
-    padding: 0px;
-    width: 100%;
-}
-
-#sidebar > ul li {
-    display: flex;
-    align-items: center;
-    padding: 10px 20px;
-}
-
-#sidebar > ul li:hover, .current {
-    background-color: rgb(233, 186, 1);
-}
-
-#sidebar > ul li a{
-    text-decoration: none;
-    color: rgb(29, 29, 31);
-    font-family: 'Jost', sans-serif;
-    font-size: 16px;
-}
-
-#sidebar > ul li img{
-    margin-right: 10px;
-    height: 16px;
-    width: 16px; 
-}
-
 /* section */
 section {
     margin: 5px;
@@ -460,16 +433,6 @@ subsection button.approve {
     cursor: pointer;
 }
 
-section.content_50 {
-    width: 50%;
-}
-
-.p_container {
-    width: 90%;
-    align-self: center;
-    text-align: justify;
-}
-
 section subsection .info {
     background-color: rgb(255, 204, 0);
     border-radius: 10px;
@@ -492,6 +455,12 @@ section subsection >.service {
 
 section subsection >.service:hover {
     filter: brightness(0.8);
+}
+
+section subsection .data-display{
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
 }
 /* Table */
 table {
@@ -690,5 +659,17 @@ table td.table-actions {
 
     table {
         font-size: 0.8rem;
+    }
+
+    #subnav {
+        display: none;
+    }
+
+    nav .button-group #subnav-links {
+        display: block;
+    }
+
+    nav .button-group #subnav-links li:first-child {
+        border-top: 2px solid rgb(245, 245, 247);
     }
   }
