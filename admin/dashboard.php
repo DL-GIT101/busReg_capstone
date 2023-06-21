@@ -93,7 +93,7 @@ if($stmt4 = $mysqli->prepare($sql4)){
         <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
-                <li><a class="current" href="dashboard.php">Dashboard</a></li>
+                <li class="current"><a href="dashboard.php">Dashboard</a></li>
                 <li><a href="management/users.php">Management</a></li>
                 <li><a href="permit/msme.php">Permit</a></li>
                 <li><a href="../php/logout.php">Logout</a></li>
