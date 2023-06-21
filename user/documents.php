@@ -19,7 +19,7 @@ if(isset($_GET['message'])){
     echo $modal_get;
 }
     
-    $modal = "hidden";
+    $modal_display = "hidden";
     $sql = "SELECT * FROM new_documents WHERE user_id = ?";
    
     if($stmt = $mysqli->prepare($sql)){
@@ -146,33 +146,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if($stmt->execute()){
 
                 if ($error_count > 0) {
-                    $modal = "";
-                    $status_modal = "warning";
-                    $title = "Refresh to see Uploaded Files";
-                    $message = "Some Uploaded files are not uploaded";
-                    $button = '<button class="close">OK</button>';
+                    $modal_display = "";
+                    $modal_status = "warning";
+                    $modal_title = "Refresh to see Uploaded Files";
+                    $modal_message = "Some Uploaded files are not uploaded";
+                    $modal_button = '<button class="close">OK</button>';
                 } else {
-                    $modal = "";
-                    $status_modal = "success";
-                    $title = "Upload Successful";
-                    $message = "All Uploaded files will be reviewed";
-                    $button = '<a href="documents.php">OK</a>';
+                    $modal_display = "";
+                    $modal_status = "success";
+                    $modal_title = "Upload Successful";
+                    $modal_message = "All Uploaded files will be reviewed";
+                    $modal_button = '<a href="documents.php">OK</a>';
                 }
             }else{
-                $modal = "";
-                $status_modal = "fail";
-                $title = "Upload Error";
-                $message = "Try again later";
-                $button = '<a href="dashboard.php">OK</a>';
+                $modal_display = "";
+                $modal_status = "fail";
+                $modal_title = "Upload Error";
+                $modal_message = "Try again later";
+                $modal_button = '<a href="dashboard.php">OK</a>';
             }
         $stmt->close();
         }
     }else{
-        $modal = "";
-        $status_modal = "success";
-        $title = "Profile cannot be updated";
-        $message = "The permit has already been approved";
-        $button = '<a href="documents.php">OK</a>';
+        $modal_display = "";
+        $modal_status = "success";
+        $modal_title = "Profile cannot be updated";
+        $modal_message = "The permit has already been approved";
+        $modal_button = '<a href="documents.php">OK</a>';
     }     
 }
 $mysqli->close();
@@ -223,15 +223,15 @@ function pushNullValues(&$array1, &$array2, &$array3) {
 </head>
 <body>
 
-<modal class="<?= $modal ?>">
-        <div class="content <?= $status_modal ?>">
-            <p class="title"><?= $title ?></p>
-            <p class="sentence"><?= $message ?></p>
+    <modal class="<?= $modal_display ?>">
+        <div class="content <?= $modal_status ?>">
+            <p class="title"><?= $modal_title ?></p>
+            <p class="sentence"><?= $modal_message ?></p>
             <div class="button-group">
-                <?= $button ?>
+                <?= $modal_button ?>
             </div>
         </div>
-</modal>
+    </modal>
 
     <nav>
         <div class="logo">

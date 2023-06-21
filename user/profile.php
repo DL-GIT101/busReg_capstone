@@ -317,7 +317,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="content <?= $modal_status ?>">
             <p class="title"><?= $modal_title ?></p>
             <p class="sentence"><?= $modal_message ?></p>
-            <?= $modal_button ?>
+            <div class="button-group">
+                <?= $modal_button ?>
+            </div>
         </div>
     </modal>
 
