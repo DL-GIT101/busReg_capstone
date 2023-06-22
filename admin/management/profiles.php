@@ -1,6 +1,13 @@
 <?php
 session_start();
 require_once "../../php/connection.php";
+require_once "../../php/functions.php";
+require_once "../../php/checkPermit.php";
+
+if(checkRole($_SESSION["role"]) !== "admin"){
+    header("location: ../../index.php");
+    exit;
+}
 
 if(isset($_GET['id'])){
     $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
@@ -12,8 +19,7 @@ if(isset($_GET['id'])){
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
-$profile = "";
-$none = "hidden";
+$modal_display = "hidden";
 
     if($stmt = $mysqli->prepare($sql)){
         $stmt->bind_param("s",$param_id);
@@ -38,8 +44,11 @@ $none = "hidden";
                 $longitude = $row["longitude"];
 
             }else{
-                $profile = "hidden";
-                $none = "";
+                $modal_display = "";
+                $modal_status = "warning";
+                $modal_title = "User did not create a profile yet";
+                $modal_message = "No profile found for the user";
+                $modal_button = '<a href="users.php">Back</a>';
             }
         }else{
             echo "Oops! Something went wrong. Please try again later";
@@ -71,6 +80,28 @@ $none = "hidden";
         $stmt2->close();
     }
 
+    $sql3 = "SELECT * FROM users WHERE id = ?";
+
+    if($stmt3 = $mysqli->prepare($sql3)){
+        $stmt3->bind_param("s",$param_id);
+
+        $param_id = $user_id;
+
+        if($stmt3->execute()){
+            $result = $stmt3->get_result();
+
+            if($result->num_rows == 1){
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+
+                $email = $row['email'];
+                
+            }
+        }else{
+            echo "Oops! Something went wrong. Please try again later";
+        }
+        $stmt3->close();
+    }
+
 $mysqli->close();
 
 ?>
@@ -88,93 +119,106 @@ $mysqli->close();
      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
      crossorigin=""></script>
     <script src="../../js/script.js" defer></script>
+    <script src="../../js/profile.js" defer></script>
+    <script src="../../js/modal.js" defer></script>
     <script src="../../js/map.js" defer></script>
-    <script src="../../js/displayMap.js" defer></script>
-    <script src="../../js/admin_td_click.js" defer></script>
+    <script src="../../js/showLocation.js" defer></script>
     <title>MSME Profile</title>
 </head>
 <body>
-<p id="user_id" class="hidden"><?= $user_id ?></p>
-<modal id="user_del" class="hidden">
-        <div class="content fail">
-            <p class="title">Delete File</p>
-            <p class="sentence">Are you sure you want to delete this Profile? This action cannot be undone</p>
-            <div id="btn_grp" class="flex align-self-center">
-                <a href="" id="user_link">Delete</a>
-                <button>Cancel</button>
+    <modal class="<?= $modal_display ?>">
+        <div class="content <?= $modal_status ?>">
+            <p class="title"><?= $modal_title ?></p>
+            <p class="sentence"><?= $modal_message ?></p>
+            <div class="button-group">
+                <?= $modal_button ?>
             </div>
         </div>
-</modal>
-
+    </modal>
     <nav>
-        <div id="nav_logo">
-                <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City BPLO - ADMIN</p>  
+        <div class="logo">
+            <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <div id="account">
-             <a href="../../php/logout.php">Logout</a>
+        <img id="toggle" src="../../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a href="../dashboard.php">Dashboard</a></li>
+                <li class="current"><a href="users.php">Management</a></li>
+                <li><a href="../permit/msme.php">Permit</a></li>
+                <li><a href="../../php/logout.php">Logout</a></li>
+            </ul>
+            <ul id="subnav-links">
+                <li><a href="users.php">List</a></li>
+                <li class="current"><a href="profiles.php">Profile</a></li>
+                <li><a href="documents.php">Documents</a></li>
+            </ul>
         </div>
     </nav>
 
-<div class="flex">
-
-    <nav id="sidebar">
-        <ul>
-            <li ><img src="../../img/dashboard.png" alt=""><a href="dashboard.php">Dashboard</a></li>
-            <li class="current"><img src="../../img/register.png" alt=""><a href="users.php">MSME Management</a></li>
-            <li><img src="../../img/list.png" alt=""><a href="../permit/msme.php">MSME Permit</a></li>
-            
-        </ul>
+    <nav id="subnav">
+        <div class="logo">
+            <img src="../../img/admin.svg" alt="Tarlac City Seal">
+            <p>Admin</p>  
+        </div>
+        <div class="button-group">
+            <ul>
+                <li><a href="users.php">List</a></li>
+                <li class="current"><a href="profiles.php">Profile</a></li>
+                <li><a href="documents.php">Documents</a></li>
+            </ul>
+        </div>
     </nav>
 
-    <main class="flex-grow-1 flex-wrap content-center">
-        
-        <div class="actions space-between">
-            <p id="page" class="title">Profile</p>
-            <p class="sentence"> User ID : <?= $user_id ?></p>
-            <div class="buttons">
-                <a href="users.php" class="back">Management</a>
-                <a href="edit_profile.php" class="<?= $none ?>">Add</a>
-                <a href="edit_profile.php" class="<?= $profile ?>">Edit</a>
-                <a id="action_dlt" class="delete <?= $profile ?>">Delete</a>
-                <a href="documents.php" class="back">Documents</a>
-            </div>
-        </div>
-        <p class="title <?= $none ?>">The user has not yet created a profile.</p>
-        <content class="<?= $profile ?>">
-            <section class="flex-grow-2">
-                <subsection class="space-around">
-                    <p class="sentence">Business Profile</p>
-                    <div id="logo"> 
-                        <img src="<?= $logo_path ?>" alt="Logo">
+    <main>    
+        <div class="container">
+            <section>
+                <subsection class="space-between">
+                    <p id="page" class="sentence">Business Profile</p>
+                    <div class="logo"> 
+                        <img src="<?= $logo_path ?>" alt="Business Logo">
                     </div>
                     <div class="text-center">
                         <p class="title"><?= $business_name ?></p>
                         <p class="sentence"><?= $name ?></p> 
                     </div>
                 </subsection>
-                <subsection class="space-around">
+                <subsection>
                     <p class="sentence">Business Activity</p> 
                     <div class="info title"><?= $business_activity ?></div>
                 </subsection>
-                <subsection class="space-around">
+                <subsection>
                     <p class="sentence">Business Permit Status</p> 
-                    <div class="info title <?= strtolower($permit_status)?>" id="permit_status"><?= $permit_status ?></div>
+                    <div class="info title" id="permit-status"><?= $permit_status ?></div>
                 </subsection>
             </section>
-            <section class="flex-grow-15">
+            <section class="map-container">
                 <subsection>
                         <p class="title">Location</p>
-                        <map id="map">
-                            <p id="latitude" class="hidden"><?= $latitude ?></p>
-                            <p id="longitude" class="hidden"><?= $longitude ?></p>
-                        </map>
+                        <map id="map"></map>
+                        <p id="latitude" class="hidden"><?= $latitude ?></p>
+                        <p id="longitude" class="hidden"><?= $longitude ?></p>
                 </subsection>
             </section>
-        </content>
-    </main>
+            <section>
+                <subsection>
+                    <p class="title">Actions</p> 
 
-</div>
+                    <div class="action delete"><img class="deleteUser" src="../../img/delete.svg" alt="Delete"></div>
+
+                    <a class="action edit" href="editProfile.php"><img src="../../img/edit.svg" alt="Edit"></a>
+                </subsection>
+                <subsection>
+                    <p class="sentence">User ID</p> 
+                    <div id="user_id" class="info title"><?= $_SESSION['user_id'] ?></div>
+                </subsection>
+                <subsection>
+                    <p class="sentence">Email</p> 
+                    <div class="info title" id="permit-status"><?= $email ?></div>
+                </subsection>
+            </section>
+        </div>
+    </main>
 
 </body>
 </html>
