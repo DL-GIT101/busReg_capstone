@@ -151,7 +151,7 @@ $mysqli->close();
                 <li><a href="../../php/logout.php">Logout</a></li>
             </ul>
             <ul id="subnav-links">
-                <li class="current"><a href="user.php">List</a></li>
+                <li class="current"><a href="users.php">List</a></li>
                 <li><a href="profiles.php">Profile</a></li>
                 <li><a href="documents.php">Documents</a></li>
             </ul>
@@ -165,7 +165,7 @@ $mysqli->close();
         </div>
         <div class="button-group">
             <ul>
-                <li class="current"><a href="user.php">List</a></li>
+                <li class="current"><a href="users.php">List</a></li>
                 <li><a href="profiles.php">Profile</a></li>
                 <li><a href="documents.php">Documents</a></li>
             </ul>
