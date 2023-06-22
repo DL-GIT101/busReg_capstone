@@ -67,3 +67,54 @@ if(info_btn){
       });
     });
 };
+
+const delete_user = document.querySelectorAll('table img.deleteUser');
+const admin_page = document.querySelector('#page');
+
+if(delete_user){
+  delete_user.forEach(btn => {
+    btn.addEventListener('click', () => {
+
+      modal.className = "";
+  
+      content.className = "content error";
+
+      title.innerText = "Delete User";
+
+      sentence.innerHTML = '<p class="sentence">Are you sure you want to delete this user? <br> This action cannot be undone</p>';
+
+      let row = btn.parentNode.parentNode;
+      let idTD = row.firstElementChild;
+      let id = idTD.innerText;
+      let link = document.createElement('a');
+
+      if(admin_page.innerText === "Management"){
+        link.href = "../../php/userDelete.php?user=" + encodeURIComponent(id);
+      }else if(admin_page.innerText === "Profile"){
+        link.href = "../../php/userDelete.php?profile=" + encodeURIComponent(id);
+      }else if(admin_page.innerText === "Documents"){
+        link.href = "../../php/userDelete.php?docuements=" + encodeURIComponent(id);
+      }
+
+      link.textContent = 'Delete';
+      
+      let close_button = document.createElement('button');
+      close_button.textContent = 'Cancel';
+      close_button.className = 'close';
+    
+      button_grp.innerHTML = '';
+      button_grp.appendChild(link);
+      button_grp.appendChild(close_button);
+
+      close_button.addEventListener('click', () => {
+          modal.className = "hidden";
+      });
+    });
+  });
+};
+
+let modal_close_btn = document.querySelector('modal .button-group .close');
+
+modal_close_btn.addEventListener('click', () => {
+  modal.className = "hidden";
+});
