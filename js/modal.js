@@ -68,7 +68,8 @@ if(info_btn){
     });
 };
 
-const delete_user = document.querySelectorAll('table img.deleteUser');
+const delete_user = document.querySelectorAll('div.action.delete');
+console.log(delete_user);
 const admin_page = document.querySelector('#page');
 
 if(delete_user){
@@ -79,20 +80,33 @@ if(delete_user){
   
       content.className = "content error";
 
-      title.innerText = "Delete User";
-
-      sentence.innerHTML = '<p class="sentence">Are you sure you want to delete this user? <br> This action cannot be undone</p>';
-
-      let row = btn.parentNode.parentNode;
-      let idTD = row.firstElementChild;
-      let id = idTD.innerText;
       let link = document.createElement('a');
 
       if(admin_page.innerText === "Management"){
+        let row = btn.parentNode.parentNode;
+        let idTD = row.firstElementChild;
+        let id = idTD.innerText;
+        title.innerText = "Delete User";
+
+        sentence.innerHTML = '<p class="sentence">Are you sure you want to delete this user? <br> This action cannot be undone</p>';
+
         link.href = "../../php/userDelete.php?user=" + encodeURIComponent(id);
-      }else if(admin_page.innerText === "Profile"){
+
+      }else if(admin_page.innerText === "Business Profile"){
+        let user_id = document.querySelector('#user_id');
+        id = user_id.innerText;
+        title.innerText = "Delete Profile";
+
+        sentence.innerHTML = '<p class="sentence">Are you sure you want to delete this Profile? <br> This action cannot be undone</p>';
+
         link.href = "../../php/userDelete.php?profile=" + encodeURIComponent(id);
+
       }else if(admin_page.innerText === "Documents"){
+
+        title.innerText = "Delete All Documents";
+
+        sentence.innerHTML = '<p class="sentence">Are you sure you want to delete all documents? <br> This action cannot be undone</p>';
+
         link.href = "../../php/userDelete.php?docuements=" + encodeURIComponent(id);
       }
 
