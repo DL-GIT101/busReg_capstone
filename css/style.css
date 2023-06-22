@@ -312,7 +312,6 @@ modal > .content  button  {
     color: rgb(29, 29, 31);
     cursor: pointer;
     border: none;
-    margin-bottom: 5px;
 }
 
 modal > .content.success {
@@ -326,6 +325,12 @@ modal > .content.success > .title {
 modal > .content.success a {
     color: rgb(245, 245, 247);
     background-color: rgb(25,135,84);
+}
+
+modal > .content.success button {
+    background-color: rgb(245, 245, 247);
+    border: 1px solid rgb(25,135,84);
+    color: rgb(25,135,84);
 }
 
 modal > .content.error {
@@ -364,6 +369,7 @@ modal .button-group {
     height: 30%;;
     display: flex;
     justify-content: center;
+    margin-bottom: 5px;
 }
 
 modal .button-group > * {
