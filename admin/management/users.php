@@ -1,15 +1,21 @@
 <?php
 session_start();
+require_once "../../php/connection.php";
+require_once "../../php/functions.php";
 
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== "admin"){
-    header("location: ../../login.php");
+if(checkRole($_SESSION["role"]) !== "admin"){
+    header("location: ../../index.php");
     exit;
 }
 
-require_once "../../php/connection.php";
-require_once "../../php/validate.php";
+if(isset($_GET['message'])){
+    $modal_get = urldecode($_GET['message']);
+    echo $modal_get;
+}
 
-$all_business = array();
+$modal_display = "hidden";
+
+$all_business = array(); 
 
 $user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
     if($user_stmt = $mysqli->prepare($user_sql)){
@@ -116,44 +122,61 @@ $mysqli->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/script.js" defer></script>
-    <script src="../../js/admin_td_click.js" defer></script>
+    <script src="../../js/modal.js" defer></script>
+    <script src="../../js/table.js" defer></script>
     <title>Management</title>
 </head>
 <body>
-<modal id="user_del" class="hidden">
-        <div class="content fail">
-            <p class="title">Delete File</p>
-            <p class="sentence">Are you sure you want to delete this user? This action cannot be undone</p>
-            <div id="btn_grp" class="flex align-self-center">
-                <a href="" id="user_link">Delete</a>
-                <button>Cancel</button>
+    <modal class="<?= $modal_display ?>">
+        <div class="content <?= $modal_status ?>">
+            <p class="title"><?= $modal_title ?></p>
+            <p class="sentence"><?= $modal_message ?></p>
+            <div class="button-group">
+                <?= $modal_button ?>
             </div>
         </div>
-</modal>
-<nav>
-        <div id="nav_logo">
-                <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City BPLO - ADMIN</p>  
-        </div>
-        <div id="account">
-             <a href="../../php/logout.php">Logout</a>
-        </div>
-</nav>
+    </modal>
 
-<div class="flex">
-
-    <nav id="sidebar">
-        <ul>
-            <li ><img src="../../img/dashboard.png" alt=""><a href="../dashboard.php">Dashboard</a></li>
-            <li class="current"><img src="../../img/register.png" alt=""><a href="users.php">MSME Management</a></li>
-            <li><img src="../../img/list.png" alt=""><a href="../permit/msme.php">MSME Permit</a></li>
-        </ul>
+    <nav>
+        <div class="logo">
+            <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
+        </div>
+        <img id="toggle" src="../../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a href="../dashboard.php">Dashboard</a></li>
+                <li class="current"><a href="users.php">Management</a></li>
+                <li><a href="../permit/msme.php">Permit</a></li>
+                <li><a href="../../php/logout.php">Logout</a></li>
+            </ul>
+            <ul id="subnav-links">
+                <li class="current"><a href="user.php">List</a></li>
+                <li><a href="add_user.php">Add User</a></li>
+                <li><a href="profiles.php">Profile</a></li>
+                <li><a href="documents.php">Documents</a></li>
+            </ul>
+        </div>
     </nav>
 
-    <main class="flex-grow-1">
-        <content class="justify-center">
-            <div class="column_container"> 
-                    <p id="page" class="title text-center">Management</p>
+    <nav id="subnav">
+        <div class="logo">
+            <img src="../../img/admin.svg" alt="Tarlac City Seal">
+            <p>Admin</p>  
+        </div>
+        <div class="button-group">
+            <ul>
+                <li class="current"><a  href="user.php">List</a></li>
+                <li><a href="add_user.php">Add User</a></li>
+                <li><a href="profiles.php">Profile</a></li>
+                <li><a href="documents.php">Documents</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="column-container height-auto">
+            <p id="page" class="title text-center">Management</p>
                 <table>   
                     <tr>
                         <th>ID</th>
@@ -163,24 +186,30 @@ $mysqli->close();
                         <th>Delete</th>
                     </tr>
                     <tr>
-                        <td colspan="5"><a href="add_user.php" class="info default justify-center">Add Account</a></td>
+                        <td colspan="5"> 
+                            <div class="data">
+                                <img src="../../img/add-user.svg" alt=""> Add User
+                            </div>
+                    </td>
                     </tr>
                     <?php 
                     foreach ($all_business as &$business) {
                         echo '  <tr class="user_info">  
                                     <td>'.$business['id'].'</td>
-                                    <td><div class="info '.strtolower($business['profile']) .'">'.$business['profile'].'</div></td>
-                                    <td><div class="info '.strtolower($business['documents']) .'">'.$business['documents'].'</div></td>
-                                    <td><div class="info '.strtolower($business['permit']) .'">'.$business['permit'].'</div></td>
-                                    <td><button type="button" class="delete">Delete</button></td>
+                                    <td><div class="data">'.$business['profile'].'</div></td>
+                                    <td><div class="data">'.$business['documents'].'</div></td>
+                                    <td><div class="data">'.$business['permit'].'</div></td>
+                                    <td><img class="deleteUser" src="../../img/delete.svg" alt="Delete"></td>
                                 </tr>';
                 }
                     ?>
                 </table>
             </div>
+            </div>
+        </content>
+        </div>
         </content>
     </main>
-</div>
 
 </body>
 </html>
