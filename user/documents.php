@@ -52,7 +52,7 @@ if(isset($_GET['message'])){
     
    
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if(checkPermit($mysqli) !== "Approved"){
+    if(checkPermit($_SESSION['id']) !== "Approved"){
     $allowTypes = array('jpg', 'jpeg', 'png', 'pdf');
 
     $file_inputs_count = count($_FILES);
@@ -170,7 +170,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }else{
         $modal_display = "";
         $modal_status = "success";
-        $modal_title = "Profile cannot be updated";
+        $modal_title = "Documents cannot be updated";
         $modal_message = "The permit has already been approved";
         $modal_button = '<a href="documents.php">OK</a>';
     }     
