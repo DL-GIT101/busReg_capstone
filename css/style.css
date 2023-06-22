@@ -501,13 +501,41 @@ table img {
     cursor: pointer;
 }
 
-table td.table-actions {
+table td .data{
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(30, 78, 173);
 }
 
-.user_info:hover, .msme_details:hover {
-    background-color: rgb(214, 214, 214);
+table td .data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(30, 78, 173);
+    color: rgb(245, 245, 247);
+    border-radius: 10px;
+    padding: 5px;
+}
+
+table td .data.gray {
+    background-color: rgb(99, 99, 99);
+    color: rgb(245, 245, 247);
+}
+
+table td .data.green {
+    background-color: rgb(71, 159, 118);
+    color: rgb(245, 245, 247);
+}
+
+table td .data.orange {
+    background-color: rgb(247, 163, 38);
+    color: rgb(245, 245, 247);
+}
+
+table td .data:hover {
+    filter: brightness(0.8);
+    cursor: pointer;
 }
 
 .actions {
