@@ -23,7 +23,7 @@ const fileStatusElements = document.querySelectorAll('table td .status');
 const add_user = document.querySelector('table td .data');
 
 add_user.addEventListener('click', () =>{
-        window.location.href = "add_user.php";
+        window.location.href = "addUser.php";
 });
 
 const profile = document.querySelectorAll('table td:nth-child(2) div.data');
@@ -33,6 +33,10 @@ const profile = document.querySelectorAll('table td:nth-child(2) div.data');
       }else{
         status.className = "data gray";
       }
+      status.addEventListener('click', () => {
+          let id = status.parentNode.previousElementSibling.textContent;
+          window.location.href = "profiles.php?id=" + encodeURIComponent(id);
+      });
   });
 
   const documents = document.querySelectorAll('table td:nth-child(3) div.data');
@@ -44,6 +48,10 @@ const profile = document.querySelectorAll('table td:nth-child(2) div.data');
     }else{
       status.className = "data gray";
     }
+    status.addEventListener('click', () => {
+      let id = status.parentNode.previousElementSibling.textContent;
+      window.location.href = "documents.php?id=" + encodeURIComponent(id);
+  });
   });
 
   const permit = document.querySelectorAll('table td:nth-child(4) div.data');
@@ -53,4 +61,8 @@ const profile = document.querySelectorAll('table td:nth-child(2) div.data');
       }else{
         status.className = "data gray";
       }
+      status.addEventListener('click', () => {
+        let id = status.parentNode.previousElementSibling.textContent;
+        window.location.href = "../permit/msme.php?id=" + encodeURIComponent(id);
+    });
   });
