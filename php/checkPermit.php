@@ -1,6 +1,7 @@
 <?php
 
-function checkPermit($mysqli){
+function checkPermit($id){
+    global $mysqli;
 
     $param_id = "";
 
@@ -9,7 +10,7 @@ function checkPermit($mysqli){
     if($stmt = $mysqli->prepare($sql)){
         $stmt->bind_param("s",$param_id);
 
-        $param_id = validate($_SESSION['id']);
+        $param_id = $id;
 
         if($stmt->execute()){
             $result = $stmt->get_result();
