@@ -360,7 +360,7 @@ modal > .content.warning > .title {
     color: rgb(247, 163, 38);
 }
 
-modal > .content.warning button {
+modal > .content.warning button, modal > .content.warning a {
     color: rgb(245, 245, 247);
     background-color: rgb(247, 163, 38);
 }
@@ -468,6 +468,34 @@ section subsection .data-display{
     justify-content: space-between;
     padding: 5px 10px;
 }
+
+section subsection .action {
+    border: 2px solid rgb(255, 204, 0);
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+    margin: 10px;
+}
+
+section subsection .action:hover {
+    filter: brightness(0.8);
+    cursor: pointer;
+}
+
+section subsection .action.delete {
+    border: 2px solid rgb(220, 53, 69);
+}
+
+section subsection .action.edit {
+    border: 2px solid rgb(0, 59, 179)
+}
+
+section subsection .action img{
+    height: 2rem;
+}
 /* Table */
 table {
     border-collapse: collapse;
@@ -538,38 +566,19 @@ table td .data:hover {
     cursor: pointer;
 }
 
-.actions {
+table td .action.delete {
+    border: 2px solid rgb(220, 53, 69);
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
     display: flex;
+    justify-content: center;
     align-items: center;
-    width: 75%;
-    background-color: white;
-    border: 1px solid rgb(199, 199, 199);
-    border-radius: 10px;
-    padding: 10px;
+    padding: 5px;
 }
 
-.actions .buttons > * {
-    background-color: rgb(0, 59, 179);
-    color: rgb(245, 245, 247);
-    border-radius: 10px;
-    padding: 5px 10px;
-    margin: 0px 5px;
-    font-family: 'Jost', sans-serif;
-    font-size: 18px;
-    text-decoration: none;
-}
-
-.actions .buttons > .delete {
-    background-color: rgb(220, 53, 69);  
-}
-
-.actions .buttons > .success {
-    background-color: rgb(71, 159, 118);
-}
-
-.actions .buttons > .back {
-    background-color: rgb(255, 204, 0);
-    color: rgb(29, 29, 31); 
+table td .action.delete:hover {
+    filter: brightness(0.8);
+    cursor: pointer;
 }
 
 /* Single Styles */
