@@ -1,15 +1,14 @@
 <?php
 session_start();
+require_once "../../php/connection.php";
+require_once "../../php/functions.php";
 
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== "admin"){
-    header("location: ../../login.php");
+if(checkRole($_SESSION["role"]) !== "admin"){
+    header("location: ../../index.php");
     exit;
 }
 
-require_once "../../php/connection.php";
-require_once "../../php/validate.php";
-
-$hidden = "hidden";
+$modal_display = "hidden";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // email
@@ -126,19 +125,19 @@ if(!empty($id)) {
                 $directory = '../user/upload/'. $id;
                 mkdir($directory, 0777, true);
 
-                $title = "Registration Successful";
-                $message = "Account has been successfully created <br>";
-                $button = '<a href="users.php">Go to Management</a>';
+                $modal_title = "Registration Successful";
+                $modal_message = "Account has been successfully created <br>";
+                $modal_button = '<a href="users.php">Go to Management</a>';
 
-                $status = "success";
-                $hidden = "";
+                $modal_status = "success";
+                $modal_display = "";
             } else {
-                $title = "Registration Fail";
-                $message = "Try again later <br>";
-                $button = '<a href="users.php">OK</a>';
+                $modal_title = "Registration Fail";
+                $modal_message = "Try again later <br>";
+                $modal_button = '<a href="users.php">OK</a>';
 
-                $status = "fail";
-                $hidden = "";
+                $modal_status = "fail";
+                $modal_display = "";
             }
         $stmt->close();
         }
@@ -160,48 +159,57 @@ $mysqli->close();
     <title>Add MSME</title>
 </head>
 <body>
-<modal class="<?= $hidden ?>">
-        <div class="content <?= $status ?>">
-            <p class="title"><?= $title ?></p>
-            <p class="sentence"><?= $message ?></p>
-            <?= $button ?>
-        </div>
-</modal>
-<nav>
-        <div id="nav_logo">
-                <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City BPLO - ADMIN</p>  
-        </div>
-        <div id="account">
-             <a href="../../php/logout.php">Logout</a>
-        </div>
-</nav>
-
-<div class="flex">
-
-    <nav id="sidebar">
-        <ul>
-            <li ><img src="../../img/dashboard.png" alt=""><a href="../dashboard.php">Dashboard</a></li>
-            <li class="current"><img src="../../img/register.png" alt=""><a href="users.php">MSME Management</a></li>
-            <li><img src="../../img/list.png" alt=""><a href="../permit/msme.php">MSME Permit</a></li>
-        </ul>
-    </nav>
-
-    <main class="flex-grow-1 flex-wrap content-center"> 
-    <div class="actions space-between">
-            <p id="page" class="title">Add Account</p>
-            <div class="buttons">
-                <a href="users.php" class="back">Management</a>
+    <modal class="<?= $modal_display ?>">
+        <div class="content <?= $modal_status ?>">
+            <p class="title"><?= $modal_title ?></p>
+            <p class="sentence"><?= $modal_message ?></p>
+            <div class="button-group">
+                <?= $modal_button ?>
             </div>
         </div>
+    </modal>
 
-        <div class="column_container">      
+    <nav>
+        <div class="logo">
+            <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
+        </div>
+        <img id="toggle" src="../../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a href="../dashboard.php">Dashboard</a></li>
+                <li class="current"><a href="users.php">Management</a></li>
+                <li><a href="../permit/msme.php">Permit</a></li>
+                <li><a href="../../php/logout.php">Logout</a></li>
+            </ul>
+            <ul id="subnav-links">
+
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="subnav">
+        <div class="logo">
+            <img src="../../img/admin.svg" alt="Tarlac City Seal">
+            <p>Admin</p>  
+        </div>
+        <div class="button-group">
+            <ul>
+        
+            </ul>
+        </div>
+    </nav>
+
+    <main> 
+        <div class="column-container">   
+
             <div class="text-center">
-                <p class="title">Create an Account</p>
+                <p class="title">Add an Account</p>
                 <p class="sentence">Enter email and password to create an account.</p>
             </div>
 
             <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+            
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email Address" value=<?= $email; ?>>
                 <div class="error_msg"><?= $email_err; ?></div>
@@ -214,11 +222,11 @@ $mysqli->close();
                 <input type="password" id="cPassword" name="cPassword" placeholder="Confirm Password" value=<?= $cPassword; ?>>
                 <div class="error_msg"><?= $cPassword_error; ?></div>
 
-                <input type="submit" value="Create">
+                <input type="submit" value="Add">
             </form>
+
         </div>
      </main>
-</div>
 
 </body>
 </html>
