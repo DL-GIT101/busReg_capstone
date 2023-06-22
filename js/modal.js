@@ -115,6 +115,8 @@ if(delete_user){
 
 let modal_close_btn = document.querySelector('modal .button-group .close');
 
-modal_close_btn.addEventListener('click', () => {
-  modal.className = "hidden";
-});
+if(modal_close_btn){
+  modal_close_btn.addEventListener('click', () => {
+    modal.className = "hidden";
+  });
+};
