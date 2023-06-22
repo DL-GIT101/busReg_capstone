@@ -9,6 +9,11 @@ if(checkRole($_SESSION["role"]) !== "admin"){
     exit;
 }
 
+if(isset($_GET['message'])){
+    $modal_get = urldecode($_GET['message']);
+    echo $modal_get;
+}
+
 if(isset($_GET['id'])){
     $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
 }else if(isset($_SESSION['user_id'])){
