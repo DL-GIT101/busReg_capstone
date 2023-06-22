@@ -64,7 +64,7 @@ if($stmt = $mysqli->prepare($sql)){
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if(checkPermit($mysqli) !== "Approved"){
+    if(checkPermit($_SESSION['id']) !== "Approved"){
         $modal_display = "hidden";
         //FIRST NAME
         $fname = validate($_POST["fname"]);
@@ -248,10 +248,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
  
         }else{
-           if(!empty($logo)){
-                unlink($logo);
+            if($logo == null){
+                $logo = null;
+            }else{
+                $logo = basename($logo);
             }
-           $param_logo = null;  
+           $param_logo = $logo;  
             if($stmt->execute()){
                 $modal_display = "";
                         $modal_status = "success";
