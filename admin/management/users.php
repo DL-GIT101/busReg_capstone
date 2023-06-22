@@ -197,7 +197,7 @@ $mysqli->close();
                                     <td><div class="data">'.$business['profile'].'</div></td>
                                     <td><div class="data">'.$business['documents'].'</div></td>
                                     <td><div class="data">'.$business['permit'].'</div></td>
-                                    <td><img class="deleteUser" src="../../img/delete.svg" alt="Delete"></td>
+                                    <td><div class="action delete"><img class="deleteUser" src="../../img/delete.svg" alt="Delete"></div></td>
                                 </tr>';
                 }
                     ?>
