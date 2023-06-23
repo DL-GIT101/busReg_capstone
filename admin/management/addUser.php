@@ -122,7 +122,7 @@ if(!empty($id)) {
             $param_pword = password_hash($password, PASSWORD_DEFAULT);
 
             if($stmt->execute()) {
-                $directory = '../user/upload/'. $id;
+                $directory = '../../user/upload/'. $id;
                 mkdir($directory, 0777, true);
 
                 $modal_title = "Registration Successful";
