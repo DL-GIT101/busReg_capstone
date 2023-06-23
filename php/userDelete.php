@@ -145,6 +145,10 @@ function deleteDirectory($directory,$page) {
         if (is_dir($file)) {
             deleteDirectory($file,$page);
         } else {
+            $filename = basename($file);
+            if (strpos($filename, 'LOGO_') === 0) {
+                continue; 
+            }
             unlink($file);
         }
     }
