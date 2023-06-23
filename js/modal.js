@@ -99,19 +99,22 @@ if(delete_user){
       }else if(admin_page.innerText === "Business Profile"){
         let user_id = document.querySelector('#user_id');
         id = user_id.innerText;
+
         title.innerText = "Delete Profile";
 
         sentence.innerHTML = '<p class="sentence">Are you sure you want to delete this Profile? <br> This action cannot be undone</p>';
 
         link.href = "../../php/userDelete.php?profile=" + encodeURIComponent(id);
 
-      }else if(admin_page.innerText === "Documents"){
+      }else if(admin_page.innerText === "Uploaded Documents"){
+        let user_id = document.querySelector('#user_id');
+        id = user_id.innerText;
 
         title.innerText = "Delete All Documents";
 
         sentence.innerHTML = '<p class="sentence">Are you sure you want to delete all documents? <br> This action cannot be undone</p>';
 
-        link.href = "../../php/userDelete.php?docuements=" + encodeURIComponent(id);
+        link.href = "../../php/userDelete.php?documents=" + encodeURIComponent(id);
       }
 
       link.textContent = 'Delete';
