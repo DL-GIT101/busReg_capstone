@@ -226,7 +226,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $modal_title = "Profile Information Updated";
                                 $message = "Your Profile has been updated <br>";
                             }else{
-                                $title = "Profile Creation Success";
+                                $modal_title = "Profile Creation Success";
                                 $modal_message = "You can now view your profile and use our services  <br>";
                             }
                             $modal_message .= "You can view your profile now";
