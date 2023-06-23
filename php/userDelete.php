@@ -13,7 +13,6 @@ if(isset($_GET['user'])){
     $user_id = urldecode($_GET['user']);
     $sql = "DELETE FROM users WHERE id = ?";
     $page = "management";
-    $link = "../admin/management/users.php";
 
 }else if(isset($_GET['profile'])){
 
@@ -23,19 +22,17 @@ if(isset($_GET['user'])){
         LEFT JOIN new_documents ON user_profile.user_id = new_documents.user_id
         WHERE user_profile.user_id = ?";
     $page = "profile";
-    $link = "../admin/management/profiles.php";
 
 }else if(isset($_GET['documents'])){
 
     $user_id = validate($_GET['documents']);
     $sql = "DELETE FROM new_documents WHERE user_id = ?";
     $page = "documents";
-    $link = "../admin/management/documents.php";
 
 }else{
     header("location: ../admin/management/users.php");
 }
-
+$link = "../admin/management/users.php";
 $userDirectory = '../user/upload/' . $user_id;
 $error = "";
 
