@@ -1,9 +1,23 @@
-const fileStatusMap = {
+let fileStatusMap = {};
+
+if(pathLevels === 2){
+
+  fileStatusMap = {
     Uploaded: '../img/uploaded.svg',
     Approved: '../img/approved.svg',
     Denied: '../img/denied.svg',
     Pending: '../img/pending.svg'
+
   };
+}else if(pathLevels === 3){
+    fileStatusMap = {
+    Uploaded: '../../img/uploaded.svg',
+    Approved: '../../img/approved.svg',
+    Denied: '../../img/denied.svg',
+    Pending: '../../img/pending.svg'
+    
+  };
+}
   
 const fileStatusElements = document.querySelectorAll('table td .status');
   
@@ -22,9 +36,12 @@ const fileStatusElements = document.querySelectorAll('table td .status');
 
 const add_user = document.querySelector('table td .data');
 
-add_user.addEventListener('click', () =>{
-        window.location.href = "addUser.php";
+if(add_user){
+  add_user.addEventListener('click', () =>{
+    window.location.href = "addUser.php";
 });
+}
+
 
 const profile = document.querySelectorAll('table td:nth-child(2) div.data');
   profile.forEach(status => {
