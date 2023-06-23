@@ -24,7 +24,12 @@ if(delete_btn){
       let lastIndex = href.lastIndexOf('/');
       let fileName = href.substring(lastIndex + 1);
       let link = document.createElement('a');
-      link.href = "../php/deleteFile.php?file=" + encodeURIComponent(fileName);
+      if(pathLevels === 2){
+        link.href = "../php/deleteFile.php?file=" + encodeURIComponent(fileName);
+      }else if(pathLevels === 3){
+        link.href = "../../php/deleteFile.php?file=" + encodeURIComponent(fileName);
+      }
+      
       link.textContent = 'Delete';
       
       let close_button = document.createElement('button');
