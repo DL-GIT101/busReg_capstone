@@ -69,7 +69,6 @@ if(info_btn){
 };
 
 const delete_user = document.querySelectorAll('div.action.delete');
-console.log(delete_user);
 const admin_page = document.querySelector('#page');
 
 if(delete_user){
