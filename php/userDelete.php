@@ -2,7 +2,6 @@
 session_start();
 require_once "connection.php";
 require_once "functions.php";
-require_once "checkPermit.php";
 
 if(checkRole($_SESSION["role"]) !== "admin"){
     header("location: ../index.php");
@@ -40,7 +39,7 @@ if(isset($_GET['user'])){
 $userDirectory = '../user/upload/' . $user_id;
 $error = "";
 
-if(checkPermit($user_id) !== "Approved"){
+if(checkPermit($user_id) === "None"){
 
     if ($stmt = $mysqli->prepare($sql)) {
 
@@ -98,7 +97,7 @@ if(checkPermit($user_id) !== "Approved"){
         header('location: '.$link.'?message='. urlencode($message));
     }
 $mysqli->close(); 
-}else{
+}else if(checkPermit($user_id) === "Approved"){
 
     if($page === "management"){
 
@@ -115,7 +114,7 @@ $mysqli->close();
     }
 
     $message = '<modal>
-                    <div class="content success">
+                    <div class="content warning">
                         <p class="title">'.$title.'</p>
                         <p class="sentence">The permit has already been approved</p>
                         <div class="button-group">
@@ -125,6 +124,18 @@ $mysqli->close();
                 </modal>
     ';
     header('location: '.$link.'?message='. urlencode($message));
+}else {
+    $message = '<modal>
+                <div class="content error">
+                    <p class="title">Something went wrong</p>
+                    <p class="sentence">Try again later</p>
+                    <div class="button-group">
+                        <button class="close">Close</button>
+                    </div>
+                </div>
+            </modal>
+            ';
+header('location: '.$link.'?message='. urlencode($message));
 }
 
 function deleteDirectory($directory,$page) {
