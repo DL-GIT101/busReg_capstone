@@ -53,7 +53,8 @@ $modal_display = "hidden";
                 $modal_status = "warning";
                 $modal_title = "User did not create a profile yet";
                 $modal_message = "No profile found for the user";
-                $modal_button = '<a href="users.php">Back</a>';
+                $modal_button = '<a href="users.php">Back</a>
+                                <a href="editProfile.php">Create</a>';
             }
         }else{
             echo "Oops! Something went wrong. Please try again later";
