@@ -2,7 +2,6 @@
 session_start();
 require_once "../../php/connection.php";
 require_once "../../php/functions.php";
-require_once "../../php/checkPermit.php";
 
 if(checkRole($_SESSION["role"]) !== "admin"){
     header("location: ../../index.php");
@@ -61,7 +60,7 @@ if($stmt = $mysqli->prepare($sql)){
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if(checkPermit($_SESSION['id']) !== "Approved"){
+    if(checkPermit($user_id) === "None"){
 
     $modal_display = "hidden";
 
@@ -279,12 +278,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->close();
     } 
    
-    }else{
+    }else if(checkPermit($user_id) === "Approved"){
         $modal_display = "";
-        $modal_status = "success";
+        $modal_status = "warning";
         $modal_title = "Profile cannot be updated";
         $modal_message = "The permit has already been approved";
-        $modal_button = '<a href="dashboard.php">OK</a>';
+        $modal_button = '<a href="profiles.php">OK</a>';
+    }else{
+        $modal_display = "";
+        $modal_status = "error";
+        $modal_title = "Something went wrong";
+        $modal_message = "Try again later";
+        $modal_button = '<a href="profiles.php">OK</a>';
     }      
 }
 
