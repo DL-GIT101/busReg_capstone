@@ -66,7 +66,7 @@ const profile = document.querySelectorAll('table td:nth-child(2) div.data');
       status.className = "data gray";
     }
     status.addEventListener('click', () => {
-      let id = status.parentNode.previousElementSibling.textContent;
+      let id = status.parentNode.parentNode.firstElementChild.textContent;
       window.location.href = "documents.php?id=" + encodeURIComponent(id);
   });
   });
@@ -79,7 +79,7 @@ const profile = document.querySelectorAll('table td:nth-child(2) div.data');
         status.className = "data gray";
       }
       status.addEventListener('click', () => {
-        let id = status.parentNode.previousElementSibling.textContent;
+        let id = status.parentNode.parentNode.firstElementChild.textContent;
         window.location.href = "../permit/msme.php?id=" + encodeURIComponent(id);
     });
   });
