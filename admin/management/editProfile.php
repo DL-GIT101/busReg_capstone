@@ -1,15 +1,16 @@
 <?php
 session_start();
+require_once "../../php/connection.php";
+require_once "../../php/functions.php";
+require_once "../../php/checkPermit.php";
 
-if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== "admin"){
-    header("location: ../../login.php");
+if(checkRole($_SESSION["role"]) !== "admin"){
+    header("location: ../../index.php");
     exit;
 }
 
-require_once "../../php/connection.php";
-require_once "../../php/validate.php";
+$modal_display = "hidden";
 
-$modal = "hidden";
 $user_id = validate($_SESSION['user_id']);
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
@@ -49,18 +50,21 @@ if($stmt = $mysqli->prepare($sql)){
                 $submit_btn = "Create Profile";
             }
         }else{
-            $modal = "";
-            $status = "fail";
-            $title = "Profile Information Error";
-            $message = "Profile cannot be retrieve";
-            $button = '<a href="profiles.php">OK</a>';
+            $modal_display = "";
+            $modal_status = "fail";
+            $modal_title = "Profile Information Error";
+            $modal_message = "Profile cannot be retrieve";
+            $modal_button = '<a href="profiles.php">OK</a>';
         }
     $stmt->close();
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $modal = "hidden";
-    $user_id = validate($_POST["id"]);
+
+    if(checkPermit($_SESSION['id']) !== "Approved"){
+
+    $modal_display = "hidden";
+
         //FIRST NAME
         $fname = validate($_POST["fname"]);
         if(empty($fname)){
@@ -216,22 +220,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                     
                     if($stmt->execute()){
-                        $modal = "";
-                        $status = "success";
+                        $modal_display = "";
+                        $modal_status = "success";
                         if($submit_btn === "Update Profile"){
-                            $title = "Profile Information Updated";
-                            $message = "Profile has been updated";
+                            $modal_title = "Profile Information Updated";
+                            $message = "Your Profile has been updated <br>";
                         }else{
                             $title = "Profile Creation Success";
-                            $message = "Profile can now be view";
+                            $modal_message = "You can now view your profile and use our services  <br>";
                         }
-                        $button = '<a href="profiles.php">Go to Dashboard</a>';
+                        $modal_message .= "You can view your profile now";
+                        $modal_button = '<a href="profiles.php">Profile</a>';
                     } else{
-                        $modal = "";
-                        $status = "fail";
-                        $title = "Profile Information Error";
-                        $message = "Try again later";
-                        $button = '<a href="profiles.php">Go to Dashboard</a>';
+                        $modal_display = "";
+                        $modal_status = "fail";
+                        $modal_title = "Profile Information Error";
+                        $modal_message = "Try again later";
+                        $modal_button = '<a href="profiles.php">OK</a>';
                     }
                 }else{
                     $logo_err = "Error uploading" . $_FILES['logo']['error'];
@@ -243,34 +248,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
  
         }else{
-           if(!empty($logo)){
-                unlink($logo);
+            if($logo == null){
+                $logo = null;
+            }else{
+                $logo = basename($logo);
             }
-           $param_logo = null;  
+           $param_logo = $logo;  
             if($stmt->execute()){
-                $modal = "";
-                        $status = "success";
+                $modal_display = "";
+                        $modal_status = "success";
                         if($submit_btn === "Update Profile"){
-                            $title = "Profile Information Updated";
-                            $message = "Profile has been updated";
+                            $modal_title = "Profile Information Updated";
+                            $modal_message = "Profile has been updated <br>";
                         }else{
-                            $title = "Profile Creation Success";
-                            $message = "Profile can now be view";
+                            $modal_title = "Profile Creation Success";
+                            $modal_message = "You can now view the profile<br>";
                         }
-                        $button = '<a href="profiles.php">Go to Dashboard</a>';
+                        $modal_message .= "You can view the profile now";
+                        $modal_button = '<a href="profiles.php">Profile</a>';
             } else{
-                $modal = "";
-                $status = "fail";
-                $title = "Profile Information Error";
-                $message = "Try again later";
-                $button = '<a href="profiles.php">Go to Dashboard</a>';
+                $modal_display = "";
+                $modal_status = "fail";
+                $modal_title = "Profile Information Error";
+                $modal_message = "Try again later";
+                $modal_button = '<a href="users.php">Profile</a>';
             }
           }
            
         }
         $stmt->close();
     } 
-       
+   
+    }else{
+        $modal_display = "";
+        $modal_status = "success";
+        $modal_title = "Profile cannot be updated";
+        $modal_message = "The permit has already been approved";
+        $modal_button = '<a href="dashboard.php">OK</a>';
+    }      
 }
 
 $mysqli->close();
@@ -293,109 +308,136 @@ $mysqli->close();
     <!-- Javascript -->
     <script src="../../js/script.js" defer></script>
     <script src="../../js/form.js" defer></script>
+    <script src="../../js/modal.js" defer></script>
     <script src="../../js/map.js" defer></script>
     <script src="../../js/pinLocation.js" defer></script>
     <title>Create/Edit Profile</title>
 </head>
 <body>
 
-<modal class="<?= $modal ?>">
-        <div class="content <?= $status ?>">
-            <p class="title"><?= $title ?></p>
-            <p class="sentence"><?= $message ?></p>
-            <?= $button ?>
+<modal class="<?= $modal_display ?>">
+        <div class="content <?= $modal_status ?>">
+            <p class="title"><?= $modal_title ?></p>
+            <p class="sentence"><?= $modal_message ?></p>
+            <div class="button-group">
+                <?= $modal_button ?>
+            </div>
         </div>
-</modal>
+    </modal>
 
 <nav>
-        <div id="nav_logo">
-                <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City BPLO - ADMIN</p>  
+        <div class="logo">
+            <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <div id="account">
-             <a href="../../php/logout.php">Logout</a>
+        <img id="toggle" src="../../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a href="../dashboard.php">Dashboard</a></li>
+                <li class="current"><a href="users.php">Management</a></li>
+                <li><a href="../permit/msme.php">Permit</a></li>
+                <li><a href="../../php/logout.php">Logout</a></li>
+            </ul>
+            <ul id="subnav-links">
+                <li><a href="users.php">List</a></li>
+                <li class="current"><a href="profiles.php">Profile</a></li>
+                <li><a href="documents.php">Documents</a></li>
+            </ul>
         </div>
-</nav>
-
-<div class="flex">
-
-    <nav id="sidebar">
-        <ul>
-            <li ><img src="../../img/dashboard.png" alt=""><a href="dashboard.php">Dashboard</a></li>
-            <li class="current"><img src="../../img/register.png" alt=""><a href="users.php">MSME Management</a></li>
-            <li><img src="../../img/list.png" alt=""><a href="../permit/msme.php">MSME Permit</a></li>
-        </ul>
     </nav>
 
-    <main class="flex-grow-1 flex-wrap content-center">
-
-    <div class="actions space-between">
-            <p class="title">Profile</p>
-            <p class="sentence"> User ID : <?= $user_id ?></p>
-            <div class="buttons">
-                <a href="profiles.php" class="back">View Profile</a>
-            </div>
+    <nav id="subnav">
+        <div class="logo">
+            <img src="../../img/admin.svg" alt="Tarlac City Seal">
+            <p>Admin</p>  
         </div>
-        <form class="flex-row" autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
-        <section>
+        <div class="button-group">
+            <ul>
+                <li><a href="users.php">List</a></li>
+                <li class="current"><a href="profiles.php">Profile</a></li>
+                <li><a href="documents.php">Documents</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="column-container height-auto">   
             <div class="text-center">
-                <p class="title">Enter Informations to make a profile</p>
+                <p class="title">Profile</p>
+                <p class="sentence">Enter your informations to make a profile</p>
             </div>
+
+            <form class="long-form" autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+            <section class="height-auto">
                 <!--Owner -->
                 <p class="title text-center">Owner</p>
-            <div class="flex">
-                <div class="input-group">
-                    <label for="fname">First Name</label>
-                    <input type="text" id="fname" name="fname" placeholder="First Name" value="<?= $fname; ?>">
-                    <div class="error_msg"><?= $fname_err; ?></div>
+                <div class="input-row">
+
+                    <div class="input-group">
+                        <label for="fname">First Name</label>
+                        <input type="text" id="fname" name="fname" placeholder="First Name" value="<?= $fname; ?>">
+                        <div class="error_msg"><?= $fname_err; ?></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="lname">Surname</label>
+                        <input type="text" id="lname" name="lname" placeholder="Surname" value="<?= $lname; ?>">
+                        <div class="error_msg"><?= $lname_err; ?></div>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="lname">Surname</label>
-                    <input type="text" id="lname" name="lname" placeholder="Surname" value="<?= $lname; ?>">
-                    <div class="error_msg"><?= $lname_err; ?></div>
+
+                <div class="input-row">
+
+                    <div class="input-group">
+                        <label for="mname">Middle Name<span>(Optional)</span></label>
+                        <input type="text" id="mname" name="mname" placeholder="Middle Name" value="<?= $mname; ?>">
+                        <div class="error_msg"><?= $mname_err; ?></div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="suffix">Suffix<span>(Optional)</span></label>
+                        <input type="text" id="suffix" name="suffix" placeholder="Suffix" value="<?= $suffix; ?>">
+                        <div class="error_msg"><?= $suffix_err; ?></div>
+                    </div>
                 </div>
-            </div>
-            <div class="flex">
-                <div class="input-group">
-                    <label for="mname">Middle Name<span>(Optional)</span></label>
-                    <input type="text" id="mname" name="mname" placeholder="Middle Name" value="<?= $mname; ?>">
-                    <div class="error_msg"><?= $mname_err; ?></div>
+
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="gender">Gender</label>
+                        <select name="gender" id="gender">
+                            <option value="" disabled selected>Select Gender..</option>
+                            <option value="Male" <?= $gender === "Male" ? "selected" : "" ?>>Male</option>
+                            <option value="Female" <?= $gender === "Female" ? "selected" : "" ?>>Female</option>
+                        </select>
+                        <div class="error_msg"><?= $gender_err; ?></div>
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label for="suffix">Suffix<span>(Optional)</span></label>
-                    <input type="text" id="suffix" name="suffix" placeholder="Suffix" value="<?= $suffix; ?>">
-                    <div class="error_msg"><?= $suffix_err; ?></div>
-                </div>
-                <div class="input-group">
-                    <label for="gender">Gender</label>
-                    <select name="gender" id="gender">
-                        <option value="" disabled selected>Select Gender..</option>
-                        <option value="Male" <?= $gender === "Male" ? "selected" : "" ?>>Male</option>
-                        <option value="Female" <?= $gender === "Female" ? "selected" : "" ?>>Female</option>
-                    </select>
-                    <div class="error_msg"><?= $gender_err; ?></div>
-                </div>
-            </div>
+
                 <!--BUSINESS -->
             <p class="title text-center">Business</p>
-            <div class="flex">
+            <div class="input-row">
+
                 <div class="input-group">
                     <label for="bus_name">Name</label>
                     <input type="text" id="bus_name" name="bus_name" placeholder="Business Name" value="<?= $bus_name; ?>">
                     <div class="error_msg"><?= $bus_name_err; ?></div>
                 </div>
+
                 <div class="input-group">
                     <label for="logo">Logo<span>(Optional)</span></label>
                     <input type="file" id="logo" name="logo">
                     <div class="error_msg"><?= $logo_err; ?></div>
                 </div>
             </div>
-            <div class="flex">
+
+            <div class="input-row">
+
                 <div class="input-group">
                     <label for="activity">Activity</label>
                     <input type="text" id="activity" name="activity" placeholder="Business Activity" value="<?= $activity; ?>">
                     <div class="error_msg"><?= $activity_err; ?></div>
                 </div>
+
                 <div class="input-group">
                     <label for="contact">Contact Number</label>
                     <div class="flex">
@@ -405,12 +447,15 @@ $mysqli->close();
                     <div class="error_msg"><?= $contact_err; ?></div>
                 </div>
             </div>
-            <div class="flex">
+
+            <div class="input-row">
+
                 <div class="input-group">
-                    <label for="address_1">House No./Unit No./Building/Street</label>
+                    <label for="address_1">House/Unit No./Building/Street</label>
                     <input type="text" id="address_1" name="address_1" placeholder="House No./Unit No./Building/Street" value="<?= $address_1; ?>">
                     <div class="error_msg"><?= $address_1_err; ?></div>
                 </div>
+
                 <div class="input-group">
                     <label for="address_2">Barangay</label>
                     <select id="address_2" name="address_2">
@@ -441,19 +486,19 @@ $mysqli->close();
         
         </section>
 
-        <section>
+        <section class="height-auto">
         
             <p class="title text-center">Pin Location</p>
             <map id="map"></map>
-            <input type="text" id="latitude" name="latitude" value="<?= $latitude; ?>" hidden> 
-            <input type="text" id="longitude" name="longitude" value="<?= $longitude; ?>" hidden>
-            <div class="error_msg"><?= $latlang_err; ?></div>
-            <input type="hidden" name="id" value="<?= $user_id ?>">
+                <input type="text" id="latitude" name="latitude" value="<?= $latitude; ?>" hidden> 
+                <input type="text" id="longitude" name="longitude" value="<?= $longitude; ?>" hidden>
+                <div class="error_msg"><?= $latlang_err; ?></div>
             <input type="submit" value="<?= $submit_btn; ?>">
         </section>
+        
         </form>
+        </div>
     </main>
-</div>
 
 </body>
 </html>
