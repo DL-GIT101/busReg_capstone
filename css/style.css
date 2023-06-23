@@ -372,7 +372,7 @@ modal .button-group {
     margin-bottom: 5px;
 }
 
-modal .button-group > * {
+modal .button-group button, modal .button-group a {
     margin-left: 10px;
 }
 
