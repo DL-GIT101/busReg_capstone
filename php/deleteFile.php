@@ -4,19 +4,20 @@ session_start();
 
 require_once "connection.php";
 require_once "functions.php";
-require_once "checkPermit.php";
 
-if(checkPermit($mysqli) !== "Approved"){
+if(checkRole($_SESSION["role"]) === "admin"){
+    $id = validate($_SESSION['user_id']);
+    $link = "../admin/management/documents.php";
+}elseif(checkRole($_SESSION["role"]) === "user"){
+    $id = validate($_SESSION['id']);
+    $link = "../user/documents.php";
+}else{
+    $error = "yes";
+}
+
+if(checkPermit($id) === "None"){
 
     if (isset($_GET['file'])) {
-
-        if(checkRole($_SESSION["role"]) === "admin"){
-            $id = validate($_SESSION['user_id']);
-        }elseif(checkRole($_SESSION["role"]) === "user"){
-            $id = validate($_SESSION['id']);
-        }else{
-            $error = "yes";
-        }
 
         $file = urldecode($_GET['file']);
         $filePath = '../user/upload/'.$id.'/'.$file;
@@ -56,8 +57,14 @@ if(checkPermit($mysqli) !== "Approved"){
             }else {
                 $error = "yes";
             }
-        } 
-        $stmt->close();
+
+            $stmt->close();
+
+        } else{
+
+            $error = "yes";
+        }
+        
 
         if($error !== "yes"){
             $sql = "UPDATE new_documents SET requirements = ?, status = ? WHERE user_id = ?";
@@ -74,53 +81,74 @@ if(checkPermit($mysqli) !== "Approved"){
 
                 if($stmt->execute()){
                     $message = '<modal>
-                            <div class="content success">
-                                <p class="title">File Deleted</p>
-                                <p class="sentence">You can now upload another file</p>
-                                <button class="close">Close</button>    
-                            </div>
-                        </modal>
+                                    <div class="content success">
+                                        <p class="title">File Deleted</p>
+                                        <p class="sentence">You can now upload another file</p>
+                                        <div class="button-group">
+                                            <button class="close">Close</button>    
+                                        </div>
+                                    </div>
+                                </modal>
                         ';
-                        header("location: ../user/documents.php?message=". urlencode($message));
+                        header('location: '.$link.'?message='. urlencode($message));
                 }else{
                     $message = '<modal>
                             <div class="content error">
                                 <p class="title">An error has occured</p>
                                 <p class="sentence">Try again later</p>
-                                <button class="close">Close</button>    
+                                <div class="button-group">
+                                    <button class="close">Close</button>    
+                                </div>    
                             </div>
                         </modal>
                         ';
-                        header("location: ../user/documents.php?message=". urlencode($message));
+                        header('location: '.$link.'?message='. urlencode($message));
                 }
                 $stmt->close();
+
+            } else{
+                $message = '<modal>
+                            <div class="content error">
+                                <p class="title">An error has occured</p>
+                                <p class="sentence">Try again later</p>
+                                <div class="button-group">
+                                    <button class="close">Close</button>    
+                                </div>    
+                            </div>
+                        </modal>
+                        ';
+                        header('location: '.$link.'?message='. urlencode($message));
             }
         }else{
             $message = '<modal>
                             <div class="content error">
                                 <p class="title">An error has occured</p>
                                 <p class="sentence">Try again later</p>
-                                <button class="close">Close</button>    
+                                <div class="button-group">
+                                    <button class="close">Close</button>    
+                                </div>    
                             </div>
                         </modal>
                         ';
-                        header("location: ../user/documents.php?message=". urlencode($message));
+                        header('location: '.$link.'?message='. urlencode($message));
         }
 
         $mysqli->close();
 
     }else {
-        header("location: ../documents.php");
+        header("location: " . $link);
     } 
-}else{
+}else if(checkPermit($id) === "Approved"){
     $message = '<modal>
-                    <div class="content success">
-                        <p class="title">Documents cannot be deleted</p>
+                    <div class="content warning">
+                        <p class="title">Document cannot be deleted</p>
                         <p class="sentence">The permit has already been approved</p>
-                        <button class="close">Close</button>   
+                        <div class="button-group">
+                                    <button class="close">Close</button>    
+                                </div>   
                     </div>
                 </modal>
     ';
-    header("location: ../user/documents.php?message=". urlencode($message));
+    header('location: '.$link.'?message='. urlencode($message));
 }
 ?>
