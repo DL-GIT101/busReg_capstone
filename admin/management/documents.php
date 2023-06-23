@@ -1,9 +1,17 @@
-<?php
-
+<?php 
 session_start();
-
 require_once "../../php/connection.php";
-require_once "../../php/validate.php";
+require_once "../../php/functions.php";
+
+if(checkRole($_SESSION["role"]) !== "admin"){
+    header("location: ../../index.php");
+    exit;
+}
+
+if(isset($_GET['message'])){
+    $modal_get = urldecode($_GET['message']);
+    echo $modal_get;
+}
 
 if(isset($_GET['id'])){
     $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
@@ -13,8 +21,7 @@ if(isset($_GET['id'])){
     header("location: users.php");
 }
 
-$modal = "hidden";
-$document = "";
+$modal_display = "hidden";
 
     $sql = "SELECT * FROM new_documents WHERE user_id = ?";
    
@@ -36,20 +43,26 @@ $document = "";
                 $requirements_fetch = unserialize($serialized_requirements_fetch);
                 $status_fetch = unserialize($serialized_status_fetch);    
                 $denied_fetch = unserialize($serialized_denied_fetch);
-                $update = 1;            
+                $update = true;            
             }else{
-                $document = "hidden";
-                $update = 0;
+                $update = false;
             }
         }else {
-            echo "error retrieving data";
+            $modal_display = "";
+            $modal_status = "error";
+            $modal_title = "Something went wrong";
+            $modal_message = "Try again later";
+            $modal_button = '<a href="users.php">OK</a>';
         }
     $stmt->close();
     }
     
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    if(hasProfile($mysqli,$user_id) === 1){
+    if(hasProfile($user_id) === true){
+
+        if(checkPermit($user_id) === "None"){
+
         $allowTypes = array('jpg', 'jpeg', 'png', 'pdf');
     
         $file_inputs_count = count($_FILES);
@@ -123,7 +136,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $serialized_status = serialize($status);
             $serialized_msg = serialize($denied_msg);
     
-            if($update === 1){
+            if($update === true){
                 $sql = "UPDATE new_documents SET requirements = ?, status = ? , message = ? WHERE user_id = ?";
             }else{
                 $sql = "INSERT INTO new_documents (user_id, requirements, status, message) VALUES (?, ?, ?, ?)";
@@ -145,61 +158,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if($stmt->execute()){
     
                     if ($error_count > 0) {
-                        $modal = "";
-                        $status_modal = "warning";
-                        $title = "Refresh to see Changes";
-                        $message = "Some Changes are not updated";
-                        $button = '<button class="close">OK</button>';
+                        $modal_display = "";
+                        $modal_status = "warning";
+                        $modal_title = "Refresh to see Changes";
+                        $modal_message = "Some Changes are not updated";
+                        $modal_button = '<button class="close">OK</button>';
                     } else {
-                        $modal = "";
-                        $status_modal = "success";
-                        $title = "Successful";
-                        $message = "All changes has been updated";
-                        $button = '<a href="documents.php">OK</a>';
+                        $modal_display = "";
+                        $modal_status = "success";
+                        $modal_title = "Successful";
+                        $modal_message = "All changes has been updated";
+                        $modal_button = '<a href="documents.php">OK</a>';
                     }
                 }else{
-                    $modal = "";
-                    $status_modal = "fail";
-                    $title = "Updating Error";
-                    $message = "Try again later";
-                    $button = '<a href="manangement.php">OK</a>';
+                    $modal_display = "";
+                    $modal_status = "fail";
+                    $modal_title = "Updating Error";
+                    $modal_message = "Try again later";
+                    $modal_button = '<a href="manangement.php">OK</a>';
                 }
             $stmt->close();
             }
-        }else{
-            $modal = "";
-            $status_modal = "warning";
-            $title = "Profile not found for the user.";
-            $message = "Create user profile first <br>";
-            $message .= "Or wait for the user to create profile";
-            $button = '<button class="close">OK</button>';
-        }
-    }
+        }else if(checkPermit($user_id) === "Approved"){
+            $modal_display = "";
+            $modal_status = "warning";
+            $modal_title = "Documents cannot be updated";
+            $modal_message = "The permit has already been approved";
+            $modal_button = '<button class="close">OK</button>';
+        }else {
+            $modal_display = "";
+            $modal_status = "error";
+            $modal_title = "Something went wrong";
+            $modal_message = "Try again later";
+            $modal_button = '<a href="users.php">OK</a>';
+        }     
+    }else if(hasProfile($user_id) === false){
+        $modal_display = "";
+        $modal_status = "warning";
+        $modal_title = "User did not create a profile yet";
+        $modal_message = "No profile found for the user <br>
+                        Cannot upload documents without a profile";
+        $modal_button = '<a href="users.php">Back</a>
+                        <a href="editProfile.php">Create</a>';
+    }else {
+        $modal_display = "";
+        $modal_status = "error";
+        $modal_title = "Something went wrong";
+        $modal_message = "Try again later";
+        $modal_button = '<a href="users.php">OK</a>';
+    }  
+}
 
     $mysqli->close();
-
-function hasProfile($mysqli,$param_id){
-        $sql = "SELECT * FROM user_profile WHERE user_id = ?";
-    
-        if($stmt = $mysqli->prepare($sql)){
-            $stmt->bind_param("s",$param_id);
-    
-            $param_id = $param_id;
-    
-            if($stmt->execute()){
-                $result = $stmt->get_result();
-    
-                if($result->num_rows == 1){
-                    return 1;
-                }else {
-                    return 0;
-                }
-            }else{
-                echo "Oops! Something went wrong. Please try again later";
-            }
-        $stmt->close();
-        }
-}
 
 function pushNullValues(&$array1, &$array2, &$array3) {
         array_push($array1, null);
@@ -218,94 +228,68 @@ function pushNullValues(&$array1, &$array2, &$array3) {
     <script src="../../js/script.js" defer></script>
     <script src="../../js/form.js" defer></script>
     <script src="../../js/modal.js" defer></script>
-    <script src="../../js/file_modal.js" defer></script>
-    <script src="../../js/admin_td_click.js" defer></script>
+    <script src="../../js/table.js" defer></script>
     <title>MSME Documents</title>
 </head>
 <body>
-<p id="user_id" class="hidden"><?= $user_id ?></p>
-<modal class="<?= $modal ?>">
-        <div class="content <?= $status_modal ?>">
-            <p class="title"><?= $title ?></p>
-            <p class="sentence"><?= $message ?></p>
-            <?= $button ?>
-        </div>
-</modal>
 
-<modal id="file_del" class="hidden">
-        <div class="content fail">
-            <p class="title">Delete File</p>
-            <p class="sentence">Are you sure you want to delete this file? This action cannot be undone</p>
-            <div id="btn_grp" class="flex align-self-center">
-                <a href="" id="file_link">Delete</a>
-                <button>Cancel</button>
-            </div>
-                
-        </div>
-</modal>
-
-<modal id="user_del" class="hidden">
-        <div class="content fail">
-            <p class="title">Delete ALL File</p>
-            <p class="sentence">Are you sure you want to delete All documents? This action cannot be undone</p>
-            <div id="btn_grp" class="flex align-self-center">
-                <a href="" id="user_link">Delete</a>
-                <button>Cancel</button>
+    <modal class="<?= $modal_display ?>">
+        <div class="content <?= $modal_status ?>">
+            <p class="title"><?= $modal_title ?></p>
+            <p class="sentence"><?= $modal_message ?></p>
+            <div class="button-group">
+                <?= $modal_button ?>
             </div>
         </div>
-</modal>
+    </modal>
 
-<modal id="info_modal" class="hidden">
-        <div class="content">
-            <p class="title">On the Place of Business</p>
-            <p class="sentence">
-                - Building/Occupancy Certificate, if owned	<br>
-                - Lease of Contract, if rented	 <br>
-                - Notice of Award/Award Sheet, if inside a Mall<br>
-                - Homeowners/Neighborhood Certification of No Objection, if inside a subdivision or housing facility</p>
-                <button>OK</button>                
-        </div>
-</modal>
     <nav>
-        <div id="nav_logo">
-                <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City BPLO - ADMIN</p>  
+        <div class="logo">
+            <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <div id="account">
-             <a href="../../php/logout.php">Logout</a>
+        <img id="toggle" src="../../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a href="../dashboard.php">Dashboard</a></li>
+                <li class="current"><a href="users.php">Management</a></li>
+                <li><a href="../permit/msme.php">Permit</a></li>
+                <li><a href="../../php/logout.php">Logout</a></li>
+            </ul>
+            <ul id="subnav-links">
+                <li><a href="users.php">List</a></li>
+                <li><a href="profiles.php">Profile</a></li>
+                <li class="current"><a href="documents.php">Documents</a></li>
+            </ul>
         </div>
     </nav>
 
-<div class="flex">
-
-    <nav id="sidebar">
-        <ul>
-            <li ><img src="../../img/dashboard.png" alt=""><a href="../dashboard.php">Dashboard</a></li>
-            <li class="current"><img src="../../img/register.png" alt=""><a href="users.php">MSME Management</a></li>
-            <li><img src="../../img/list.png" alt=""><a href="../permit/msme.php">MSME Permit</a></li>
-            
-        </ul>
+    <nav id="subnav">
+        <div class="logo">
+            <img src="../../img/admin.svg" alt="Tarlac City Seal">
+            <p>Admin</p>  
+        </div>
+        <div class="button-group">
+            <ul>
+                <li><a href="users.php">List</a></li>
+                <li><a href="profiles.php">Profile</a></li>
+                <li class="current"><a href="documents.php">Documents</a></li>
+            </ul>
+        </div>
     </nav>
 
-    <main class="flex-grow-1 flex-wrap content-center">
-    <div class="actions space-between">
-            <p id="page" class="title">Documents</p>
-            <p class="sentence"> User ID : <?= $user_id ?></p>
-            <div class="buttons">
-                <a href="profiles.php" class="back">Profile</a>
-                <a id="action_dlt" class="delete <?= $document ?>">Delete All</a>
-            </div>
-        </div>
 
-    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
-            <div class="text-center">
-                <p class="sentence">Check the uploaded file of the following requirements</p>
-            </div>
+    <main>
+    <div class="column-container height-auto">
+        <div class="text-center">
+            <p id="page" class="title">Uploaded Documents</p>
+            <p id="user_id" class="sentence"><?= $user_id ?></p>
+        </div>
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
             <table>
                 <tr>
                     <th>Requirement</th>
-                    <th>View</th>
-                    <th>Delete</th>
+                    <th>Actions</th>
                     <th>Status</th>
                     <th>File Upload</th>
                 </tr>
@@ -313,11 +297,11 @@ function pushNullValues(&$array1, &$array2, &$array3) {
                     $requirements_names = array(
                         'Barangay Clearance for business',
                         'DTI Certificate of Registration',
-                        'On the Place of Business <img id="info" src="../../img/info.png" alt="">',
+                        'On the Place of Business <img class="info" src="../../img/info.svg" alt="Info">',
                         'Community Tax Certificate',
                         'Certificate of Zoning Compliance',
                         'Business Inspection Clearance',
-                        'Valid Fire Safety Inspection Certificate/Official Receipt',
+                        'Fire Safety Inspection Certificate',
                         'Sanitary Permit',
                         'Environmental Compliance Clearance',
                         'Latest 2x2 picture',
@@ -333,26 +317,38 @@ function pushNullValues(&$array1, &$array2, &$array3) {
                         if(empty($requirements_fetch[$count-1])){
                             echo '  <td></td>
                                     <td></td>
-                                    <td></td>
-                                ';
+                                   ';
                         }else{
-                            echo    '<td><a class="view" target="_blank" href="../user/upload/'.$user_id.'/'.$requirements_fetch[$count-1].'">View</a></td>
-                                    <td><button value="'.$requirements_fetch[$count-1].'" type="button" class="delete">Delete</td>
-                                    <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
-                                    ';
+                            echo    '<td class="table-actions">
+
+                                    <a class="view" target="_blank" href="../../user/upload/'.$user_id.'/'.$requirements_fetch[$count-1].'"><img src="../../img/view.svg" alt="View"></a>
+
+                                    <img class="delete" src="../../img/delete.svg" alt="Delete">
+                            </td>
+
+                                    <td>
+                                        <div class="status">'.$status_fetch[$count-1].'</div>
+                                        <div class="message">'.$message_fetch[$count-1].'</div>
+                                    </td>';
                         }
-                        echo '<td>
-                                    <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
-                                    <div class="error_msg">'.${$errorMsg}.'</div>
-                                </td>';
-                        echo '</tr>';
+                                echo '<td>
+                                        <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
+                                        <div class="error_msg">'.${$errorMsg}.'</div>
+                                    </td>
+                                </tr>';
                     $count++;
                     }
-                ?>  
+                ?>
+                
             </table>
-            <input type="submit" value="Upload">
+
+            <div class="button-group">
+                <input type="submit" value="Upload">
+                <div class="action delete">Delete All</div>
+            </div>
+            
         </form>   
-    </main>
-</div>
+    </div>    
+</main>
 </body>
 </html>
