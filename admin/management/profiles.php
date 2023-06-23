@@ -2,7 +2,6 @@
 session_start();
 require_once "../../php/connection.php";
 require_once "../../php/functions.php";
-require_once "../../php/checkPermit.php";
 
 if(checkRole($_SESSION["role"]) !== "admin"){
     header("location: ../../index.php");
