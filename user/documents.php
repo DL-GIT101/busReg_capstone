@@ -2,7 +2,6 @@
 session_start();
 require_once "../php/connection.php";
 require_once "../php/functions.php";
-require_once "../php/checkPermit.php";
 
 if(checkRole($_SESSION["role"]) !== "user"){
     header("location: ../index.php");
@@ -52,7 +51,11 @@ if(isset($_GET['message'])){
     
    
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if(checkPermit($_SESSION['id']) !== "Approved"){
+
+    if(hasProfile($_SESSION['id']) === true){
+
+    if(checkPermit($_SESSION['id']) === "None"){
+
     $allowTypes = array('jpg', 'jpeg', 'png', 'pdf');
 
     $file_inputs_count = count($_FILES);
@@ -167,39 +170,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         $stmt->close();
         }
-    }else{
+    }else if(checkPermit($user_id) === "Approved"){
         $modal_display = "";
-        $modal_status = "success";
+        $modal_status = "warning";
         $modal_title = "Documents cannot be updated";
         $modal_message = "The permit has already been approved";
-        $modal_button = '<a href="documents.php">OK</a>';
+        $modal_button = '<button class="close">OK</button>';
+    }else {
+        $modal_display = "";
+        $modal_status = "error";
+        $modal_title = "Something went wrong";
+        $modal_message = "Try again later";
+        $modal_button = '<a href="users.php">OK</a>';
     }     
+}else if(hasProfile($user_id) === false){
+    $modal_display = "";
+    $modal_status = "warning";
+    $modal_title = "User did not create a profile yet";
+    $modal_message = "No profile found for the user <br>
+                    Cannot upload documents without a profile";
+    $modal_button = '<a href="users.php">Back</a>
+                    <a href="editProfile.php">Create</a>';
+}else {
+    $modal_display = "";
+    $modal_status = "error";
+    $modal_title = "Something went wrong";
+    $modal_message = "Try again later";
+    $modal_button = '<a href="users.php">OK</a>';
+}    
 }
 $mysqli->close();
-
-function hasProfile($mysqli,$param_id){
-
-    $sql = "SELECT * FROM user_profile WHERE user_id = ?";
-
-    if($stmt = $mysqli->prepare($sql)){
-        $stmt->bind_param("s",$param_id);
-
-        $param_id = validate($_SESSION['id']);
-
-        if($stmt->execute()){
-            $result = $stmt->get_result();
-
-            if($result->num_rows == 1){
-                return 1;
-            }else {
-                return 0;
-            }
-        }else{
-            echo "Oops! Something went wrong. Please try again later";
-        }
-    $stmt->close();
-    }
-}
 
 function pushNullValues(&$array1, &$array2, &$array3) {
     array_push($array1, null);
@@ -219,7 +219,7 @@ function pushNullValues(&$array1, &$array2, &$array3) {
     <script src="../js/form.js" defer></script>
     <script src="../js/modal.js" defer></script>
     <script src="../js/table.js" defer></script>
-    <title>New Permit</title>
+    <title>Upload Documents</title>
 </head>
 <body>
 
