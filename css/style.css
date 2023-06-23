@@ -206,9 +206,8 @@ form input[type=submit]{
     border: none;
     align-self: center;
     font-family: 'Jost', sans-serif;
-    font-size: 16px;
+    font-size: 1.1rem;
     padding: 5px 10px;
-    margin-top: 5px;
     cursor: pointer;
 }
 
@@ -256,6 +255,30 @@ form > section {
 
 form .input-row{
     display: flex;
+}
+
+form .button-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form .button-group *{
+    margin-left: 5px;
+}
+
+form .button-group .action.action.delete{
+    background-color: rgb(220, 53, 69);
+    color: rgb(245, 245, 247);
+    border-radius: 10px;
+    padding: 5px 10px;
+    font-family: 'Jost', sans-serif;
+    font-size: 1.1rem;
+}
+
+form .button-group .action.action.delete:hover{
+    filter: brightness(0.8);
+    cursor: pointer;
 }
 /* Modal */
 modal {
