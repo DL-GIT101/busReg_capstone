@@ -53,7 +53,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                             }else{
                                 $_SESSION["role"] = "user";
                                 header("location: user/dashboard.php");
+                                
                             }
+                            exit;
 
                         }else{
                             $login_err = "Invalid email or password";
