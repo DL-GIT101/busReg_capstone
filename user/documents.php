@@ -8,11 +8,6 @@ if(checkRole($_SESSION["role"]) !== "user"){
     exit;
 }
 
-if(hasProfile($mysqli,$_SESSION['id']) === 0){
-    header("location: profile.php");
-    exit;
-}
-
 if(isset($_GET['message'])){
     $modal_get = urldecode($_GET['message']);
     echo $modal_get;
