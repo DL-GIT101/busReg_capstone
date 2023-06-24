@@ -604,6 +604,15 @@ table td .action.delete:hover {
     cursor: pointer;
 }
 
+table#msme td:nth-child(6) {
+    display: flex;
+    justify-content: center;
+}
+
+table#msme td:nth-child(6) img:hover{
+    filter: brightness(0.8);
+}
+
 /* Single Styles */
 
 .height-auto {
