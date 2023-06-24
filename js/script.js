@@ -16,14 +16,17 @@ navLogo.addEventListener('click', () => {
 });
 
 const adminLogo = document.querySelector('nav#subnav .logo');
-adminLogo.addEventListener('click', () => {
+if(adminLogo){
+    adminLogo.addEventListener('click', () => {
 
-    if(pathLevels === 2){
-        window.location.href = 'dashboard.php';
-    }else if(pathLevels === 3){
-        window.location.href = '../dashboard.php';
-    }
-});
+        if(pathLevels === 2){
+            window.location.href = 'dashboard.php';
+        }else if(pathLevels === 3){
+            window.location.href = '../dashboard.php';
+        }
+    });
+};
+
 
 const navIcon = document.querySelector('nav #toggle');
 const navButtonGrp = document.querySelector('nav .button-group');
