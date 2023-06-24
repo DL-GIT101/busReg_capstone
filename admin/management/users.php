@@ -175,7 +175,7 @@ $mysqli->close();
     <main>
         <div class="column-container height-auto">
             <p id="page" class="title text-center">Management</p>
-                <table>   
+                <table id="users">   
                     <tr>
                         <th>ID</th>
                         <th>Profile</th>
