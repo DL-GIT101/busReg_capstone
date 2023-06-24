@@ -144,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             if($stmt = $mysqli->prepare($sql)){
     
-                if($update === 1){
+                if($update === true){
                     $stmt->bind_param('ssss',$param_req, $param_Stat,$param_msg, $param_id);
                 }else{
                     $stmt->bind_param('ssss', $param_id, $param_req, $param_Stat,$param_msg);
@@ -305,8 +305,7 @@ function pushNullValues(&$array1, &$array2, &$array3) {
                         'Sanitary Permit',
                         'Environmental Compliance Clearance',
                         'Latest 2x2 picture',
-                        'Tax Order of Payment',
-                        'Tax Order of Payment Official Receipt'
+                        'Tax Order of Payment'
                     );
                     $count = 1;
                     foreach($requirements_names as $fileName){
