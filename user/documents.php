@@ -268,8 +268,7 @@ function pushNullValues(&$array1, &$array2, &$array3) {
                         'Sanitary Permit',
                         'Environmental Compliance Clearance',
                         'Latest 2x2 picture',
-                        'Tax Order of Payment',
-                        'Tax Order of Payment Official Receipt'
+                        'Tax Order of Payment'
                     );
                     $count = 1;
                     foreach($requirements_names as $fileName){
