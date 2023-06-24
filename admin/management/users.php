@@ -202,12 +202,7 @@ $mysqli->close();
                 }
                     ?>
                 </table>
-            </div>
-            </div>
-        </content>
         </div>
-        </content>
     </main>
-
 </body>
 </html>
