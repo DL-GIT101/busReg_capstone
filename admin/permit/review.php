@@ -1,18 +1,22 @@
-<?php
-
+<?php ini_set('display_errors', 1);
 session_start();
-
 require_once "../../php/connection.php";
-require_once "../../php/validate.php";
+require_once "../../php/functions.php";
+
+if(checkRole($_SESSION["role"]) !== "admin"){
+    header("location: ../../index.php");
+    exit;
+}
 
 if(isset($_GET['id'])){
     $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
 }else if(isset($_SESSION['user_id'])){
     $user_id = $_SESSION['user_id'];
 }else{
-    header("location: ../management.php");
+    header("location: msme.php");
 }
-$modal = "hidden";
+
+$modal_display = "hidden";
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
@@ -104,6 +108,28 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
         $stmt3->close();
     }
 
+    $sql4 = "SELECT * FROM users WHERE id = ?";
+
+    if($stmt4 = $mysqli->prepare($sql4)){
+        $stmt4->bind_param("s",$param_id);
+
+        $param_id = $user_id;
+
+        if($stmt4->execute()){
+            $result = $stmt4->get_result();
+
+            if($result->num_rows == 1){
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+
+                $email = $row['email'];
+                
+            }
+        }else{
+            echo "Oops! Something went wrong. Please try again later";
+        }
+        $stmt4->close();
+    }
+
     
     
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -190,191 +216,196 @@ $mysqli->close();
      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
      crossorigin=""></script>
     <script src="../../js/script.js" defer></script>
+    <script src="../../js/profile.js" defer></script>
     <script src="../../js/map.js" defer></script>
-    <script src="../../js/displayMap.js" defer></script>
+    <script src="../../js/showLocation.js" defer></script>
     <script src="../../js/form.js" defer></script>
     <script src="../../js/modal.js" defer></script>
-    <script src="../../js/contentSwitch.js" defer></script>
+    <script src="../../js/table.js" defer></script>
     <title>Review Information</title>
 </head>
 <body>
-<p id="user_id" class="hidden"><?= $user_id ?></p>
-<modal class="<?= $modal ?>">
-        <div class="content <?= $status_modal ?>">
-            <p class="title"><?= $title ?></p>
-            <p class="sentence"><?= $message ?></p>
-            <?= $button ?>
-        </div>
-</modal>
 
-<modal id="info_modal" class="hidden">
-        <div class="content">
-            <p class="title">On the Place of Business</p>
-            <p class="sentence">
-                - Building/Occupancy Certificate, if owned	<br>
-                - Lease of Contract, if rented	 <br>
-                - Notice of Award/Award Sheet, if inside a Mall<br>
-                - Homeowners/Neighborhood Certification of No Objection, if inside a subdivision or housing facility</p>
-                <button>OK</button>                
-        </div>
-</modal>
-
-
-    <nav>
-        <div id="nav_logo">
-                <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City BPLO - ADMIN</p>  
-        </div>
-        <div id="account">
-             <a href="../../php/logout.php">Logout</a>
-        </div>
-    </nav>
-
-<div class="flex">
-
-    <nav id="sidebar">
-        <ul>
-            <li ><img src="../../img/dashboard.png" alt=""><a href="../dashboard.php">Dashboard</a></li>
-            <li ><img src="../../img/register.png" alt=""><a href="../management/users.php">MSME Management</a></li>
-            <li class="current"><img src="../../img/list.png" alt=""><a href="msme.php">MSME Permit</a></li>
-            
-        </ul>
-    </nav>
-
-    <main class="flex-grow-1 flex-wrap content-center">
-
-    <div class="actions space-between">
-            <p id="page" class="title">Review</p>
-            <p class="sentence"> User ID : <?= $user_id ?></p>
-            <div class="buttons">
-                <a href="msme.php" class="back">List</a>
-
-                <a id="content_1_edit" href="../management/edit_profile.php">Edit</a>
-                <a id="content_1_document" class="back">Document</a>
-                
-                <a id="content_2_upload" class="hidden" href="../management/documents.php">Upload</a>
-                <a id="content_2_profile" class="back hidden">Profile</a>
-                
-                <a href="approve.php?id=<?= $user_id ?>" class="back">Approve</a>
+    <modal class="<?= $modal_display ?>">
+        <div class="content <?= $modal_status ?>">
+            <p class="title"><?= $modal_title ?></p>
+            <p class="sentence"><?= $modal_message ?></p>
+            <div class="button-group">
+                <?= $modal_button ?>
             </div>
         </div>
+    </modal>
 
-        <content id="content_1">
-            <section class="flex-grow-2">
-                <subsection class="space-around">
+    <nav>
+        <div class="logo">
+            <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
+        </div>
+        <img id="toggle" src="../../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a href="../dashboard.php">Dashboard</a></li>
+                <li><a href="../management/users.php">Management</a></li>
+                <li class="current"><a href="msme.php">Permit</a></li>
+                <li><a href="../../php/logout.php">Logout</a></li>
+            </ul>
+            <ul id="subnav-links">
+                <li><a href="msme.php">List</a></li>
+                <li  class="current"><a href="review.php">Review</a></li>
+                <li><a href="approve.php">Approve</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="subnav">
+        <div class="logo">
+            <img src="../../img/admin.svg" alt="Tarlac City Seal">
+            <p>Admin</p>  
+        </div>
+        <div class="button-group">
+            <ul>
+                <li><a href="msme.php">List</a></li>
+                <li  class="current"><a href="review.php">Review</a></li>
+                <li><a href="approve.php">Approve</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+    <div class="column-container height-auto">
+        <div class="container height-auto">
+            <section>
+                <subsection class="space-between">
                     <p class="sentence">Business Profile</p>
-                    <div id="logo"> 
-                        <img src="<?= $logo_path ?>" alt="Logo">
+                    <div class="logo"> 
+                        <img src="<?= $logo_path ?>" alt="Business Logo">
                     </div>
                     <div class="text-center">
                         <p class="title"><?= $business_name ?></p>
                         <p class="sentence"><?= $business_activity ?></p> 
                     </div>
                 </subsection>
-                <subsection class="space-around">
-                    <p class="sentence">Business Permit Status</p> 
-                    <div class="info title <?= strtolower($permit_status)?>" id="permit_status"><?= $permit_status ?></div>
-                </subsection>
-                <subsection class="space-around">
+                <subsection class="space-between">
                     <p class="sentence">Business Owner</p> 
+                    <p class="sentence-title text-center"><?= $name ?></p> 
                     <div class="text-center">
-                        <p class="title"><?= $name ?></p> 
                         <p class="sentence"><?= $gender ?></p> 
                         <p class="sentence"><?= $contact ?></p>
                     </div>
                 </subsection>
             </section>
-            <section class="flex-grow-15">
+            <section class="map-container">
                 <subsection>
                         <p class="title">Location</p>
-                        <p class="sentence"><?= $address ?></p>
                         <map id="map">
                             <p id="latitude" class="hidden"><?= $latitude ?></p>
                             <p id="longitude" class="hidden"><?= $longitude ?></p>
                         </map>
                 </subsection>
             </section>
-        </content>
+            <section>
+                <subsection>
+                    <p class="title">Actions</p> 
 
-    <form id="content_2" class="hidden" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+                    <a class="action approve" href="approve.php"><img src="../../img/approve-doc.svg" alt="Edit"></a>
+                    <p class="sentence text-center">ID: <?= $user_id ?></p>
+                </subsection>
+                <subsection>
+                    <p class="sentence">Address</p> 
+                    <div class="info sentence"><?= $address ?></div>
+                </subsection>
+                <subsection>
+                    <p class="sentence">Business Permit Status</p> 
+                    <div class="info title" id="permit-status"><?= $permit_status ?></div>
+                </subsection>
+                <subsection>
+                    <p class="sentence">Email</p> 
+                    <div class="info sentence"><?= $email ?></div>
+                </subsection>
+            </section>
+        </div>
+
+        <div class="column-container height-auto">
             <div class="text-center">
+                <p class="title">Documents</p>
                 <p class="sentence">Review the following documents carefully</p>
             </div>
-            <table>
-                <tr>
-                    <th>Requirement</th>
-                    <th>View</th>
-                    <th>Status</th>
-                    <th>Review</th>
-                    <th>Message</th>
-                </tr>one
-                <?php 
-                    $requirements_names = array(
-                        'Barangay Clearance for business',
-                        'DTI Certificate of Registration',
-                        'On the Place of Business <img id="info" src="../../img/info.png" alt="">',
-                        'Community Tax Certificate',
-                        'Certificate of Zoning Compliance',
-                        'Business Inspection Clearance',
-                        'Valid Fire Safety Inspection Certificate/Official Receipt',
-                        'Sanitary Permit',
-                        'Environmental Compliance Clearance',
-                        'Latest 2x2 picture',
-                        'Tax Order of Payment',
-                        'Tax Order of Payment Official Receipt'
-                    );
-                    $message_array = array(
-                        'Incorrect/Outdated Information',
-                        'Insufficient Detail',
-                        'Incorrect Document',
-                        'Low Image Resolution',
-                        'Overexposure/Underexposure',
-                        'Misleading/Manipulated Visuals',
-                        'File Corruption',
-                        'Invalid Foneile Extension'
-                    );
-                    $count = 1;
-                    foreach($requirements_names as $fileName){
-                            $errorMsg = 'errorMsg_' . $count;
-                        echo '  <tr>
-                                    <td>'.$fileName.'</td>';
+            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+                <table>
+                    <tr>
+                        <th>Requirement</th>
+                        <th>View</th>
+                        <th>Status</th>
+                        <th>Review</th>
+                        <th>Message</th>
+                    </tr>
+                    <?php 
+                        $requirements_names = array(
+                            'Barangay Clearance for business',
+                            'DTI Certificate of Registration',
+                            'On the Place of Business <img id="info" src="../../img/info.svg" alt="">',
+                            'Community Tax Certificate',
+                            'Certificate of Zoning Compliance',
+                            'Business Inspection Clearance',
+                            'Valid Fire Safety Inspection Certificate/Official Receipt',
+                            'Sanitary Permit',
+                            'Environmental Compliance Clearance',
+                            'Latest 2x2 picture',
+                            'Tax Order of Payment'
+                        );
+                        $message_array = array(
+                            'Incorrect/Outdated Information',
+                            'Insufficient Detail',
+                            'Incorrect Document',
+                            'Low Image Resolution',
+                            'Overexposure/Underexposure',
+                            'Misleading/Manipulated Visuals',
+                            'File Corruption',
+                            'Invalid Foneile Extension'
+                        );
+                        $count = 1;
+                        foreach($requirements_names as $fileName){
+                                $errorMsg = 'errorMsg_' . $count;
+                            echo '  <tr>
+                                        <td>'.$fileName.'</td>';
 
-                        if(empty($requirements_fetch[$count-1])){
-                            echo '  <td></td>
-                                    <td></td>
-                                    <td></td>
-                                ';
-                        }else{
-                            echo    '<td><a class="view" target="_blank" href="../user/upload/'.$user_id.'/'.$requirements_fetch[$count-1].'">View</a></td>
-                                    <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
-                                    <td>
-                                    <select class="select_review" name="status_'.$count.'" id="status_'.$count.'">
-                                        <option class="uploaded" value="Uploaded"'.(($status_fetch[$count-1] === "Uploaded") ? "selected" : "" ).'>Uploaded</option>
-                                        <option class="pending" value="Pending"'.(($status_fetch[$count-1] === "Pending") ? "selected" : "" ).'>Pending</option>
-                                        <option class="denied" value="Denied"'.(($status_fetch[$count-1] === "Denied") ? "selected" : "" ).'>Denied</option>
-                                        <option class="approved" value="Approved"'.(($status_fetch[$count-1] === "Approved") ? "selected" : "" ).'>Approved</option>
-                                    </select>
-                                    </td>
-                                    <td>
-                                    <select class="denied_message hidden" id="denied_message_'.$count.'" name="denied_message_'.$count.'">
-                                    <option value="" disabled selected>Select Message...</option>';
-                                    foreach($message_array as $denied){
-                                        echo "<option value='$denied' " . ($message_fetch[$count-1] === $denied ? "selected" : "") . ">$denied</option>";
-                                    }
-                            echo    '</select>
-                                    <div class="error_msg">'.${$errorMsg}.'</div>
-                                    </td>';
-                               
-                            
+                            if(empty($requirements_fetch[$count-1])){
+                                echo '  <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    ';
+                            }else{
+                                echo    '<td><a class="view" target="_blank" href="../user/upload/'.$user_id.'/'.$requirements_fetch[$count-1].'">View</a></td>
+                                        <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
+                                        <td>
+                                        <select class="select_review" name="status_'.$count.'" id="status_'.$count.'">
+                                            <option class="uploaded" value="Uploaded"'.(($status_fetch[$count-1] === "Uploaded") ? "selected" : "" ).'>Uploaded</option>
+                                            <option class="pending" value="Pending"'.(($status_fetch[$count-1] === "Pending") ? "selected" : "" ).'>Pending</option>
+                                            <option class="denied" value="Denied"'.(($status_fetch[$count-1] === "Denied") ? "selected" : "" ).'>Denied</option>
+                                            <option class="approved" value="Approved"'.(($status_fetch[$count-1] === "Approved") ? "selected" : "" ).'>Approved</option>
+                                        </select>
+                                        </td>
+                                        <td>
+                                        <select class="denied_message hidden" id="denied_message_'.$count.'" name="denied_message_'.$count.'">
+                                        <option value="" disabled selected>Select Message...</option>';
+                                        foreach($message_array as $denied){
+                                            echo "<option value='$denied' " . ($message_fetch[$count-1] === $denied ? "selected" : "") . ">$denied</option>";
+                                        }
+                                echo    '</select>
+                                        <div class="error_msg">'.${$errorMsg}.'</div>
+                                        </td>';
+                                
+                                
+                            }
+                            echo '</tr>';
+                        $count++;
                         }
-                        echo '</tr>';
-                    $count++;
-                    }
-                ?>  
-            </table>
-            <input type="submit" value="Review">
-        </form>   
+                    ?>  
+                </table>
+                <input type="submit" value="Update">
+            </form> 
+        </div>  
+    </div>
     </main>
-</div>
 </body>
 </html>
