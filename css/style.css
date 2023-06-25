@@ -513,7 +513,11 @@ section subsection .action.delete {
 }
 
 section subsection .action.edit {
-    border: 2px solid rgb(0, 59, 179)
+    border: 2px solid rgb(0, 59, 179);
+}
+
+section subsection .action.approve {
+    border: 2px solid rgb(71, 159, 118);
 }
 
 section subsection .action img{
@@ -663,6 +667,10 @@ table#msme td:nth-child(6) img:hover{
     text-align: center;
 }
 
+.sentence-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
 /* For  responsive*/
 
 @media only screen and (max-width: 767px) {
