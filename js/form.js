@@ -1,61 +1,76 @@
 const error_msg = document.querySelectorAll('form .error_msg');
 const inputs = document.querySelectorAll('form input[type=email],form input[type=password], form input[type=text], form select,form input[type=file], #map');
 
-for (let i = 0; i < error_msg.length; i++) {
-  if(error_msg[i].textContent.trim().length > 0){
-    inputs[i].classList.add('error_input');
-  }
-}
+if(error_msg && inputs){
 
-for (let i = 0; i < inputs.length; i++) {
-  inputs[i].addEventListener('input', () => {
-    inputs[i].classList.remove('error_input');
-    error_msg[i].classList.add('hidden');
-  });  
-}
-// Form Error Alert
-const error_alert = document.querySelector('form .error-alert');
-if(error_alert){
-  if(error_alert.textContent.trim().length > 0){
-    error_alert.classList.remove('hidden');
+  error_msg.forEach((msg, i) => {
+    
+    if (msg.textContent.trim().length > 0) {
+      inputs[i].classList.add('error_input');
+    }
+  
+    inputs[i].addEventListener('input', () => {
+      inputs[i].classList.remove('error_input');
+      error_msg[i].classList.add('hidden');
+    });
+  });
+
+  // Form Error Alert
+  const error_alert = document.querySelector('form .error-alert');
+  if(error_alert){
+    if(error_alert.textContent.trim().length > 0){
+      error_alert.classList.remove('hidden');
+    };
   };
 };
   
-const select_review  = document.querySelectorAll('.select_review');
-const denied_message  = document.querySelectorAll('.denied_message');
+const review_selects = document.querySelectorAll('form table select.review');
+const denied_message = document.querySelectorAll('form table select.denied-message');
+const denied_error = document.querySelectorAll('form table div.denied-error');
 
-if(select_review && denied_message){
+if(review_selects && denied_message){
+  review_selects.forEach((select, index) => {
 
-  select_review.forEach((review, index )=> {
-    denied = denied_message[index];
-      if(review.value == "Uploaded"){
-        review.classList.add('uploaded');
-      }else if(review.value == "Pending"){
-        review.classList.add('pending');
-      }else if(review.value == "Denied"){
-        review.classList.add('denied');
-        denied.classList.remove('hidden');   
-      }else if(review.value == "Approved"){
-        review.classList.add('approved');
-      }
+    let denied_select = denied_message[index];
+    
+    if(select.value == "Uploaded"){
+      select.classList.add('uploaded');
+    }else if(select.value == "Pending"){
+      select.classList.add('pending');
+    }else if(select.value == "Denied"){
+      select.classList.add('denied');
+      denied_select.style.display = "block";
+    }else if(select.value == "Approved"){
+      select.classList.add('approved');
+    }
 
-      review.addEventListener('change', () => {
-        let selected = review.options[review.selectedIndex];
-        review.className = "select_review";
+      
 
-        denied = denied_message[index];
-        denied.className = "denied_message hidden";
+      select.addEventListener('change', () => {
 
-          if(selected.innerText == "Uploaded"){
-            review.classList.add('uploaded');
-          }else if(selected.innerText == "Pending"){
-            review.classList.add('pending');      
-          }else if(selected.innerText == "Denied"){
-            review.classList.add('denied');
-            denied.classList.remove('hidden');
-          }else if(selected.innerText == "Approved"){
-            review.classList.add('approved');   
-          }
+        let selectedOption = select.options[select.selectedIndex];
+        denied_select.removeAttribute('style');
+        select.className = "review";
+
+        denied_error[index].textContent = "";
+        select.classList.remove('error_input');
+
+        if(selectedOption.value == "Uploaded"){
+          select.classList.add('uploaded');
+        }else if(selectedOption.value == "Pending"){
+          select.classList.add('pending');
+        }else if(selectedOption.value == "Denied"){
+          select.classList.add('denied');
+          denied_select.style.display = "block";
+        }else if(selectedOption.value == "Approved"){
+          select.classList.add('approved');
+        }
       });
+  });
+
+  denied_error.forEach((message, index) => {
+    if (message.textContent.trim().length > 0) {
+      review_selects[index].classList.add('error_input');
+    }
   });
 };
