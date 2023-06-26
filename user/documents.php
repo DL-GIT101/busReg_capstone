@@ -212,8 +212,8 @@ function pushNullValues(&$array1, &$array2, &$array3) {
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/script.js" defer></script>
     <script src="../js/form.js" defer></script>
-    <script src="../js/modal.js" defer></script>
     <script src="../js/table.js" defer></script>
+    <script src="../js/modal.js" defer></script>
     <title>Upload Documents</title>
 </head>
 <body>
