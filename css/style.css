@@ -416,9 +416,34 @@ modal > .content.warning > .title {
     color: rgb(247, 163, 38);
 }
 
-modal > .content.warning button, modal > .content.warning a {
+modal > .content.warning button{
+    border: 1px solid rgb(247, 163, 38);
+    background-color: rgb(245, 245, 247);
+    color: rgb(247, 163, 38);
+}
+
+modal > .content.warning a {
     color: rgb(245, 245, 247);
     background-color: rgb(247, 163, 38);
+}
+
+modal > .content.gray {
+    border: 1px solid rgb(66,66,69)
+}
+
+modal > .content.gray > .title {
+    color: rgb(66,66,69)
+}
+
+modal > .content.gray button{
+    border: 1px solid rgb(66,66,69);
+    background-color: rgb(245, 245, 247);
+    color: rgb(66,66,69)
+}
+
+modal > .content.gray a {
+    color: rgb(245, 245, 247);
+    background-color: rgb(66,66,69)
 }
 
 modal .button-group {
