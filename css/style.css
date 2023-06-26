@@ -280,6 +280,34 @@ form .button-group .action.action.delete:hover{
     filter: brightness(0.8);
     cursor: pointer;
 }
+
+form table select.review{
+    color: rgb(245, 245, 247);
+}
+
+form table select.review option.uploaded, form table select.review.uploaded {
+    background-color: rgb(66,66,69);
+}
+
+form table select.review option.pending, form table select.review.pending {
+    background-color: rgb(247, 163, 38);
+}
+
+form table select.review option.denied, form table select.review.denied {
+    background-color: rgb(220, 53, 69);
+}
+
+form table select.review option.approved, form table select.review.approved {
+    background-color: rgb(25,135,84);
+}
+
+form table select.denied-message {
+    display: none;
+}
+
+form table div.denied-error {
+    color: rgb(220, 53, 69);
+}
 /* Modal */
 modal {
     position: fixed; 
