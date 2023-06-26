@@ -1,16 +1,23 @@
 <?php
 session_start();
 require_once "../../php/connection.php";
+require_once "../../php/functions.php";
+
+if(checkRole($_SESSION["role"]) !== "admin"){
+    header("location: ../../index.php");
+    exit;
+}
 
 if(isset($_GET['id'])){
     $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
 }else if(isset($_SESSION['user_id'])){
     $user_id = $_SESSION['user_id'];
 }else{
-    header("location: ../management.php");
+    header("location: msme.php");
+    exit;
 }
 
-$modal = "hidden";
+$modal_display = "hidden";
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
@@ -22,7 +29,7 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
         if($stmt->execute()){
             $result = $stmt->get_result();
 
-            if($result->num_rows == 1){
+            if($result->num_rows === 1){
                 $row = $result->fetch_array(MYSQLI_ASSOC);
 
                 $business_name = $row["business_name"];
@@ -32,9 +39,6 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                 $contact = $row['contact_number'];
                 $address = $row["address_1"]." ".$row["address_2"];
 
-            }else{
-                $profile = "hidden";
-                $none = "";
             }
         }else{
             echo "Oops! Something went wrong. Please try again later";
@@ -96,39 +100,39 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if($approvedReq === 12){
+    if($approvedReq === 11){
 
-        $sql = "INSERT INTO permit (user_id, status) VALUES (?,?)";
+        $sql4 = "INSERT INTO permit (user_id, status) VALUES (?,?)";
 
-        if($stmt = $mysqli->prepare($sql)){
+        if($stmt4 = $mysqli->prepare($sql4)){
             $stmt->bind_param("ss", $param_id, $param_Status);
 
             $param_id = $user_id;
             $param_Status = "Approved";
 
-            if($stmt->execute()){
-                $modal = "";
-                $status_modal = "success";
-                $title = "Permit has been Approved";
-                $message = "Status can now be seen";
-                $button = '<a href="review.php">OK</a>';
+            if($stmt4->execute()){
+                $modal_display = "";
+                $modal_status = "success";
+                $modal_title = "Permit has been Approved";
+                $modal_message = "Status can now be seen";
+                $modal_button = '<a href="review.php">OK</a>';
             }else{
-                $modal = "";
-                $status_modal = "fail";
-                $title = "Approving Permit Error";
-                $message = "Try again later";
-                $button = '<a href="review.php">OK</a>';
+                $modal_display = "";
+                $modal_status = "error";
+                $modal_title = "Approving Permit Error";
+                $modal_message = "Try again later";
+                $modal_button = '<a href="review.php">OK</a>';
             }
         }
 
+        $stmt4->close();
     }else{
-        $modal = "";
-        $status_modal = "fail";
-        $title = "Incomplete Documents";
-        $message = "All documents must be approved";
-        $button = '<button class="close">OK</button>';
+        $modal_display = "";
+        $modal_status = "error";
+        $modal_title = "Incomplete Documents";
+        $modal_message = "All documents must be approved";
+        $modal_button = '<button class="close">OK</button>';
     }
-    $stmt->close();
 }
 
 $mysqli->close();
@@ -144,100 +148,94 @@ $mysqli->close();
     <script src="../../js/script.js" defer></script>
     <script src="../../js/form.js" defer></script>
     <script src="../../js/modal.js" defer></script>
-    <script src="../../js/file_modal.js" defer></script>
+    <script src="../../js/profile.js" defer></script>
     <title>Approve</title>
 </head>
 <body>
-<p id="user_id" class="hidden"><?= $user_id ?></p>
-<modal class="<?= $modal ?>">
-        <div class="content <?= $status_modal ?>">
-            <p class="title"><?= $title ?></p>
-            <p class="sentence"><?= $message ?></p>
-            <?= $button ?>
-        </div>
-</modal>
 
-<modal id="approve_modal" class="hidden">
-        <div class="content success">
-            <p class="title">Approving Permit</p>
-            <p class="sentence">Once approved, the business permit will be granted based on the reviewed documents. Are you certain about this decision?</p>
-            <p class="sentence"></p>
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
-                <div id="btn_grp" class="flex align-self-center success">
-                    <input type="submit" value="Approve">
-                    <button>Cancel</button>
-                </div> 
-            </form>
-        </div> 
-</modal>
-
-    <nav>
-        <div id="nav_logo">
-                <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City BPLO - ADMIN</p>  
-        </div>
-        <div id="account">
-             <a href="../../php/logout.php">Logout</a>
-        </div>
-    </nav>
-
-<div class="flex">
-
-    <nav id="sidebar">
-        <ul>
-            <li ><img src="../../img/dashboard.png" alt=""><a href="../dashboard.php">Dashboard</a></li>
-            <li ><img src="../../img/register.png" alt=""><a href="../management/users.php">MSME Management</a></li>
-            <li class="current"><img src="../../img/list.png" alt=""><a href="msme.php">MSME Permit</a></li>
-            
-        </ul>
-    </nav>
-
-    <main class="flex-grow-1 flex-wrap content-center">
-
-    <div class="actions space-between">
-            <p id="page" class="title">Approve</p>
-            <p class="sentence"> User ID : <?= $user_id ?></p>
-            <div class="buttons">
-                <a href="review.php" class="back">Review</a>
-                
+    <modal class="<?= $modal_display ?>">
+        <div class="content <?= $modal_status ?>">
+            <p class="title"><?= $modal_title ?></p>
+            <p class="sentence"><?= $modal_message ?></p>
+            <div class="button-group">
+                <?= $modal_button ?>
             </div>
         </div>
+    </modal>
 
-        <content>
+    <nav>
+        <div class="logo">
+            <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
+        </div>
+        <img id="toggle" src="../../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <div class="button-group">
+            <ul>
+                <li><a href="../dashboard.php">Dashboard</a></li>
+                <li><a href="../management/users.php">Management</a></li>
+                <li class="current"><a href="msme.php">Permit</a></li>
+                <li><a href="../../php/logout.php">Logout</a></li>
+            </ul>
+            <ul id="subnav-links">
+                <li><a href="msme.php">List</a></li>
+                <li><a href="review.php">Review</a></li>
+                <li class="current"><a href="approve.php">Approve</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="subnav">
+        <div class="logo">
+            <img src="../../img/admin.svg" alt="Tarlac City Seal">
+            <p>Admin</p>  
+        </div>
+        <div class="button-group">
+            <ul>
+                <li><a href="msme.php">List</a></li>
+                <li><a href="review.php">Review</a></li>
+                <li class="current"><a href="approve.php">Approve</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
             <section>
-                <subsection class="space-around">
+                <subsection class="space-between">
                     <p class="sentence">Business Profile</p>
                     <div class="text-center">
                         <p class="title"><?= $business_name ?></p>
                         <p class="sentence"><?= $business_activity ?></p> 
-                        <p class="sentence"><?= $address ?></p>
                     </div>
+                    <p class="sentence text-center"><?= $address ?></p>
                 </subsection>
-                <subsection class="space-around">
+                <subsection class="space-between">
                 <p class="sentence">Business Owner</p> 
+                <p class="title text-center"><?= $name ?></p> 
                     <div class="text-center">
-                        <p class="title"><?= $name ?></p> 
                         <p class="sentence"><?= $gender ?></p> 
                         <p class="sentence"><?= $contact ?></p>
                     </div>
                 </subsection>
             </section>
-            <section class="content_50">
-                <subsection>
-                        <p class="title">Business Permit</p>
-                        <p class="p_container">As the admin, it is crucial to carefully consider the reviewed documents and their compliance with the necessary requirements. Once approved, the business permit will be granted, and it will signify that the reviewed documents have met the necessary criteria for permit issuance. Please ensure you have thoroughly assessed the documents and are confident in your decision to proceed with the approval.</p>
-                        <button id="approve_btn" class="approve">Approve</button>
-                </subsection>
+            <section class="map-container">
                 <subsection class="space-around">
-                    <p class="title">Approved Documents</p> 
+                    <p class="sentence-title">Approved Documents</p> 
                     <div class="info title approved"><?= $approvedReq ?>/12</div>
 
-                    <p class="title">Business Permit Status</p> 
-                    <div class="info title <?= strtolower($permit_status)?>" id="permit_status"><?= $permit_status ?></div>
+                    <p class="sentence-title">Business Permit Status</p> 
+                    <div class="info title" id="permit-status"><?= $permit_status ?></div>
+                </subsection>
+                <subsection>
+                        <p class="title">Business Permit</p>
+                        <p class="whole-paragraph">As the admin, it is crucial to carefully consider the reviewed documents and their compliance with the necessary requirements. Once approved, the business permit will be granted, and it will signify that the reviewed documents have met the necessary criteria for permit issuance. Please ensure you have thoroughly assessed the documents and are confident in your decision to proceed with the approval.</p>
+                        form
+                        <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                            <input type="submit" class="approve" value="Approve">
+                        </form>
                 </subsection>
             </section>
-        </content>
+        </div>
     </main>
-</div>
 </body>
 </html>
