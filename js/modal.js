@@ -134,6 +134,55 @@ if(delete_user){
   });
 };
 
+const file_status_img = document.querySelectorAll('table td .status img');
+const denied_messages = document.querySelectorAll('table td .message');
+
+if(file_status_img){
+
+  const messages = Array.from(denied_messages, div => div.textContent);
+
+  file_status_img.forEach((file, index) => {
+
+    denied_messages[index].textContent = "";
+
+    file.addEventListener('click', () => {
+
+      modal.className = "";
+
+      if(file.alt == "Approved"){
+        content.className = "content success";
+        sentence.innerHTML = '<p class="sentence">The document has been approved</p>';
+        title.innerText = "Approved";
+      }else if(file.alt == "Denied"){
+        content.className = "content error";
+        title.innerText = "Denied";
+
+        sentence.innerHTML = '<p class="sentence">The document has been denied <br>' + messages[index] +'</p>';
+        
+      }else if(file.alt == "Pending"){
+        content.className = "content warning";
+        title.innerText = "Pending";
+        sentence.innerHTML = '<p class="sentence">The document is being reviewed</p>';
+      }else{
+        content.className = "content gray";
+        title.innerText = "Uploaded";
+        sentence.innerHTML = '<p class="sentence">The document has been uploaded</p>';
+      }
+
+      let close_button = document.createElement('button');
+      close_button.textContent = 'Close';
+      close_button.className = 'close';
+    
+      button_grp.innerHTML = '';
+      button_grp.appendChild(close_button);
+
+      close_button.addEventListener('click', () => {
+          modal.className = "hidden";
+      });
+    });
+  });
+};
+
 let modal_close_btn = document.querySelector('modal .button-group .close');
 
 if(modal_close_btn){
