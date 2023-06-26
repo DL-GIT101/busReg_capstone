@@ -227,8 +227,8 @@ function pushNullValues(&$array1, &$array2, &$array3) {
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/script.js" defer></script>
     <script src="../../js/form.js" defer></script>
-    <script src="../../js/modal.js" defer></script>
     <script src="../../js/table.js" defer></script>
+    <script src="../../js/modal.js" defer></script>
     <title>MSME Documents</title>
 </head>
 <body>
@@ -327,7 +327,7 @@ function pushNullValues(&$array1, &$array2, &$array3) {
 
                                     <td>
                                         <div class="status">'.$status_fetch[$count-1].'</div>
-                                        <div class="message">'.$message_fetch[$count-1].'</div>
+                                        <div class="message">'.$denied_fetch[$count-1].'</div>
                                     </td>';
                         }
                                 echo '<td>
