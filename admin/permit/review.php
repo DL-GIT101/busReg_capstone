@@ -1,4 +1,4 @@
-<?php ini_set('display_errors', 1);
+<?php 
 session_start();
 require_once "../../php/connection.php";
 require_once "../../php/functions.php";
@@ -133,9 +133,10 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
     
     
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $errorMsg = 'errorMsg_' . $i;
-        $errorCount = 0;
-        $length = 12;
+
+        $errorMsg = 'errorMsg_';
+        $errorCount = "no";
+        $length = 11;
 
         $status = array();
         $denied_msg = array();
@@ -143,18 +144,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         for($i = 1; $i <= $length; $i++){
             $errorMsg = 'errorMsg_' . $i;
 
-           $status_review = validate($_POST['status_'.$i]);
-           if(!empty($status_review)){
+           if(isset($_POST['status_'.$i])){
+
+                $status_review = validate($_POST['status_'.$i]);
 
                 if($status_review === "Denied"){
 
                     $message_review = validate($_POST['denied_message_'.$i]);
+
                     if(!empty($message_review)){
+
                         array_push($status, $status_review);
                         array_push($denied_msg, $message_review);
+
                     }else{
                         $$errorMsg = "Denied Document must have a message";
-                        $errorCount++;
+                        $errorCount = "yes";
                     }
 
                 }else{
@@ -168,7 +173,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
            }
         }
 
-    if($errorCount === 0){
+    if($errorCount === "no"){
+
         $serialized_status = serialize($status);
         $serialized_denied = serialize($denied_msg);
 
@@ -182,19 +188,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_msg = $serialized_denied;
 
             if($stmt->execute()){
-                $modal = "";
-                $status_modal = "success";
-                $title = "Successful";
-                $message = "All changes has been updated";
-                $button = '<a href="review.php">OK</a>';
+                $modal_display = "";
+                $modal_status = "success";
+                $modal_title = "Successful";
+                $modal_message = "All changes has been updated";
+                $modal_button = '<a href="review.php">OK</a>';
             }else{
-                $modal = "";
-                $status_modal = "fail";
-                $title = "Updating Error";
-                $message = "Try again later";
-                $button = '<a href="../manangement.php">OK</a>';
+                $modal_display = "";
+                $modal_status = "error";
+                $modal_title = "Updating Error";
+                $modal_message = "Try again later";
+                $modal_button = '<a href="msme.php">OK</a>';
             }
-            $stmt->close();ini_set('display_errors', 1);
+            $stmt->close();
         }
     }
 }
@@ -361,44 +367,49 @@ $mysqli->close();
                             'Overexposure/Underexposure',
                             'Misleading/Manipulated Visuals',
                             'File Corruption',
-                            'Invalid Foneile Extension'
+                            'Invalid File Extension'
                         );
-                        $count = 1;
-                        foreach($requirements_names as $fileName){
-                                $errorMsg = 'errorMsg_' . $count;
+                        foreach($requirements_names as $index => $fileName){
+                                $errorMsg = 'errorMsg_' . $index+1;
                             echo '  <tr>
                                         <td>'.$fileName.'</td>';
 
-                            if(empty($requirements_fetch[$count-1])){
+                            if(empty($requirements_fetch[$index])){
                                 echo '  <td></td>
                                         <td></td>
                                         <td></td>
                                     ';
                             }else{
-                                echo    '<td><a class="view" target="_blank" href="../user/upload/'.$user_id.'/'.$requirements_fetch[$count-1].'">View</a></td>
-                                        <td><div class="info '.strtolower($status_fetch[$count-1]) .'">'.$status_fetch[$count-1].'</div></td>
-                                        <td>
-                                        <select class="select_review" name="status_'.$count.'" id="status_'.$count.'">
-                                            <option class="uploaded" value="Uploaded"'.(($status_fetch[$count-1] === "Uploaded") ? "selected" : "" ).'>Uploaded</option>
-                                            <option class="pending" value="Pending"'.(($status_fetch[$count-1] === "Pending") ? "selected" : "" ).'>Pending</option>
-                                            <option class="denied" value="Denied"'.(($status_fetch[$count-1] === "Denied") ? "selected" : "" ).'>Denied</option>
-                                            <option class="approved" value="Approved"'.(($status_fetch[$count-1] === "Approved") ? "selected" : "" ).'>Approved</option>
-                                        </select>
+                                echo    '<td>
+                                            <a class="view" target="_blank" href="../../user/upload/'.$user_id.'/'.$requirements_fetch[$index].'"><img src="../../img/view.svg" alt="View"></a>
                                         </td>
+
                                         <td>
-                                        <select class="denied_message hidden" id="denied_message_'.$count.'" name="denied_message_'.$count.'">
+                                            <div class="status">'.$status_fetch[$index].'</div>
+                                        </td>
+
+                                        <td>
+                                            <select class="review" name="status_'.($index+1).'" id="status_'.($index+1).'">
+                                                <option class="uploaded" value="Uploaded"'.(($status_fetch[$index] === "Uploaded") ? "selected" : "" ).'>Uploaded</option>
+                                                <option class="pending" value="Pending"'.(($status_fetch[$index] === "Pending") ? "selected" : "" ).'>Pending</option>
+                                                <option class="denied" value="Denied"'.(($status_fetch[$index] === "Denied") ? "selected" : "" ).'>Denied</option>
+                                                <option class="approved" value="Approved"'.(($status_fetch[$index] === "Approved") ? "selected" : "" ).'>Approved</option>
+                                            </select>
+                                        </td>
+
+                                        <td>
+                                        <select class="denied-message" id="denied_message_'.($index+1).'" name="denied_message_'.($index+1).'">
                                         <option value="" disabled selected>Select Message...</option>';
                                         foreach($message_array as $denied){
-                                            echo "<option value='$denied' " . ($message_fetch[$count-1] === $denied ? "selected" : "") . ">$denied</option>";
+                                            echo "<option value='$denied' " . ($message_fetch[$index] === $denied ? "selected" : "") . ">$denied</option>";
                                         }
                                 echo    '</select>
-                                        <div class="error_msg">'.${$errorMsg}.'</div>
+                                        <div class="denied-error">'.${$errorMsg}.'</div>
                                         </td>';
                                 
                                 
                             }
                             echo '</tr>';
-                        $count++;
                         }
                     ?>  
                 </table>
