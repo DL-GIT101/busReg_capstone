@@ -2,7 +2,6 @@
 session_start();
 require_once "php/functions.php";
 
-
 if(checkRole($_SESSION["role"]) === "user") {
     $links = '
                 <li><a href="user/dashboard.php">Dashboard</a></li>
@@ -27,6 +26,8 @@ if(checkRole($_SESSION["role"]) === "user") {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="icon" href="img/tarlac-seal.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/style.css">
     <!-- OpenStreetMap Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
