@@ -14,15 +14,21 @@ if(checkRole($_SESSION["role"]) === "user") {
 $modal_display = "hidden";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $errors = [];
 // email
-$email = validate($_POST["email"]);
+    $email = validate(($_POST["email"]));
+
     if(empty($email)) {
-            $email_err = "Enter Email";
+        $errors["email"] = "Please enter your email"; 
     } elseif(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $email_err = "Invalid Email";
+        $errors["email"] = "Invalid Email"; 
     } else {
+
         $sql = "SELECT email FROM users WHERE email = ?";
+        
         if($stmt = $mysqli->prepare($sql)) {
+
             $stmt->bind_param("s", $param_email);
             $param_email = validate($_POST["email"]);
 
@@ -30,13 +36,18 @@ $email = validate($_POST["email"]);
                 $stmt->store_result();
 
                     if($stmt->num_rows() == 1) {
-                        $email_err = "Email was already taken";
+                        $errors["email"] = "Email was already taken";
                     } else {
                         $email = validate($_POST["email"]);
                     }
 
             } else {
-                echo "Error Getting Email";
+                $modal_title = "Registration Error";
+                $modal_message = "Try again later";
+                $modal_button = '<a href="../index.php">Login</a>';
+
+                $modal_status = "error";
+                $modal_display = "";
             }
         $stmt->close();
         }
@@ -44,55 +55,60 @@ $email = validate($_POST["email"]);
 
 //password
 $password = validate($_POST["password"]);
+
     if(empty($password)) {
-        $pword_error = "Enter Password";
+        $errors["password"] = "Enter Password";
     } else {
         if(!preg_match('@[A-Z]@', $password)) {
-            $pword_error .= "Password must include at least one uppercase letter <br>";
+            $errors["password"] .= "Password must include at least one uppercase letter <br>";
         }
         if(!preg_match('@[a-z]@', $password)) {
-            $pword_error .= "Password must include at least one lowercase letter  <br>";
+            $errors["password"] .= "Password must include at least one lowercase letter  <br>";
         }
         if(!preg_match('@[0-9]@', $password)) {
-            $pword_error .= "Password must include at least one number  <br>";
+            $errors["password"] .= "Password must include at least one number  <br>";
         }
         if(!preg_match('@[^\w]@', $password)) {
-            $pword_error .= "Password must include at least one special character  <br>";
+            $errors["password"] .= "Password must include at least one special character  <br>";
         }
         if(strlen($password)<8) {
-            $pword_error .= "Password must be at least 8 characters in length  <br>";
+            $errors["password"] .= "Password must be at least 8 characters in length  <br>";
         }
-        if(empty($pword_error)) {
+        if(empty($errors["password"])) {
             $pwordHash = password_hash($password, PASSWORD_DEFAULT);
         }
     }
 //confirm password
 $cPassword = validate($_POST["cPassword"]);
     if(empty($cPassword)) {
-        $cPassword_error = "Enter confirm password";
+        $errors["confirmPassword"] = "Enter confirm password";
     } else {
         if(!empty($pword_error)) {
-            $cPassword_error = "Invalid Password";
+            $errors["confirmPassword"] = "Invalid Password";
         } else {
             if($password!==$cPassword){ 
-                $cPassword_error = "Password and Confirm Password do not match";
+                $errors["confirmPassword"] = "Password and Confirm Password do not match";
             }
         }
     }
 
 //ID  ex. US20230503001
-if(empty($email_err) && empty($pword_error) && empty($cPassword_error)) {
+if(empty($errors)) {
     $sql = "SELECT id as max_id FROM users ORDER BY id DESC LIMIT 1";
 
     if($stmt = $mysqli->prepare($sql)) {
+
         if($stmt->execute()){  
+
             $stmt->bind_result($max_id);
 
             if($stmt->fetch()) {
                 $last_id = $max_id;
             }
         }
+
     $stmt->close();
+
     }
 
     if($last_id) {
@@ -112,9 +128,11 @@ if(empty($email_err) && empty($pword_error) && empty($cPassword_error)) {
 }    
 
 if(!empty($id)) {
+
     $sql = "INSERT INTO users (id, email, password) VALUES (?, ?, ?)";
 
     if($stmt = $mysqli->prepare($sql)){
+
     $stmt->bind_param("sss",$param_id, $param_email, $param_pword);
 
             $param_id = $id;
@@ -137,10 +155,12 @@ if(!empty($id)) {
                 $modal_message = "Try again later <br>";
                 $modal_button = '<a href="../index.php">OK</a>';
 
-                $modal_status = "fail";
+                $modal_status = "error";
                 $modal_display = "";
             }
+
         $stmt->close();
+
         }
     }
 }
@@ -197,15 +217,15 @@ $mysqli->close();
             
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" placeholder="Email Address" value=<?= $email; ?>>
-                <div class="error_msg"><?= $email_err; ?></div>
+                <div class="error-msg"><?= $errors["email"]; ?></div>
 
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Password" value=<?= $password; ?>>
-                <div class="error_msg"><?= $pword_error; ?></div>
+                <div class="error-msg"><?= $errors["password"]; ?></div>
 
                 <label for="cPassword">Confirm Password</label>
                 <input type="password" id="cPassword" name="cPassword" placeholder="Confirm Password" value=<?= $cPassword; ?>>
-                <div class="error_msg"><?= $cPassword_error; ?></div>
+                <div class="error-msg"><?= $errors["confirmPassword"]; ?></div>
 
                 <input type="submit" value="Sign up">
                 <a href="../login.php">Have an account? Click Here</a>
