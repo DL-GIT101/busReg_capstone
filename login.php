@@ -18,13 +18,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
     $errors = [];
     
 //email
-    if(empty(validate($_POST["email"]))) {
+    $email = validate($_POST["email"]);
+    if(empty($email)) {
         $errors["email"] = "Please enter your email"; 
     } else {
         $email = validate($_POST["email"]);
     }
 //password
-    if(empty(validate($_POST["password"]))) {
+    $password = validate($_POST["password"]);
+    if(empty($password)) {
         $errors["password"] = "Please enter your password";
     }
     else {
