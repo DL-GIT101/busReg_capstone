@@ -46,6 +46,20 @@ body {
 .sentence {
     color: rgb(66,66,69);
 }
+
+.text-center {
+    text-align: center;
+}
+
+.sentence-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+p.whole-paragraph {
+    text-align: justify;
+    text-indent: 2rem;
+}
 /* map */
 map {
     height: 75vh;
@@ -185,8 +199,8 @@ form input, form select, .pre-input{
 }
 
 form input:focus, form select:focus {
-    outline: 1px solid rgb(155, 188, 255);
-    border: 1px solid rgb(155, 188, 255);
+    outline: 1px solid rgb(66,66,69);
+    border: 1px solid rgb(66,66,69);
 }
 
 .pre-input {
@@ -221,7 +235,7 @@ form a {
     align-self: center;
 }
 
-form .error_msg {
+form .error-msg {
     color: rgb(220, 53, 69);
     padding-left: 10px;
 }
@@ -234,7 +248,7 @@ form .error-alert {
     padding: 5px 10px;
 }
 
-.error_input {
+form .error-input {
     border: 1px solid rgb(220, 53, 69);
     outline: 1px solid rgb(220, 53, 69);
 }
@@ -707,19 +721,6 @@ table#msme td:nth-child(6) img:hover{
     display: none;
 }
 
-.text-center {
-    text-align: center;
-}
-
-.sentence-title {
-    font-weight: bold;
-    font-size: 1.1rem;
-}
-
-p.whole-paragraph {
-    text-align: justify;
-    text-indent: 2rem;
-}
 /* For  responsive*/
 
 @media only screen and (max-width: 767px) {
