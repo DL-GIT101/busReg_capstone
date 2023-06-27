@@ -1,4 +1,4 @@
-const error_msg = document.querySelectorAll('form .error_msg');
+const error_msg = document.querySelectorAll('form .error-msg');
 const inputs = document.querySelectorAll('form input[type=email],form input[type=password], form input[type=text], form select,form input[type=file], #map');
 
 if(error_msg && inputs){
@@ -6,11 +6,11 @@ if(error_msg && inputs){
   error_msg.forEach((msg, i) => {
     
     if (msg.textContent.trim().length > 0) {
-      inputs[i].classList.add('error_input');
+      inputs[i].classList.add('error-input');
     }
   
     inputs[i].addEventListener('input', () => {
-      inputs[i].classList.remove('error_input');
+      inputs[i].classList.remove('error-input');
       error_msg[i].classList.add('hidden');
     });
   });
