@@ -3,7 +3,6 @@ session_start();
 
 require_once "../php/connection.php";
 require_once "../php/functions.php";
-require_once "../php/checkPermit.php";
 
 if(checkRole($_SESSION["role"]) !== "user"){
     header("location: ../index.php");
@@ -13,12 +12,15 @@ if(checkRole($_SESSION["role"]) !== "user"){
 $modal_display = "hidden";
 
 $sql = "SELECT * FROM user_profile WHERE user_id = ?";
+
 if($stmt = $mysqli->prepare($sql)){
+
     $stmt->bind_param("s",$param_id);
 
     $param_id = validate($_SESSION['id']);
 
     if($stmt->execute()){ 
+
         $result = $stmt->get_result();
 
             if($result->num_rows === 1){
@@ -48,30 +50,34 @@ if($stmt = $mysqli->prepare($sql)){
             }else {
                 $submit_btn = "Create Profile";
                 $modal_display = "";
-                $modal_status = "";
+                $modal_status = "gray";
                 $modal_title = "Create Profile";
                 $modal_message = "Please create your profile before accessing our services";
                 $modal_button = '<button class="close">Close</button>';
             }
-        }else{
+
+        }else {
             $modal_display = "";
-            $modal_status = "fail";
+            $modal_status = "error";
             $modal_title = "Profile Information Error";
             $modal_message = "Profile cannot be retrieve";
             $modal_button = '<a href="../index.php">OK</a>';
         }
+
     $stmt->close();
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if(checkPermit($_SESSION['id']) !== "Approved"){
-        $modal_display = "hidden";
+
+    if(checkPermit($_SESSION['id']) === "None"){
+
+        $errors = [];
         //FIRST NAME
         $fname = validate($_POST["fname"]);
         if(empty($fname)){
-            $fname_err = "Enter First Name";
+            $errors["fname"] = "Enter First Name";
         } elseif(!preg_match("/^[a-zA-Z- ]*$/", $fname)){
-            $fname_err = "Only Letters and Spaces are allowed";
+            $errors["fname"] = "Only Letters and Spaces are allowed";
         } else{
               $fname = ucwords(strtolower($fname));
         }
@@ -79,19 +85,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $mname = validate($_POST["mname"]);
         if(!empty($mname)){
             if(!preg_match("/^[a-zA-Z- ]*$/", $mname)){
-                $mname_err = "Only Letters and Spaces are allowed";
+                $errors["mname"] = "Only Letters and Spaces are allowed";
             }else{
                 $mname = ucwords(strtolower($mname));
             }
         }else{
-            $mname = '';
+            $mname = null;
         }
         //LAST NAME
         $lname = validate($_POST["lname"]);
         if(empty($lname)){
-            $lname_err = "Enter Suffix";
+            $errors["lname"] = "Enter Suffix";
         } elseif(!preg_match("/^[a-zA-Z- ]*$/", $lname)){
-            $lname_err = "Only Letters and Spaces are allowed";
+            $errors["lname"] = "Only Letters and Spaces are allowed";
         } else{
               $lname = ucwords(strtolower($lname));
         }
@@ -99,24 +105,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $suffix = validate($_POST["suffix"]);
         if(!empty($suffix)){
             if(!preg_match("/^[a-zA-Z]*$/", $suffix)){
-                $suffix_err = "Only Letters are allowed";
+                $errors["suffix"] = "Only Letters are allowed";
             }else{
                 $suffix = ucwords(strtolower($suffix));
             }
         }else{
-            $suffix = '';
+            $suffix = null;
         }
         //gender
         $gender = validate($_POST["gender"]);
         if(empty($gender)){
-            $gender_err = "Select Gender";
+            $errors["gender"] = "Select Gender";
         }
         //business name
         $bus_name = validate($_POST["bus_name"]);
         if(empty($bus_name)){
-            $bus_name_err = "Enter Business Name";
+            $errors["bus_name"] = "Enter Business Name";
         }elseif(!preg_match("/^[a-zA-Z0-9&*@\\-!#()%+?\"\/~\s]*$/", $bus_name)){
-            $bus_name_err = "Only letters, numbers, and special characters are allowed";
+            $errors["bus_name"] = "Only letters, numbers, and special characters are allowed";
         }else{
             $bus_name = ucwords(strtolower($bus_name));
         }
@@ -124,47 +130,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         //activity
         $activity = validate($_POST["activity"]);
         if(empty($activity)){
-            $activity_err = "Enter Business Activity";
+            $errors["activity"] = "Enter Business Activity";
         } elseif(!preg_match("/^[a-zA-Z- ]*$/", $activity)){
-            $activity_err = "Only Letters and Spaces are allowed";
+            $errors["activity"] = "Only Letters and Spaces are allowed";
         }else{
             $activity = ucwords(strtolower($activity));
         }
         // contact number
         $contact = validate($_POST['contact']);
         if(empty($contact)){
-            $contact_err = "Enter Contact Number";
+            $errors["contact"] = "Enter Contact Number";
         } elseif(!preg_match('/^[0-9]{10}$/',$contact)){
-            $contact_err = "Only Numbers are allowed";
+            $errors["contact"] = "Only Numbers are allowed";
         }
         // address one
         $address_1 = $_POST['address_1'];
         if(empty($address_1)){
-            $address_1_err = "Enter Address";
+            $errors["address_1"] = "Enter Address";
         }elseif(!preg_match("/^[a-zA-Z 0-9&*@#().\/~-]*$/", $address_1)){
-            $address_1_err = "Invalid Address";
+            $errors["address_1"] = "Invalid Address";
         } else{
             $address_1 = ucwords(strtolower($address_1));
         }
         //barangay
         $address_2 = validate($_POST["address_2"]);
         if(empty($address_2)){
-            $address_2_err = "Select Barangay";
+            $errors["address_2"]  = "Select Barangay";
         }
         //location
         $latitude = validate($_POST["latitude"]);
         $longitude = validate($_POST["longitude"]);
         if(empty($latitude) || empty($longitude)){
-            $latlang_err = "Pin the business location";
+            $errors["location"]  = "Pin the business location";
         }
 
     //insert to database
-    if(empty($fname_err) && empty($mname_err) && empty($lname_err) && empty($suffix_err) && empty($gender_err) && empty($bus_name_err) && empty($logo_err) && empty($activity_err) &&empty($contact_err) && empty($address_1_err) && empty($address_2_err) && empty($latlang_err)){ 
+    if(empty($errors)){ 
 
         if($submit_btn === "Update Profile"){
-            $sql = "UPDATE user_profile SET first_name = ?, middle_name = ?, last_name = ?, suffix = ?, gender = ?, business_name = ?, logo = ?, activity = ?, contact_number = ?, address_1 = ?, address_2 = ?, latitude = ?, longitude = ? WHERE user_id = ?";
+            $sql = "UPDATE BusinessProfile SET first_name = ?, middle_name = ?, last_name = ?, suffix = ?, gender = ?, business_name = ?, logo = ?, activity = ?, contact_number = ?, address_1 = ?, address_2 = ?, latitude = ?, longitude = ? WHERE user_id = ?";
         }else {
-            $sql = "INSERT INTO user_profile (user_id, first_name, middle_name, last_name, suffix, gender, business_name, logo, activity, contact_number, address_1, address_2, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO BusinessProfile (user_id, first_name, middle_name, last_name, suffix, gender, business_name, logo, activity, contact_number, address_1, address_2, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         }
 
        if($stmt = $mysqli->prepare($sql)){
@@ -207,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if($fileSize > 2097152){
 
-                $logo_err = "File size should be 2MB or less";
+                $errors["logo"]  = "File size should be 2MB or less";
 
             }else{
 
@@ -222,6 +228,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if($stmt->execute()){
                             $modal_display = "";
                             $modal_status = "success";
+
                             if($submit_btn === "Update Profile"){
                                 $modal_title = "Profile Information Updated";
                                 $message = "Your Profile has been updated <br>";
@@ -229,46 +236,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 $modal_title = "Profile Creation Success";
                                 $modal_message = "You can now view your profile and use our services  <br>";
                             }
+
                             $modal_message .= "You can view your profile now";
                             $modal_button = '<a href="dashboard.php">Go to Dashboard</a>';
                         } else{
                             $modal_display = "";
-                            $modal_status = "fail";
+                            $modal_status = "error";
                             $modal_title = "Profile Information Error";
                             $modal_message = "Try again later";
                             $modal_button = '<a href="../index.php">OK</a>';
                         }
                 }else{
-                    $logo_err = "Error uploading" . $_FILES['logo']['error'];
+                    $errors["logo"] = "Error uploading " . $_FILES['logo']['error'];
                 }
             }
 
         }else {
-            $logo_err = "Only jpg, jpeg, png, and svg are allowed";
+            $errors["logo"] = "Only jpg, jpeg, png, and svg are allowed";
         }
  
         }else{
+
             if($logo == null){
                 $logo = null;
             }else{
                 $logo = basename($logo);
             }
+
            $param_logo = $logo;  
+
             if($stmt->execute()){
+
                 $modal_display = "";
-                        $modal_status = "success";
-                        if($submit_btn === "Update Profile"){
-                            $modal_title = "Profile Information Updated";
-                            $modal_message = "Your Profile has been updated <br>";
-                        }else{
-                            $modal_title = "Profile Creation Success";
-                            $modal_message = "You can now view your profile and use our services  <br>";
-                        }
-                        $modal_message .= "You can view your profile now";
-                        $modal_button = '<a href="dashboard.php">Go to Dashboard</a>';
+                $modal_status = "success";
+
+                if($submit_btn === "Update Profile"){
+                    $modal_title = "Profile Information Updated";
+                    $modal_message = "Your Profile has been updated <br>";
+                }else{
+                    $modal_title = "Profile Creation Success";
+                    $modal_message = "You can now view your profile and use our services  <br>";
+                }
+                $modal_message .= "You can view your profile now";
+                $modal_button = '<a href="dashboard.php">Go to Dashboard</a>';
+
             } else{
                 $modal_display = "";
-                $modal_status = "fail";
+                $modal_status = "error";
                 $modal_title = "Profile Information Error";
                 $modal_message = "Try again later";
                 $modal_button = '<a href="../index.php">OK</a>';
@@ -276,12 +290,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           }
            
         }
+
         $stmt->close();
     } 
 
     }else{
         $modal_display = "";
-        $modal_status = "success";
+        $modal_status = "warning";
         $modal_title = "Profile cannot be updated";
         $modal_message = "The permit has already been approved";
         $modal_button = '<a href="dashboard.php">OK</a>';
@@ -297,7 +312,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <link rel="shortcut icon" href="../img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="icon" href="img/tarlac-seal.ico" type="image/x-icon">
     <link rel="stylesheet" href="../css/style.css">
     <!-- OpenStreetMap Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
@@ -312,6 +328,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="../js/map.js" defer></script>
     <script src="../js/pinLocation.js" defer></script>
     <script src="../js/modal.js" defer></script>
+    <title>Edit Profile</title>
 </head>
 <body>
 
@@ -346,7 +363,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <p class="sentence">Enter your informations to make a profile</p>
             </div>
 
-            <form class="long-form" autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
+            <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
             <section class="height-auto">
                 <!--Owner -->
                 <p class="title text-center">Owner</p>
@@ -355,13 +372,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="input-group">
                         <label for="fname">First Name</label>
                         <input type="text" id="fname" name="fname" placeholder="First Name" value="<?= $fname; ?>">
-                        <div class="error_msg"><?= $fname_err; ?></div>
+                        <div class="error-msg"><?= $errors["fname"]; ?></div>
                     </div>
 
                     <div class="input-group">
                         <label for="lname">Surname</label>
                         <input type="text" id="lname" name="lname" placeholder="Surname" value="<?= $lname; ?>">
-                        <div class="error_msg"><?= $lname_err; ?></div>
+                        <div class="error-msg"><?= $errors["lname"]; ?></div>
                     </div>
                 </div>
 
@@ -370,13 +387,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="input-group">
                         <label for="mname">Middle Name<span>(Optional)</span></label>
                         <input type="text" id="mname" name="mname" placeholder="Middle Name" value="<?= $mname; ?>">
-                        <div class="error_msg"><?= $mname_err; ?></div>
+                        <div class="error-msg"><?= $errors["mname"]; ?></div>
                     </div>
 
                     <div class="input-group">
                         <label for="suffix">Suffix<span>(Optional)</span></label>
                         <input type="text" id="suffix" name="suffix" placeholder="Suffix" value="<?= $suffix; ?>">
-                        <div class="error_msg"><?= $suffix_err; ?></div>
+                        <div class="error-msg"><?= $errors["suffix"]; ?></div>
                     </div>
                 </div>
 
@@ -388,7 +405,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <option value="Male" <?= $gender === "Male" ? "selected" : "" ?>>Male</option>
                             <option value="Female" <?= $gender === "Female" ? "selected" : "" ?>>Female</option>
                         </select>
-                        <div class="error_msg"><?= $gender_err; ?></div>
+                        <div class="error-msg"><?= $errors["gender"]; ?></div>
                     </div>
                 </div>
 
@@ -399,13 +416,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="input-group">
                     <label for="bus_name">Name</label>
                     <input type="text" id="bus_name" name="bus_name" placeholder="Business Name" value="<?= $bus_name; ?>">
-                    <div class="error_msg"><?= $bus_name_err; ?></div>
+                    <div class="error-msg"><?= $errors["bus_name"]; ?></div>
                 </div>
 
                 <div class="input-group">
                     <label for="logo">Logo<span>(Optional)</span></label>
                     <input type="file" id="logo" name="logo">
-                    <div class="error_msg"><?= $logo_err; ?></div>
+                    <div class="error-msg"><?= $errors["logo"]; ?></div>
                 </div>
             </div>
 
@@ -414,7 +431,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="input-group">
                     <label for="activity">Activity</label>
                     <input type="text" id="activity" name="activity" placeholder="Business Activity" value="<?= $activity; ?>">
-                    <div class="error_msg"><?= $activity_err; ?></div>
+                    <div class="error-msg"><?= $errors["activity"]; ?></div>
                 </div>
 
                 <div class="input-group">
@@ -423,7 +440,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="pre-input">+63</div>
                         <input class="flex-grow-1" type="text" id="contact" name="contact" placeholder="Contact Number" maxlength="10" value="<?= $contact; ?>">
                     </div>
-                    <div class="error_msg"><?= $contact_err; ?></div>
+                    <div class="error-msg"><?= $errors["contact"]; ?></div>
                 </div>
             </div>
 
@@ -432,7 +449,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="input-group">
                     <label for="address_1">House/Unit No./Building/Street</label>
                     <input type="text" id="address_1" name="address_1" placeholder="House No./Unit No./Building/Street" value="<?= $address_1; ?>">
-                    <div class="error_msg"><?= $address_1_err; ?></div>
+                    <div class="error-msg"><?= $errors["address_1"]; ?></div>
                 </div>
 
                 <div class="input-group">
@@ -459,7 +476,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 }
                             ?>
                         </select>
-                        <div class="error_msg"><?= $address_2_err; ?></div>
+                        <div class="error-msg"><?= $errors["address_2"]; ?></div>
                 </div>
             </div>
         
@@ -471,7 +488,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <map id="map"></map>
                 <input type="text" id="latitude" name="latitude" value="<?= $latitude; ?>" hidden> 
                 <input type="text" id="longitude" name="longitude" value="<?= $longitude; ?>" hidden>
-                <div class="error_msg"><?= $latlang_err; ?></div>
+                <div class="error-msg"><?= $errors["location"]; ?></div>
             <input type="submit" value="<?= $submit_btn; ?>">
         </section>
         
