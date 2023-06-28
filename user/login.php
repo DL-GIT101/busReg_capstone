@@ -3,10 +3,10 @@ session_start();
 require_once "php/connection.php";
 require_once "php/functions.php";
 
-if(checkRole($_SESSION["role"]) === "user") {
+if($_SESSION["role"] === "user") {
     header("location: user/dashboard.php");
     exit;
-}elseif(checkRole($_SESSION["role"]) === "admin") {
+}elseif($_SESSION["role"] === "admin") {
     header("location: admin/dashboard.php");
     exit;
 }
@@ -35,7 +35,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if(empty($errors)) {
 
-        $sql = "SELECT id, email, password FROM users WHERE email = ?";
+        $sql = "SELECT UserID, Email, Password FROM User WHERE Email = ?";
 
         if($stmt = $mysqli->prepare($sql)){
 
@@ -57,7 +57,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             $_SESSION["id"] = $id;
 
-                            if($_SESSION["id"] === "ADMIN"){
+                            if($_SESSION["id"] === "A-2023-000-000"){
 
                                 $_SESSION["role"] = "admin";
                                 header("location: admin/dashboard.php");
