@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 $modal_title = "Registration Error";
                 $modal_message = "Try again later";
-                $modal_button = '<a href="../index.php">Login</a>';
+                $modal_button = '<a href="../index.php">OK</a>';
 
                 $modal_status = "error";
                 $modal_display = "";
@@ -134,24 +134,23 @@ if(empty($errors)) {
 
 if(!empty($id)) {
 
-    $sql = "INSERT INTO User (UserID, Email, Password) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO User (UserID, Email, Password, Role) VALUES (?, ?, ?, ?)";
 
     if($stmt = $mysqli->prepare($sql)){
 
-    $stmt->bind_param("sss",$param_id, $param_email, $param_pword);
+    $stmt->bind_param("ssss",$param_id, $param_email, $param_pword,$param_role);
 
             $param_id = $id;
             $param_email = $email;
             $param_pword = password_hash($password, PASSWORD_DEFAULT);
+            $param_role = "Owner";
 
             if($stmt->execute()) {
-                $directory = 'upload/'. $id;
-                mkdir($directory, 0777, true);
 
                 $modal_title = "Registration Successful";
                 $modal_message = "Your account has been successfully created <br>";
                 $modal_message .= "You can now log in using your credentials";
-                $modal_button = '<a href="../login.php">Login</a>';
+                $modal_button = '<a href="login.php">Login</a>';
 
                 $modal_status = "success";
                 $modal_display = "";
@@ -207,7 +206,7 @@ $mysqli->close();
         <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
-                <li><a href="../login.php">Login</a></li>
+                <li><a href="login.php">Login</a></li>
             </ul>
         </div>
     </nav>
@@ -235,7 +234,7 @@ $mysqli->close();
                 <div class="error-msg"><?= $errors["confirmPassword"]; ?></div>
 
                 <input type="submit" value="Sign up">
-                <a href="../login.php">Have an account? Click Here</a>
+                <a href="login.php">Have an account? Click Here</a>
             </form>
 
         </div>
