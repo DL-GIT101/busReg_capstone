@@ -2,19 +2,19 @@
 session_start();
 require_once "php/functions.php";
 
-if(checkRole($_SESSION["role"]) === "user") {
+if($_SESSION["role"] === "user") {
     $links = '
                 <li><a href="user/dashboard.php">Dashboard</a></li>
                 <li><a href="php/logout.php">Logout</a></li>
             ';
-}elseif(checkRole($_SESSION["role"]) === "admin") {
+}elseif($_SESSION["role"] === "admin") {
     $links = '
                 <li><a href="admin/dashboard.php">Dashboard</a></li>
                 <li><a href="php/logout.php">Logout</a></li>
             ';
 }else{
     $links = '
-                <li><a href="login.php">Login</a></li>
+                <li><a href="user/login.php">Login</a></li>
                 <li><a href="user/register.php">Register</a></li>
             ';
 }
