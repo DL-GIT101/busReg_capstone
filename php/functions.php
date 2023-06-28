@@ -9,15 +9,6 @@ function validate($data) {
     return $data;
 }
 
-function checkRole($role) {
-
-    if($role === "admin"){
-        return "admin";
-    }elseif($role === "user"){
-        return "user";
-    }
-}
-
 function hasProfile($id){
 
     global $mysqli;
