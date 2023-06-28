@@ -111,11 +111,12 @@ if(empty($errors)) {
 
     }
 
+    $currentYear = date('Y');
+
     if($lastID) {
 
         $year = substr($lastID, 2, 4);
-        $currentYear = date('Y');
-
+        
         $countDash = substr($lastID, 7);
         $count = str_replace("-","",$countDash);
 
@@ -124,6 +125,8 @@ if(empty($errors)) {
         }else {
             $count = 0;
         }
+    }else {
+        $count = 0;
     }
 
     $count = str_pad($count, 6, '0', STR_PAD_LEFT);
