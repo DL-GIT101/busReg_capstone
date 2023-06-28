@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors["email"] = "Invalid Email"; 
     } else {
 
-        $sql = "SELECT email FROM users WHERE email = ?";
+        $sql = "SELECT Email FROM User WHERE Email = ?";
         
         if($stmt = $mysqli->prepare($sql)) {
 
@@ -92,18 +92,18 @@ $cPassword = validate($_POST["cPassword"]);
         }
     }
 
-//ID  ex. US20230503001
+//ID  ex. U-2023-000-000
 if(empty($errors)) {
-    $sql = "SELECT id as max_id FROM users ORDER BY id DESC LIMIT 1";
+    $sql = "SELECT UserID as maxID FROM User ORDER BY UserID DESC LIMIT 1";
 
     if($stmt = $mysqli->prepare($sql)) {
 
         if($stmt->execute()){  
 
-            $stmt->bind_result($max_id);
+            $stmt->bind_result($maxID);
 
             if($stmt->fetch()) {
-                $last_id = $max_id;
+                $lastID = $maxID;
             }
         }
 
@@ -111,25 +111,30 @@ if(empty($errors)) {
 
     }
 
-    if($last_id) {
-        $date = substr($last_id, 2, -3);
-        $today = date('Ymd');
+    if($lastID) {
 
-        if($date === $today) {
-            $id_suffix = substr($last_id, 10) + 1;
+        $year = substr($lastID, 2, 4);
+        $currentYear = date('Y');
+
+        $countDash = substr($lastID, 7);
+        $count = str_replace("-","",$countDash);
+
+        if($year === $currentYear) {
+            $count += 1;
         }else {
-            $id_suffix = 0;
+            $count = 0;
         }
     }
 
-    $id_suffix = str_pad($id_suffix, 3, '0', STR_PAD_LEFT);
-    $id_prefix = 'US' . $today;
-    $id = $id_prefix . $id_suffix; 
+    $count = str_pad($count, 6, '0', STR_PAD_LEFT);
+    $countDash = substr_replace($count, "-", 3, 0);
+
+    $id = "U-" . $currentYear . "-" . $countDash; 
 }    
 
 if(!empty($id)) {
 
-    $sql = "INSERT INTO users (id, email, password) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO User (UserID, Email, Password) VALUES (?, ?, ?)";
 
     if($stmt = $mysqli->prepare($sql)){
 
