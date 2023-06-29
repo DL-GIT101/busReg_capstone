@@ -47,67 +47,53 @@ $sql3 = "SELECT * FROM Owner WHERE OwnerID = ?";
         $stmt3->close();
     }
 
-$logo_path = "../img/No_image_available.svg";
-/*
-$sql = "SELECT * FROM Business WHERE OwnerID = ?";
+$logo = "../img/No_image_available.svg";
+
+$sql = "SELECT * FROM Business WHERE BusinessID = ?";
 
     if($stmt = $mysqli->prepare($sql)){
         $stmt->bind_param("s",$param_id);
 
-        $param_id = validate($_SESSION['id']);
+        $param_id = validate($_SESSION['BusinessID']);
 
         if($stmt->execute()){
             $result = $stmt->get_result();
 
-            if($result->num_rows == 1){
-                $row = $result->fetch_array(MYSQLI_ASSOC);
+            if($result->num_rows === 1){
 
-                if (!empty($row["logo"])) {
-                    $logo_path = "upload/".$_SESSION['id']."/".$row["logo"];
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+                $logo = $row["Logo"];
+                if($row["IssuedPermit"] == null){
+                    $permit_status = "None";
+                }else{
+                    $permit_status = "Approved";
                 }
-                $business_name = $row["business_name"];
-                $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"];
-                $business_activity = $row["activity"];
-                $latitude = $row["latitude"];
-                $longitude = $row["longitude"];
+                $bus_name = $row["Name"];
+                $logo = $row["Logo"];
+                if($row["Logo"] == null){
+                    $logo = null;
+                }else{
+                    $logo = "Business/upload/".$_SESSION['BusinessID']."/".$row["Logo"];
+                }
+                $activity = $row["Activity"];
+                $contact_b = substr($row["ContactNumber"],3);
+                $address_b = $row["Address"];
+                $barangay_b = $row["Barangay"];
+                $latitude = $row["Latitude"];
+                $longitude = $row["Longitude"]; 
 
             }else {
-                header("location: profile.php");
-                exit();
+                $bus_name = "Not yet created";
             }
         }else{
-            echo "Oops! Something went wrong. Please try again later";
+            $modal_display = "";
+            $modal_status = "error";
+            $modal_title = "Business Profile Information Error";
+            $modal_message = "Profile cannot be retrieve";
+            $modal_button = '<a href="../index.php">OK</a>';
         }
         $stmt->close();
-    }
-
-   
-
-    $sql2 = "SELECT * FROM permit WHERE user_id = ?";
-
-    if($stmt2 = $mysqli->prepare($sql2)){
-        $stmt2->bind_param("s",$param_id);
-
-        $param_id = validate($_SESSION['id']);
-
-        if($stmt2->execute()){
-            $result = $stmt2->get_result();
-
-            if($result->num_rows == 1){
-                $row = $result->fetch_array(MYSQLI_ASSOC);
-
-                $permit_status = $row['status'];
-                
-            }else {
-                $permit_status = "None";
-            }
-        }else{
-            echo "Oops! Something went wrong. Please try again later";
-        }
-        $stmt2->close();
-    }
- */
-   
+    }   
     
     $mysqli->close();
 
@@ -151,25 +137,26 @@ $sql = "SELECT * FROM Business WHERE OwnerID = ?";
                 <subsection class="space-between">
                     <p class="sentence">Business Profile</p>
                     <div class="logo"> 
-                        <img src="<?= $logo_path ?>" alt="Business Logo">
+                        <img src="<?= $logo ?>" alt="Business Logo">
                     </div>
                     <div class="text-center">
-                        <p class="title"><?= $business_name ?></p>
-                        <p class="sentence"><?= $name ?></p> 
+                        <p class="title"><?= $bus_name ?></p>
+                        <p class="sentence"><?= $activity ?></p> 
                     </div>
-                </subsection>
-                <subsection>
-                    <p class="sentence">Business Activity</p> 
-                    <div class="info title"><?= $business_activity ?></div>
                 </subsection>
                 <subsection>
                     <p class="sentence">Business Permit Status</p> 
                     <div class="info title" id="permit-status"><?= $permit_status ?></div>
                 </subsection>
+                <subsection>
+                    <p class="sentence">Edit Business Profile</p> 
+                    <a class="action edit" href="Business/edit_profile.php"><img src="../img/edit.svg" alt="Edit"></a>
+                </subsection>
             </section>
             <section class="map-container">
                 <subsection>
-                        <p class="title">Location</p>
+                        <p class="title">Location </p>
+                        <p class="sentence"><?= $address_b.', '. $barangay_b ?></p> 
                         <map id="map"></map>
                         <p id="latitude" class="hidden"><?= $latitude ?></p>
                         <p id="longitude" class="hidden"><?= $longitude ?></p>
@@ -192,7 +179,7 @@ $sql = "SELECT * FROM Business WHERE OwnerID = ?";
                     <div class="info title"><?= $contact ?></div>
                     <p class="sentence">Address</p>
                     <div class="info title"><?= $address.', '. $barangay ?></div>
-                    <p class="sentence">Edit Profile</p>
+                    <p class="sentence">Edit Owner Profile</p>
                     <a class="action edit" href="Owner/edit_profile.php"><img src="../img/edit.svg" alt="Edit"></a>
                 </subsection>
             </section>
