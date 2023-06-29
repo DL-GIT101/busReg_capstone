@@ -59,7 +59,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["role"] = "user";
 
                             if(hasOwnerProfile($id) === true){
+                                if(hasBusinessProfile($_SESSION["OwnerID"]) === true){
                                 header("location: dashboard.php");
+                                }else{
+                                header("location: Business/edit_profile.php");
+                                }
+
                             }else{
                                 header("location: Owner/edit_profile.php");
                             }
