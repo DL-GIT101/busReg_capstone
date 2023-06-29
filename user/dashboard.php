@@ -4,12 +4,52 @@ require_once "../php/connection.php";
 require_once "../php/functions.php";
 
 
-if(checkRole($_SESSION["role"]) !== "user"){
+if($_SESSION["role"] !== "user"){
     header("location: ../index.php");
     exit;
 }
 
-$sql = "SELECT * FROM user_profile WHERE user_id = ?";
+$sql3 = "SELECT * FROM Owner WHERE OwnerID = ?";
+
+    if($stmt3 = $mysqli->prepare($sql3)){
+        $stmt3->bind_param("s",$param_id);
+
+        $param_id = validate($_SESSION['OwnerID']);
+
+        if($stmt3->execute()){
+            $result = $stmt3->get_result();
+
+            if($result->num_rows == 1){
+
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+                $fname = $row["FirstName"];
+                $mname = $row["MiddleName"];
+                $lname = $row["LastName"];
+                $suffix = $row["Suffix"];
+                $gender = $row["Gender"];
+                $contact = $row["ContactNumber"];
+                $address = $row["Address"];
+                $barangay = $row["Barangay"];
+                $_SESSION["OwnerID"] = $row['OwnerID'];
+
+            }else {
+                header("location: Owner/edit_profile.php");
+                exit();
+            }
+        }else{
+
+            $modal_display = "";
+            $modal_status = "error";
+            $modal_title = "Owner Profile Information Error";
+            $modal_message = "Profile cannot be retrieve";
+            $modal_button = '<a href="../index.php">OK</a>';
+        }
+        $stmt3->close();
+    }
+
+$logo_path = "../img/No_image_available.svg";
+/*
+$sql = "SELECT * FROM Business WHERE OwnerID = ?";
 
     if($stmt = $mysqli->prepare($sql)){
         $stmt->bind_param("s",$param_id);
@@ -24,8 +64,6 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
 
                 if (!empty($row["logo"])) {
                     $logo_path = "upload/".$_SESSION['id']."/".$row["logo"];
-                } else {
-                    $logo_path = "../img/No_image_available.svg";
                 }
                 $business_name = $row["business_name"];
                 $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"];
@@ -40,10 +78,10 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
         }else{
             echo "Oops! Something went wrong. Please try again later";
         }
-
+        $stmt->close();
     }
 
-    $stmt->close();
+   
 
     $sql2 = "SELECT * FROM permit WHERE user_id = ?";
 
@@ -66,10 +104,10 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
         }else{
             echo "Oops! Something went wrong. Please try again later";
         }
-
+        $stmt2->close();
     }
-
-    $stmt2->close();
+ */
+   
     
     $mysqli->close();
 
@@ -102,7 +140,6 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
         <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
-                <li><a href="profile.php">Profile</a></li>
                 <li><a href="../php/logout.php">Logout</a></li>
             </ul>
         </div>
@@ -143,6 +180,21 @@ $sql = "SELECT * FROM user_profile WHERE user_id = ?";
                         <p class="title">Services</p>
                         <a href="documents.php" class="service">Upload Documents</a>
                </subsection>        
+            </section>
+            <section>
+                <subsection>
+                    <p class="title text-center">Owner Profile</p>
+                    <p class="sentence">Name</p>
+                    <div class="info title"><?= $fname.' '. $mname.' '.$lname.' '. $suffix ?></div>
+                    <p class="sentence">Gender</p>
+                    <div class="info title"><?= $gender ?></div>
+                    <p class="sentence">Contact Number</p>
+                    <div class="info title"><?= $contact ?></div>
+                    <p class="sentence">Address</p>
+                    <div class="info title"><?= $address.', '. $barangay ?></div>
+                    <p class="sentence">Edit Profile</p>
+                    <a class="action edit" href="Owner/edit_profile.php"><img src="../img/edit.svg" alt="Edit"></a>
+                </subsection>
             </section>
         </div>
     </main>
