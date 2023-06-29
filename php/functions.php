@@ -26,8 +26,7 @@ function hasOwnerProfile($id){
             if($result->num_rows === 1){
 
                 $row = $result->fetch_assoc();
-                $ownerID = $row['OwnerID'];
-                $_SESSION["OwnerID"] = $ownerID;
+                $_SESSION["OwnerID"] = $row['OwnerID'];
 
                 return true;
             }else {
