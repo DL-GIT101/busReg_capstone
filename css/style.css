@@ -266,7 +266,7 @@ form .input-group input, form .input-group select {
 
  form .input-group select {
     height: 39px;
-    width: 215.5px;
+    width: 95%;
  }
 
 form > section {
@@ -351,6 +351,7 @@ modal > .content {
     background-color: rgb(245, 245, 247);
     border: 1px solid rgb(29, 29, 31);
     border-radius: 10px;
+    padding: 5px;
 }
 
 modal > .content > .title {
