@@ -4,7 +4,7 @@ require_once "../../php/connection.php";
 require_once "../../php/functions.php";
 
 if($_SESSION["role"] !== "user"){
-    header("location: ../index.php");
+    header("location: ../../index.php");
     exit;
 }
 
@@ -34,6 +34,7 @@ if($stmt = $mysqli->prepare($sql)){
                 $contact = substr($row["ContactNumber"],3);
                 $address = $row["Address"];
                 $barangay = $row["Barangay"];
+                $_SESSION["OwnerID"] = $row['OwnerID'];
 
             }else {
                 $submit_btn = "Submit";
@@ -121,11 +122,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // address
         $address = $_POST['address'];
         if(empty($address)){
-            $errors["address_1"] = "Enter Address";
+            $errors["address"] = "Enter Address";
         }elseif(!preg_match("/^[a-zA-Z 0-9&*@#().\/~-]*$/", $address)){
             $errors["address"] = "Invalid Address";
         } else{
-            $address = ucwords(strtolower($address_1));
+            $address = ucwords(strtolower($address));
         }
         //barangay
         $barangay = validate($_POST["barangay"]);
@@ -204,12 +205,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if($submit_btn === "Update"){
                     $modal_title = "Owner Profile Information Updated";
-                    $message = "Your Owner Profile has been updated";
+                    $modal_message = "Your Owner Profile has been updated";
                 }else{
                     $modal_title = "Owner Profile Creation Success";
-                    $modal_message = "You can now view your profile and use our services ";
+                    $modal_message = "You can now create a business Profile ";
                 }
-                $modal_button = '<a href="../dashboard.php">View</a>';
+                $modal_button = '<a href="profile.php">View</a>';
             } else{
                 $modal_display = "";
                 $modal_status = "error";
@@ -217,11 +218,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $modal_message = "Try again later";
                 $modal_button = '<a href="../../index.php">OK</a>';
             }
+            $stmt->close();
           }
-           
         }
-
-        $stmt->close();
 
     }else if(checkPermit($businessID) === "Issued"){
 
