@@ -135,7 +135,7 @@ $sql = "SELECT * FROM Business WHERE BusinessID = ?";
         <div class="container">
             <section>
                 <subsection class="space-between">
-                    <p class="sentence">Business Profile</p>
+                    <p class="title">Business Profile</p>
                     <div class="logo"> 
                         <img src="<?= $logo ?>" alt="Business Logo">
                     </div>
