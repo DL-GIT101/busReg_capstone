@@ -202,10 +202,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $modal_title = "Owner Profile Information Updated";
                     $modal_message = "Your Owner Profile has been updated";
                 }else{
+                    $_SESSION['OwnerID'] = $ownerID;
                     $modal_title = "Owner Profile Creation Success";
                     $modal_message = "You can now create a business Profile ";
                 }
-                $modal_button = '<a href="profile.php">View</a>';
+                $modal_button = '<a href="../dashboard.php">View</a>';
             } else{
                 $modal_display = "";
                 $modal_status = "error";
@@ -223,7 +224,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $modal_status = "warning";
         $modal_title = "Owner Profile cannot be updated";
         $modal_message = "The permit has already been issued";
-        $modal_button = '<a href="dashboard.php">OK</a>';
+        $modal_button = '<a href="../dashboard.php">OK</a>';
 
     }else{
         $modal_display = "";
