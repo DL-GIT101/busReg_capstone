@@ -38,11 +38,6 @@ if($stmt = $mysqli->prepare($sql)){
 
             }else {
                 $submit_btn = "Submit";
-                $modal_display = "";
-                $modal_status = "gray";
-                $modal_title = "Create Owner Profile";
-                $modal_message = "Please create your profile before accessing our services";
-                $modal_button = '<button class="close">Close</button>';
             }
 
         }else {
