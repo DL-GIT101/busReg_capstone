@@ -9,11 +9,11 @@ function validate($data) {
     return $data;
 }
 
-function hasProfile($id){
+function hasOwnerProfile($id){
 
     global $mysqli;
 
-    $sql = "SELECT * FROM user_profile WHERE user_id = ?";
+    $sql = "SELECT * FROM Owner WHERE UserID = ?";
 
     if($stmt = $mysqli->prepare($sql)){
         $stmt->bind_param("s",$param_id);
@@ -24,6 +24,11 @@ function hasProfile($id){
             $result = $stmt->get_result();
 
             if($result->num_rows === 1){
+
+                $row = $result->fetch_assoc();
+                $ownerID = $row['OwnerID'];
+                $_SESSION["UserID"] = $ownerID;
+
                 return true;
             }else {
                 return false;
@@ -33,19 +38,18 @@ function hasProfile($id){
             return "Error";
         }
 
-    $stmt->close();
-
     }else {
-
         return "Error";
-        $stmt->close();
     }
+
+    $stmt->close();
 }
 
-function checkPermit($id){
+function hasBusinessProfile($id){
+
     global $mysqli;
 
-    $sql = "SELECT status FROM permit WHERE user_id = ?";
+    $sql = "SELECT * FROM Business WHERE OwnerID = ?";
 
     if($stmt = $mysqli->prepare($sql)){
         $stmt->bind_param("s",$param_id);
@@ -56,23 +60,51 @@ function checkPermit($id){
             $result = $stmt->get_result();
 
             if($result->num_rows === 1){
+
                 $row = $result->fetch_assoc();
-                $status = $row['status'];
-                return $status;
+                $businessID = $row['BusinessID'];
+                $_SESSION["BusinessID"] = $businessID;
+
+                return true;
+            }else {
+                return false;
+            }
+
+        }else{
+            return "Error";
+        }
+
+    }else {
+        return "Error";
+    }
+    
+    $stmt->close();
+}
+
+function checkPermit($id){
+    global $mysqli;
+
+    $sql = "SELECT * FROM Permit WHERE BusinessID = ?";
+
+    if($stmt = $mysqli->prepare($sql)){
+        $stmt->bind_param("s",$param_id);
+
+        $param_id = $id;
+
+        if($stmt->execute()){
+            $result = $stmt->get_result();
+
+            if($result->num_rows === 1){
+                return "Issued";
             }else{
                 return "None";
             }
         }else{
             return "Error";
         }
-
-    $stmt->close();
-
     }else {
-
         return "Error";
-        $stmt->close();
     }
-
+    $stmt->close();
 }
 ?>
