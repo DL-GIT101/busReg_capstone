@@ -55,9 +55,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
                         if(password_verify($password, $hashed_pword)){
 
-                            $_SESSION["id"] = $id;
+                            $_SESSION["UserID"] = $id;
                             $_SESSION["role"] = "user";
-                            header("location: dashboard.php");
+
+                            if(hasOwnerProfile($id) === true){
+                                header("location: dashboard.php");
+                            }else{
+                                header("location: Owner/edit_profile.php");
+                            }
+
                             exit;
 
                         }else{
