@@ -104,6 +104,8 @@ $sql = "SELECT * FROM Business WHERE BusinessID = ?";
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="icon" href="../img/tarlac-seal.ico" type="image/x-icon">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
@@ -115,7 +117,7 @@ $sql = "SELECT * FROM Business WHERE BusinessID = ?";
     <script src="../js/map.js" defer></script>
     <script src="../js/showLocation.js" defer></script>
     <script src="../js/profile.js" defer></script>
-    <title>Welcome</title>
+    <title>Dashboard</title>
 </head>
 <body>
     <nav>
@@ -165,7 +167,7 @@ $sql = "SELECT * FROM Business WHERE BusinessID = ?";
             <section>
                 <subsection>
                         <p class="title">Services</p>
-                        <a href="documents.php" class="service">Upload Documents</a>
+                        <a href="Business/upload_requirement.php" class="service">Upload Requirements</a>
                </subsection>        
             </section>
             <section>
