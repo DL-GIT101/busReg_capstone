@@ -64,7 +64,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
                                 }else{
                                 header("location: Business/edit_profile.php");
                                 }
-
+                                exit;
                             }else{
                                 header("location: Owner/edit_profile.php");
                             }
