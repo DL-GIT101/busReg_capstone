@@ -277,7 +277,6 @@ $mysqli->close();
                 <tr>
                     <th>Requirement</th>
                     <th>Status</th>
-                    <th>Review</th>
                     <th>Actions</th>
                 </tr>
                 <?php 
@@ -290,8 +289,6 @@ $mysqli->close();
                 if($requirement['Name'] === $documentName){
                     echo '  <td>
                                 <div class="status">'.$requirement['Status'].'</div>
-                            </td>
-                            <td>
                                 <div class="message">'.$requirement['Review'].'</div>
                             </td>
                             <td class="table-actions">
@@ -305,7 +302,6 @@ $mysqli->close();
             }
             if(!$found){
                 echo '  <td></td>
-                        <td></td>
                         <td></td>
                 ';
             }
