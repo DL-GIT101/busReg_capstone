@@ -677,6 +677,29 @@ table#msme td:nth-child(6) img:hover{
     filter: brightness(0.8);
 }
 
+table td.uploadBtn input[type=submit]{
+    width: 100%;
+    padding: 5px;
+    color: rgb(245, 245, 247);
+    border: none;
+    background-color: rgb(119, 119, 119);
+    font-family: 'Jost', sans-serif;
+    font-size: 1.2rem;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+table td.uploadBtn button img{
+   margin-right: 5px;
+}
+
+table td.uploadBtn input[type=submit]:hover {
+    cursor: pointer;
+    filter: brightness(0.8);
+}
+
 /* Single Styles */
 
 .height-auto {
