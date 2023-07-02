@@ -213,7 +213,6 @@ $mysqli->close();
             </ul>
             <ul id="subnav-links">
                 <li><a href="edit_profile.php">Edit Profile</a></li>
-                <li class="current"><a href="add_admin.php">Add Admin</a></li>
                 <li><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
@@ -227,7 +226,6 @@ $mysqli->close();
         <div class="button-group">
             <ul>
                 <li><a href="edit_profile.php">Edit Profile</a></li>
-                <li class="current"><a href="add_admin.php">Add Admin</a></li>
                 <li><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
