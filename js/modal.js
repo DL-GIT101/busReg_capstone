@@ -115,6 +115,16 @@ if(delete_user){
         sentence.innerHTML = '<p class="sentence">Are you sure you want to delete all documents? <br> This action cannot be undone</p>';
 
         link.href = "../../php/userDelete.php?documents=" + encodeURIComponent(id);
+      }else if(admin_page.innerText === "Admin Management"){
+        let user_id = document.querySelector('#user_id');
+        id = user_id.innerText;
+
+        title.innerText = "Delete Admin";
+
+        sentence.innerHTML = '<p class="sentence">Are you sure you want to delete this account? <br> This action cannot be undone</p>';
+
+        link.href = "../../php/userDelete.php?admin=" + encodeURIComponent(id);
+
       }
 
       link.textContent = 'Delete';
