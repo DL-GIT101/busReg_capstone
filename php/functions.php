@@ -106,4 +106,39 @@ function checkPermit($id){
     }
     $stmt->close();
 }
+
+function hasAdminProfile($id){
+
+    global $mysqli;
+
+    $sql = "SELECT * FROM Admin WHERE UserID = ?";
+
+    if($stmt = $mysqli->prepare($sql)){
+        $stmt->bind_param("s",$param_id);
+
+        $param_id = $id;
+
+        if($stmt->execute()){
+            $result = $stmt->get_result();
+
+            if($result->num_rows === 1){
+
+                $row = $result->fetch_assoc();
+                $_SESSION["AdminID"] = $row['AdminID'];
+
+                return true;
+            }else {
+                return false;
+            }
+
+        }else{
+            return "Error";
+        }
+
+    }else {
+        return "Error";
+    }
+
+    $stmt->close();
+}
 ?>
