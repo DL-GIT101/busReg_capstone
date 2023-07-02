@@ -4,7 +4,7 @@ require_once "../php/connection.php";
 require_once "../php/functions.php";
 
 
-if($_SESSION["role"] !== "user"){
+if($_SESSION["role"] !== "Owner"){
     header("location: ../index.php");
     exit;
 }

@@ -2,12 +2,12 @@
 session_start();
 require_once "php/functions.php";
 
-if($_SESSION["role"] === "user") {
+if($_SESSION["role"] === "Owner") {
     $links = '
                 <li><a href="user/dashboard.php">Dashboard</a></li>
                 <li><a href="php/logout.php">Logout</a></li>
             ';
-}elseif($_SESSION["role"] === "admin") {
+}elseif($_SESSION["role"] === "Admin") {
     $links = '
                 <li><a href="admin/dashboard.php">Dashboard</a></li>
                 <li><a href="php/logout.php">Logout</a></li>
