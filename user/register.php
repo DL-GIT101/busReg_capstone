@@ -3,10 +3,10 @@ session_start();
 require_once "../php/connection.php";
 require_once "../php/functions.php";
 
-if($_SESSION["role"] === "user") {
+if($_SESSION["role"] === "Owner") {
     header("location: dashboard.php");
     exit;
-}elseif($_SESSION["role"] === "admin") {
+}elseif($_SESSION["role"] === "Admin") {
     header("location: ../admin/dashboard.php");
     exit;
 }
@@ -153,7 +153,7 @@ if(!empty($id)) {
                 $modal_title = "Registration Successful";
                 $modal_message = "Your account has been successfully created <br>";
                 $modal_message .= "You can now log in using your credentials";
-                $modal_button = '<a href="login.php">Login</a>';
+                $modal_button = '<a href="../login.php">Login</a>';
 
                 $modal_status = "success";
                 $modal_display = "";
@@ -209,7 +209,7 @@ $mysqli->close();
         <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
-                <li><a href="login.php">Login</a></li>
+                <li><a href="../login.php">Login</a></li>
             </ul>
         </div>
     </nav>
@@ -237,7 +237,7 @@ $mysqli->close();
                 <div class="error-msg"><?= $errors["confirmPassword"]; ?></div>
 
                 <input type="submit" value="Sign up">
-                <a href="login.php">Have an account? Click Here</a>
+                <a href="../login.php">Have an account? Click Here</a>
             </form>
 
         </div>
