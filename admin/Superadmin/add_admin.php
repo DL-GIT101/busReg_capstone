@@ -1,17 +1,17 @@
 <?php
 session_start();
-require_once "../php/connection.php";
-require_once "../php/functions.php";
+require_once "../../php/connection.php";
+require_once "../../php/functions.php";
 
 if($_SESSION["role"] !== "Admin"){
-    header("location: ../index.php");
+    header("location: ../../index.php");
     exit;
 }
 
 if($_SESSION["AdminRole"] === "Superadmin"){
     $adminLinks = '<li><a href="admins.php">Admin List</a></li>';
 }else{
-    header("location: dashboard.php");
+    header("location: ../dashboard.php");
     exit;
 }
 
@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 $modal_title = "Registration Error";
                 $modal_message = "Try again later";
-                $modal_button = '<a href="../index.php">OK</a>';
+                $modal_button = '<a href="../admins.php">OK</a>';
 
                 $modal_status = "error";
                 $modal_display = "";
@@ -185,12 +185,12 @@ $mysqli->close();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../img/tarlac-seal.ico" type="image/x-icon">
-    <link rel="icon" href="img/tarlac-seal.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="shortcut icon" href="../../img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="icon" href="../../img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/style.css">
     <!-- Javascript -->
-    <script src="../js/script.js" defer></script>
-    <script src="../js/form.js" defer></script>
+    <script src="../../js/script.js" defer></script>
+    <script src="../../js/form.js" defer></script>
     <title>Register</title>
 </head>
 
@@ -207,19 +207,19 @@ $mysqli->close();
     
     <nav>
         <div class="logo">
-            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
             <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
         <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
-                <li class="current"><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="management/users.php">Management</a></li>
-                <li><a href="permit/msme.php">Permit</a></li>
-                <li><a href="../php/logout.php">Logout</a></li>
+                <li class="current"><a href="../dashboard.php">Dashboard</a></li>
+                <li><a href="../management/users.php">Management</a></li>
+                <li><a href="../permit/msme.php">Permit</a></li>
+                <li><a href="../../php/logout.php">Logout</a></li>
             </ul>
             <ul id="subnav-links">
-                <li><a href="edit_profile.php">Edit Profile</a></li>
+                <li><a href="../edit_profile.php">Edit Profile</a></li>
                 <?= $adminLinks ?>
             </ul>
         </div>
@@ -227,12 +227,12 @@ $mysqli->close();
 
     <nav id="subnav">
         <div class="logo">
-            <img src="../img/admin.svg" alt="Tarlac City Seal">
+            <img src="../../img/admin.svg" alt="Tarlac City Seal">
             <p>Admin</p>  
         </div>
         <div class="button-group">
             <ul>
-                <li><a href="edit_profile.php">Edit Profile</a></li>
+                <li><a href="../edit_profile.php">Edit Profile</a></li>
                 <?= $adminLinks ?>
             </ul>
         </div>
