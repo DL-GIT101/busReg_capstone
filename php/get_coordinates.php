@@ -1,6 +1,6 @@
 <?php 
 require_once "connection.php";
-$sql = "SELECT business_name, longitude, latitude FROM user_profile";
+$sql = "SELECT Name, Longitude, Latitude FROM Business";
 if ($stmt = $mysqli->prepare($sql)) {
     if ($stmt->execute()) {
         $stmt->bind_result($name,$longitude, $latitude);
