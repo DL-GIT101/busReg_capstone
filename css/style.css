@@ -653,6 +653,15 @@ table td .data:hover {
     cursor: pointer;
 }
 
+table td.actions{
+    display: flex;
+    justify-content: center;
+}
+
+table td.actions *{
+    margin-left: 2px;
+}
+
 table td .action.delete {
     border: 2px solid rgb(220, 53, 69);
     background-color: rgb(255, 255, 255);
@@ -664,6 +673,21 @@ table td .action.delete {
 }
 
 table td .action.delete:hover {
+    filter: brightness(0.8);
+    cursor: pointer;
+}
+
+table td .action.edit {
+    border: 2px solid rgb(0, 59, 179);
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+table td .action.edit:hover {
     filter: brightness(0.8);
     cursor: pointer;
 }
@@ -698,6 +722,11 @@ table td.uploadBtn button img{
 table td.uploadBtn input[type=submit]:hover {
     cursor: pointer;
     filter: brightness(0.8);
+}
+
+table#admin td .data:hover{
+    cursor: auto;
+    filter: none;
 }
 
 /* Single Styles */
