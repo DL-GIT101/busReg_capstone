@@ -1,67 +1,69 @@
-<?php
+<?php ini_set('display_errors', 1);
 session_start();
 require_once "../php/connection.php";
 require_once "../php/functions.php";
 
-if(checkRole($_SESSION["role"]) !== "admin"){
+if($_SESSION["role"] !== "Admin"){
     header("location: ../index.php");
     exit;
 }
 
-$sql1 = "SELECT COUNT(*) FROM users WHERE id <> ?";
-    if($stmt1 = $mysqli->prepare($sql1)){
-        $stmt1->bind_param("s",$adminID);
-        $adminID = validate($_SESSION['id']);
-        if($stmt1->execute()){
-            $stmt1->bind_result($userCount);
-            $stmt1->fetch();
+$sql_owner = "SELECT COUNT(*) FROM Owner";
+    if($stmt_owner = $mysqli->prepare($sql_owner)){
+        if($stmt_owner->execute()){
+            $stmt_owner->bind_result($ownerCount);
+            $stmt_owner->fetch();
         }else{
             echo "Oops! Something went wrong. Please try again later";
-        }$stmt1->close();
+        }
+    $stmt_owner->close();
     }
 
-$sql2 = "SELECT COUNT(*) FROM user_profile";
-    if($stmt2 = $mysqli->prepare($sql2)){
-        if($stmt2->execute()){
-            $stmt2->bind_result($profileCount);
-            $stmt2->fetch();
+$sql_business = "SELECT COUNT(*) FROM Owner";
+    if($stmt_business = $mysqli->prepare($sql_business)){
+        if($stmt_business->execute()){
+            $stmt_business->bind_result($businessCount);
+            $stmt_business->fetch();
         }else{
             echo "Oops! Something went wrong. Please try again later";
-        }$stmt2->close();
+        }
+    $stmt_business->close();
     }
     
-$sql3 = "SELECT * FROM new_documents";
-if ($stmt3 = $mysqli->prepare($sql3)) {
-    if ($stmt3->execute()) {
-        $result = $stmt3->get_result();
+$sql_requirement = "SELECT BusinessID, COUNT(*) AS TotalCount FROM Requirement GROUP BY BusinessID";
+if ($stmt_requirement = $mysqli->prepare($sql_requirement)) {
+    if ($stmt_requirement->execute()) {
+        $result = $stmt_requirement->get_result();
+
+        $noneReqCount = 0;
         $incompleteCount = 0;
         $completeCount = 0;
-        
-        while ($row = $result->fetch_assoc()) {
-            $serializedRequirements = $row["requirements"];
-            $requirements = unserialize($serializedRequirements);
-            
-            if (in_array(null, $requirements)) {  
-                $incompleteCount++;
-            } else {
+
+        while($row = $result->fetch_assoc()) {
+            $totalCount = $row['TotalCount'];
+
+            if($totalCount === 11){
                 $completeCount++;
+            }else if($totalCount === 0){
+                $noneReqCount++;
+            }else{
+                $incompleteCount++;
             }
         }
-        $noneReqCount =  $userCount - ($incompleteCount + $completeCount);
     } else {
         echo "Error retrieving data";
     }
-    $stmt3->close();
+    $stmt_requirement->close();
 }    
 
-$sql4 = "SELECT COUNT(*) FROM permit";
-if($stmt4 = $mysqli->prepare($sql4)){
-    if($stmt4->execute()){
-        $stmt4->bind_result($permitApproved);
-        $stmt4->fetch();
+$sql_permit = "SELECT COUNT(*) FROM Permit";
+if($stmt_permit = $mysqli->prepare($sql_permit)){
+    if($stmt_permit->execute()){
+        $stmt_permit->bind_result($permitApproved);
+        $stmt_permit->fetch();
     }else{
         echo "Oops! Something went wrong. Please try again later";
-    }$stmt4->close();
+    }$stmt_permit->close();
 }   
     $mysqli->close();
 
@@ -99,7 +101,7 @@ if($stmt4 = $mysqli->prepare($sql4)){
                 <li><a href="../php/logout.php">Logout</a></li>
             </ul>
             <ul id="subnav-links">
-
+                <li><a href="edit_profile.php">Edit Profile</a></li>
             </ul>
         </div>
     </nav>
@@ -111,7 +113,7 @@ if($stmt4 = $mysqli->prepare($sql4)){
         </div>
         <div class="button-group">
             <ul>
-                
+                <li><a href="edit_profile.php">Edit Profile</a></li>
             </ul>
         </div>
     </nav>
@@ -120,15 +122,15 @@ if($stmt4 = $mysqli->prepare($sql4)){
         <div class="container">
             <section>
                  <subsection>
-                    <p class="sentence">Users</p>   
+                    <p class="sentence">Owners</p>     
                     <div class="info title data-display">
-                        <p>Total</p>
-                        <p><?= $userCount ?></p>
-                    </div>  
+                        <p>Owner Profile</p>
+                        <p><?= $ownerCount ?></p>
+                    </div>
                     <div class="info title data-display">
-                        <p>Profile</p>
-                        <p><?= $profileCount ?></p>
-                    </div>     
+                        <p>Business Profile</p>
+                        <p><?= $businessCount ?></p>
+                    </div>       
                 </subsection>
                 <subsection>
                     <p class="sentence">Documents</p> 
@@ -147,10 +149,6 @@ if($stmt4 = $mysqli->prepare($sql4)){
                 </subsection>
                 <subsection>
                     <p class="sentence">Permit</p> 
-                    <div class="info title data-display">
-                        <p>None</p>
-                        <p><?= $userCount-$permitApproved ?></p>
-                    </div>
                     <div class="info title data-display">
                         <p>Approved</p>
                         <p><?= $permitApproved ?></p>
