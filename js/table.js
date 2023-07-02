@@ -40,8 +40,7 @@ if(add_user){
   add_user.addEventListener('click', () =>{
     window.location.href = "addUser.php";
 });
-}
-
+};
 
 const profile = document.querySelectorAll('table#users td:nth-child(2) div.data');
 if(profile){
@@ -125,5 +124,46 @@ if(review_btn){
       let id = btn.parentNode.firstElementChild.textContent;
       window.location.href = "review.php?id=" + encodeURIComponent(id);
     });
+  });
+};
+
+const add_Admin = document.querySelector('table#admin td .data#addUser');
+
+if(add_Admin){
+  add_Admin.addEventListener('click', () =>{
+    window.location.href = "add_admin.php";
+});
+};
+
+const adminProfile = document.querySelectorAll('table#admin td:nth-child(2) div.data');
+if(adminProfile){
+  adminProfile.forEach(status => {
+      if(status.innerText === "Created"){
+        status.className = "data green";
+      }else{
+        status.className = "data gray";
+      }
+  });
+};
+
+const adminRole = document.querySelectorAll('table#admin td:nth-child(3) div.data');
+if(adminRole){
+  adminRole.forEach(status => {
+      if(status.innerText === "Superadmin"){
+        status.className = "data orange";
+      }else if(status.innerText === "None"){
+        status.className = "data gray";
+      }
+  });
+};
+
+const edit_adminAction = document.querySelectorAll('table#admin td.actions div.edit');
+console.log(edit_adminAction);
+if(edit_adminAction){
+  edit_adminAction.forEach(status => {
+      status.addEventListener('click', () => {
+          let id = status.parentNode.parentNode.firstElementChild.textContent;
+          window.location.href = "edit_profile.php?id=" + encodeURIComponent(id);
+      });
   });
 };
