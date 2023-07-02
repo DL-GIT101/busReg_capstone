@@ -141,23 +141,23 @@ $mysqli->close();
                     </tr>
                     <?php 
                     foreach ($admins as &$admin) {
-                        echo '  <tr class="user_info">  
+            echo '  <tr class="user_info">  
 
-                                    <td>'.$admin['UserID'].'</td>
+                        <td id="user_id">'.$admin['UserID'].'</td>
 
-                                    <td><div class="data">'.$admin['profile'].'</div></td>
-                                    <td><div class="data">'.$admin['role'].'</div></td>
+                        <td><div  class="data">'.$admin['profile'].'</div></td>
+                        <td><div class="data">'.$admin['role'].'</div></td>
 
-                                    <td class="actions">
-                                        <div class="action delete">
-                                            <img class="deleteUser" src="../../img/delete.svg" alt="Delete">
-                                        </div>
-                                        <div class="action edit">
-                                            <img class="editUser" src="../../img/edit.svg" alt="Delete">
-                                        </div>
-                                    </td>
+                        <td class="actions">
+                            <div class="action delete">
+                                <img class="deleteUser" src="../../img/delete.svg" alt="Delete">
+                            </div>
+                            <div class="action edit">
+                                <img class="editUser" src="../../img/edit.svg" alt="Delete">
+                            </div>
+                        </td>
 
-                                </tr>';
+                    </tr>';
                 }
                     ?>
                 </table>
