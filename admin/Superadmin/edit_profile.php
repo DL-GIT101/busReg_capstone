@@ -1,10 +1,26 @@
-<?php
+<?php 
 session_start();
-require_once "../php/connection.php";
-require_once "../php/functions.php";
+require_once "../../php/connection.php";
+require_once "../../php/functions.php";
 
 if($_SESSION["role"] !== "Admin"){
-    header("location: ../index.php");
+    header("location: ../../index.php");
+    exit;
+}
+
+if($_SESSION["AdminRole"] !== "Superadmin"){
+    header("location: ../dashboard.php");
+    exit;
+}
+
+$modal_display = "hidden";
+
+if(isset($_GET['id'])){
+  $editUserID = $_SESSION['EditUserID'] =  urldecode($_GET['id']);
+}else if(isset($_SESSION['EditUserID'])){
+    $editUserID = $_SESSION['EditUserID'];
+}else{
+    header("location: admins.php");
     exit;
 }
 
@@ -16,7 +32,7 @@ if($stmt = $mysqli->prepare($sql)){
 
     $stmt->bind_param("s",$param_id);
 
-    $param_id = validate($_SESSION['UserID']);
+    $param_id = $editUserID;
 
     if($stmt->execute()){ 
 
@@ -31,7 +47,6 @@ if($stmt = $mysqli->prepare($sql)){
                 $lname = $row["LastName"];
                 $suffix = $row["Suffix"];
                 $role = $row["Role"];
-                $_SESSION["AdminID"] = $row['AdminID'];
 
             }else {
                 $submit_btn = "Submit";
@@ -105,7 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(empty($errors)){ 
 
         if($submit_btn === "Update"){
-            $sql = "UPDATE Owner SET FirstName = ?, MiddleName = ?, LastName = ?, Suffix = ?, Role = ? WHERE OwnerID = ?";
+            $sql = "UPDATE Admin SET FirstName = ?, MiddleName = ?, LastName = ?, Suffix = ?, Role = ? WHERE UserID = ?";
         }else {
 
             $sql_owner = "SELECT AdminID as maxID FROM Admin ORDER BY AdminID DESC LIMIT 1";
@@ -147,16 +162,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
        if($stmt = $mysqli->prepare($sql)){
  
             if($submit_btn === "Update"){
-                $stmt->bind_param("ssssss",$param_fname, $param_mname, $param_lname, $param_suffix,$param_role, $param_AdminID);
+                $stmt->bind_param("ssssss",$param_fname, $param_mname, $param_lname, $param_suffix,$param_role, $param_UserID);
 
-                $param_AdminID = validate($_SESSION['AdminID']);
             }else {
                 $stmt->bind_param("sssssss",$param_UserID, $param_AdminID, $param_fname, $param_mname, $param_lname, $param_suffix,$param_role);
 
                 $param_AdminID = $adminID;
-                $param_UserID = validate($_SESSION['UserID']);
             }
-            
+            $param_UserID = $editUserID;
             $param_fname = $fname;
             $param_mname = $mname;
             $param_lname = $lname;
@@ -169,19 +182,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if($submit_btn === "Update"){
                     $modal_title = "Admin Profile Information Updated";
-                    $modal_message = "Your Admin Profile has been updated";
+                    $modal_message = "Admin Profile has been updated";
                 }else{
-                    $_SESSION['AdminID'] = $adminID;
                     $modal_title = "Admin Profile Creation Success";
-                    $modal_message = "You can now access the data ";
+                    $modal_message = "You can now see the profile ";
                 }
-                $modal_button = '<a href="dashboard.php">View</a>';
+                $modal_button = '<a href="edit_profile.php">View</a>';
             } else{
                 $modal_display = "";
                 $modal_status = "error";
                 $modal_title = "Admin Profile Information Error";
                 $modal_message = "Try again later";
-                $modal_button = '<a href="../index.php">OK</a>';
+                $modal_button = '<a href="admins.php">OK</a>';
             }
             $stmt->close();
           }
@@ -197,13 +209,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../img/tarlac-seal.ico" type="image/x-icon">
-    <link rel="icon" href="../img/tarlac-seal.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="shortcut icon" href="../../img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="icon" href="../../img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/style.css">
     <!-- Javascript -->
-    <script src="../js/script.js" defer></script>
-    <script src="../js/form.js" defer></script>
-    <script src="../js/modal.js" defer></script>
+    <script src="../../js/script.js" defer></script>
+    <script src="../../js/form.js" defer></script>
+    <script src="../../js/modal.js" defer></script>
     <title>Edit Profile</title>
 </head>
 <body>
@@ -220,31 +232,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <nav>
         <div class="logo">
-            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
             <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <img id="toggle" src="../../img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
-                <li class="current"><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="management/users.php">Management</a></li>
-                <li><a href="permit/msme.php">Permit</a></li>
-                <li><a href="../php/logout.php">Logout</a></li>
+                <li class="current"><a href="../dashboard.php">Dashboard</a></li>
+                <li><a href="../management/users.php">Management</a></li>
+                <li><a href="../permit/msme.php">Permit</a></li>
+                <li><a href="../../php/logout.php">Logout</a></li>
             </ul>
             <ul id="subnav-links">
-                <li class="current"><a href="edit_profile.php">Edit Profile</a></li>
+                <li class="current"><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
     </nav>
 
     <nav id="subnav">
         <div class="logo">
-            <img src="../img/admin.svg" alt="Tarlac City Seal">
+            <img src="../../img/admin.svg" alt="Tarlac City Seal">
             <p>Admin</p>  
         </div>
         <div class="button-group">
             <ul>
-                <li class="current"><a href="edit_profile.php">Edit Profile</a></li>
+            <li class="current"><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
     </nav>
