@@ -1,16 +1,16 @@
-<?php 
+<?php
 session_start();
-require_once "../../php/connection.php";
-require_once "../../php/functions.php";
+require_once "../php/connection.php";
+require_once "../php/functions.php";
 
-if($_SESSION["role"] !== "user"){
-    header("location: ../../index.php");
+if($_SESSION["role"] !== "Admin"){
+    header("location: ../index.php");
     exit;
 }
 
 $modal_display = "hidden";
 
-$sql = "SELECT * FROM Owner WHERE UserID = ?";
+$sql = "SELECT * FROM Admin WHERE UserID = ?";
 
 if($stmt = $mysqli->prepare($sql)){
 
@@ -30,11 +30,8 @@ if($stmt = $mysqli->prepare($sql)){
                 $mname = $row["MiddleName"];
                 $lname = $row["LastName"];
                 $suffix = $row["Suffix"];
-                $gender = $row["Gender"];
-                $contact = substr($row["ContactNumber"],3);
-                $address = $row["Address"];
-                $barangay = $row["Barangay"];
-                $_SESSION["OwnerID"] = $row['OwnerID'];
+                $role = $row["Role"];
+                $_SESSION["AdminID"] = $row['AdminID'];
 
             }else {
                 $submit_btn = "Submit";
@@ -45,21 +42,13 @@ if($stmt = $mysqli->prepare($sql)){
             $modal_status = "error";
             $modal_title = "Owner Profile Information Error";
             $modal_message = "Profile cannot be retrieve";
-            $modal_button = '<a href="../dashboard.php">OK</a>';
+            $modal_button = '<a href="dashboard.php">OK</a>';
         }
 
     $stmt->close();
 }
 
-if(isset($_SESSION['BusinessID'])){
-    $businessID = validate($_SESSION['BusinessID']);
-}else{
-    $businessID = "";
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-    if(checkPermit($businessID) === "None"){
 
         $errors = [];
         //FIRST NAME
@@ -102,41 +91,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }else{
             $suffix = null;
         }
-        //gender
-        $gender = validate($_POST["gender"]);
-        if(empty($gender)){
-            $errors["gender"] = "Select Gender";
-        }
-        // contact number
-        $contact = validate($_POST['contact']);
-        if(empty($contact)){
-            $errors["contact"] = "Enter Contact Number";
-        } elseif(!preg_match('/^[0-9]{10}$/',$contact)){
-            $errors["contact"] = "Only Numbers are allowed";
-        }
-        // address
-        $address = $_POST['address'];
-        if(empty($address)){
-            $errors["address"] = "Enter Address";
-        }elseif(!preg_match("/^[a-zA-Z 0-9&*@#().\/~-]*$/", $address)){
-            $errors["address"] = "Invalid Address";
+        //Role
+        $role = validate($_POST["role"]);
+        if(empty($role)){
+            $errors["role"] = "Enter Role";
+        } elseif(!preg_match("/^[a-zA-Z- ]*$/", $role)){
+            $errors["role"] = "Only Letters and Spaces are allowed";
         } else{
-            $address = ucwords(strtolower($address));
-        }
-        //barangay
-        $barangay = validate($_POST["barangay"]);
-        if(empty($barangay)){
-            $errors["barangay"]  = "Select Barangay";
+              $role = ucwords(strtolower($role));
         }
 
     //insert to database
     if(empty($errors)){ 
 
         if($submit_btn === "Update"){
-            $sql = "UPDATE Owner SET FirstName = ?, MiddleName = ?, LastName = ?, Suffix = ?, Gender = ?, ContactNumber = ?, Address = ?, Barangay = ? WHERE OwnerID = ?";
+            $sql = "UPDATE Owner SET FirstName = ?, MiddleName = ?, LastName = ?, Suffix = ?, Role = ? WHERE OwnerID = ?";
         }else {
 
-            $sql_owner = "SELECT OwnerID as maxID FROM Owner ORDER BY OwnerID DESC LIMIT 1";
+            $sql_owner = "SELECT AdminID as maxID FROM Admin ORDER BY AdminID DESC LIMIT 1";
 
             if($stmt_owner = $mysqli->prepare($sql_owner)) {
 
@@ -151,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt_owner->close();
             }
             $currentYear = date('Y');
-            if($lastID) {
+            if($lastID !== null) {
                 $year = substr($lastID, 2, 4);
                 $countDash = substr($lastID, 7);
                 $count = str_replace("-","",$countDash);
@@ -167,21 +139,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $count = str_pad($count, 6, '0', STR_PAD_LEFT);
             $countDash = substr_replace($count, "-", 3, 0);
-            $ownerID = "O-" . $currentYear . "-" . $countDash; 
+            $adminID = "A-" . $currentYear . "-" . $countDash; 
 
-            $sql = "INSERT INTO Owner (UserID, OwnerID, FirstName, MiddleName, LastName, Suffix, Gender, ContactNumber, Address, Barangay) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO Admin (UserID, AdminID, FirstName, MiddleName, LastName, Suffix, Role) VALUES (?, ?, ?, ?, ?, ?, ?)";
         }
 
        if($stmt = $mysqli->prepare($sql)){
  
             if($submit_btn === "Update"){
-                $stmt->bind_param("sssssssss",$param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_contact, $param_address, $param_barangay, $param_OwnerID);
+                $stmt->bind_param("ssssss",$param_fname, $param_mname, $param_lname, $param_suffix,$param_role, $param_AdminID);
 
-                $param_OwnerID = validate($_SESSION['OwnerID']);
+                $param_AdminID = validate($_SESSION['AdminID']);
             }else {
-                $stmt->bind_param("ssssssssss",$param_UserID, $param_OwnerID, $param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_contact, $param_address, $param_barangay);
+                $stmt->bind_param("sssssss",$param_UserID, $param_AdminID, $param_fname, $param_mname, $param_lname, $param_suffix,$param_role);
 
-                $param_OwnerID = $ownerID;
+                $param_AdminID = $adminID;
                 $param_UserID = validate($_SESSION['UserID']);
             }
             
@@ -189,50 +161,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_mname = $mname;
             $param_lname = $lname;
             $param_suffix = $suffix;
-            $param_gender = $gender;
-            $param_contact = "+63".$contact;
-            $param_address = $address;
-            $param_barangay = $barangay;
+            $param_role = $role;
                         
             if($stmt->execute()){
                 $modal_display = "";
                 $modal_status = "success";
 
                 if($submit_btn === "Update"){
-                    $modal_title = "Owner Profile Information Updated";
-                    $modal_message = "Your Owner Profile has been updated";
+                    $modal_title = "Admin Profile Information Updated";
+                    $modal_message = "Your Admin Profile has been updated";
                 }else{
-                    $_SESSION['OwnerID'] = $ownerID;
-                    $modal_title = "Owner Profile Creation Success";
-                    $modal_message = "You can now create a business Profile ";
+                    $_SESSION['AdminID'] = $adminID;
+                    $modal_title = "Admin Profile Creation Success";
+                    $modal_message = "You can now access the data ";
                 }
-                $modal_button = '<a href="../dashboard.php">View</a>';
+                $modal_button = '<a href="dashboard.php">View</a>';
             } else{
                 $modal_display = "";
                 $modal_status = "error";
-                $modal_title = "Owner Profile Information Error";
+                $modal_title = "Admin Profile Information Error";
                 $modal_message = "Try again later";
-                $modal_button = '<a href="../../index.php">OK</a>';
+                $modal_button = '<a href="../index.php">OK</a>';
             }
             $stmt->close();
           }
         }
-
-    }else if(checkPermit($businessID) === "Issued"){
-
-        $modal_display = "";
-        $modal_status = "warning";
-        $modal_title = "Owner Profile cannot be updated";
-        $modal_message = "The permit has already been issued";
-        $modal_button = '<a href="../dashboard.php">OK</a>';
-
-    }else{
-        $modal_display = "";
-        $modal_status = "error";
-        $modal_title = "Business Permit Error";
-        $modal_message = "Try again Later";
-        $modal_button = '<a href="../../index.php">OK</a>';
-    }  
 }
 
     $mysqli->close();
@@ -244,13 +197,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../../img/tarlac-seal.ico" type="image/x-icon">
-    <link rel="icon" href="../../img/tarlac-seal.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="shortcut icon" href="../img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="icon" href="../img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../css/style.css">
     <!-- Javascript -->
-    <script src="../../js/script.js" defer></script>
-    <script src="../../js/form.js" defer></script>
-    <script src="../../js/modal.js" defer></script>
+    <script src="../js/script.js" defer></script>
+    <script src="../js/form.js" defer></script>
+    <script src="../js/modal.js" defer></script>
     <title>Edit Profile</title>
 </head>
 <body>
@@ -267,14 +220,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <nav>
         <div class="logo">
-                <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+                <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
                 <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <img id="toggle" src="../../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
-                <li><a href="../dashboard.php">Dashboard</a></li>
-                <li><a href="../../php/logout.php">Logout</a></li>
+                <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="../php/logout.php">Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -282,7 +235,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <main>
         <div class="column-container">   
             <div class="text-center">
-                <p class="title">Owner Profile</p>
+                <p class="title">Admin Profile</p>
                 <p class="sentence">Enter your informations to make a profile</p>
             </div>
 
@@ -319,61 +272,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </div>
 
                 <div class="input-row">
-                    <div class="input-group">
-                        <label for="gender">Gender</label>
-                        <select name="gender" id="gender">
-                            <option value="" disabled selected>Select Gender..</option>
-                            <option value="Male" <?= $gender === "Male" ? "selected" : "" ?>>Male</option>
-                            <option value="Female" <?= $gender === "Female" ? "selected" : "" ?>>Female</option>
-                        </select>
-                        <div class="error-msg"><?= $errors["gender"]; ?></div>
-                    </div>
 
                     <div class="input-group">
-                        <label for="contact">Contact Number</label>
-                        <div class="flex">
-                            <div class="pre-input">+63</div>
-                            <input class="flex-grow-1" type="text" id="contact" name="contact" placeholder="Contact Number" maxlength="10" value="<?= $contact; ?>">
-                        </div>
-                        <div class="error-msg"><?= $errors["contact"]; ?></div>
+                        <label for="mname">Role</label>
+                        <input type="text" id="role" name="role" placeholder="Role" value="<?= $role; ?>">
+                        <div class="error-msg"><?= $errors["role"]; ?></div>
                     </div>
                 </div>
 
-            <div class="input-row">
-
-                <div class="input-group">
-                    <label for="address">House/Unit No./Building/Street</label>
-                    <input type="text" id="address" name="address" placeholder="House No./Unit No./Building/Street" value="<?= $address; ?>">
-                    <div class="error-msg"><?= $errors["address"]; ?></div>
-                </div>
-
-                <div class="input-group">
-                    <label for="barangay">Barangay</label>
-                    <select id="barangay" name="barangay">
-                    <option value="" disabled selected>Select Barangay...</option>
-                        <?php
-                        $barangays = array(
-                            'Aguso','Alvindia','Amucao','Armenia','Asturias','Atioc',
-                            'Balanti','Balete','Balibago I','Balibago II','Balingcanaway','Banaba','Bantog','Baras-baras','Batang-batang','Binauganan','Bora','Buenavista','Buhilit','Burot',
-                            'Calingcuan','Capehan','Carangian','Care','Central','Culipat','Cut-cut I','Cut-cut II',
-                            'Dalayap','Dela Paz','Dolores',
-                            'Laoang','Ligtasan','Lourdes',
-                            'Mabini','Maligaya','Maliwalo','Mapalacsiao','Mapalad','Matatalaib',
-                            'Paraiso','Poblacion',
-                            'Salapungan','San Carlos','San Francisco','San Isidro','San Jose','San Jose de Urquico','San Juan Bautista','San Juan de Mata','San Luis','San Manuel','San Miguel','San Nicolas','San Pablo','San Pascual','San Rafael','San Roque','San Sebastian','San Vicente','Santa Cruz','Santa Maria','Santo Cristo','Santo Domingo','Santo Niño','Sapang Maragul','Sapang Tagalog','Sepung Calzada','Sinait','Suizo',
-                            'Tariji','Tibag','Tibagan','Trinidad',
-                            'Ungot',
-                            'Villa Bacolor'
-                                );
-                                foreach ($barangays as $barangay_name) {
-                                    echo "<option value='$barangay_name' " . ($barangay === $barangay_name ? "selected" : "") . ">$barangay_name</option>";
-
-                                }
-                            ?>
-                        </select>
-                        <div class="error-msg"><?= $errors["barangay"]; ?></div>
-                </div>
-            </div>
             <input type="submit" value="<?= $submit_btn ?>">
         </form>
         </div>
