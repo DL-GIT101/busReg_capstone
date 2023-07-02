@@ -128,7 +128,7 @@ $mysqli->close();
                 <table id="admin"> 
                     <tr>
                         <td colspan="5"> 
-                            <div class="data">
+                            <div class="data" id="addUser">
                                 <img src="../../img/add-user.svg" alt=""> Add Admin
                             </div>
                         </td>
@@ -148,7 +148,14 @@ $mysqli->close();
                                     <td><div class="data">'.$admin['profile'].'</div></td>
                                     <td><div class="data">'.$admin['role'].'</div></td>
 
-                                    <td><div class="action delete"><img class="deleteUser" src="../../img/delete.svg" alt="Delete"></div></td>
+                                    <td class="actions">
+                                        <div class="action delete">
+                                            <img class="deleteUser" src="../../img/delete.svg" alt="Delete">
+                                        </div>
+                                        <div class="action edit">
+                                            <img class="editUser" src="../../img/edit.svg" alt="Delete">
+                                        </div>
+                                    </td>
 
                                 </tr>';
                 }
