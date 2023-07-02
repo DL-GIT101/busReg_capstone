@@ -150,14 +150,14 @@ if(!empty($id)) {
 
                 $modal_title = "Registration Successful";
                 $modal_message = "Account has been successfully created <br>";
-                $modal_button = '<a href="dashboard.php">OK</a>';
+                $modal_button = '<a href="admins.php">OK</a>';
 
                 $modal_status = "success";
                 $modal_display = "";
             } else {
                 $modal_title = "Registration Fail";
                 $modal_message = "Try again later <br>";
-                $modal_button = '<a href="dashboard.php">OK</a>';
+                $modal_button = '<a href="admins.php">OK</a>';
 
                 $modal_status = "error";
                 $modal_display = "";
@@ -214,6 +214,7 @@ $mysqli->close();
             <ul id="subnav-links">
                 <li><a href="edit_profile.php">Edit Profile</a></li>
                 <li class="current"><a href="add_admin.php">Add Admin</a></li>
+                <li><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
     </nav>
@@ -227,6 +228,7 @@ $mysqli->close();
             <ul>
                 <li><a href="edit_profile.php">Edit Profile</a></li>
                 <li class="current"><a href="add_admin.php">Add Admin</a></li>
+                <li><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
     </nav>

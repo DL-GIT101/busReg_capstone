@@ -1,4 +1,4 @@
-<?php ini_set('display_errors', 1);
+<?php 
 session_start();
 require_once "../php/connection.php";
 require_once "../php/functions.php";
@@ -103,6 +103,7 @@ if($stmt_permit = $mysqli->prepare($sql_permit)){
             <ul id="subnav-links">
                 <li><a href="edit_profile.php">Edit Profile</a></li>
                 <li><a href="add_admin.php">Add Admin</a></li>
+                <li><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
     </nav>
@@ -116,6 +117,7 @@ if($stmt_permit = $mysqli->prepare($sql_permit)){
             <ul>
                 <li><a href="edit_profile.php">Edit Profile</a></li>
                 <li><a href="add_admin.php">Add Admin</a></li>
+                <li><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
     </nav>
