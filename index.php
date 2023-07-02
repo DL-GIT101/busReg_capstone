@@ -14,7 +14,7 @@ if($_SESSION["role"] === "user") {
             ';
 }else{
     $links = '
-                <li><a href="user/login.php">Login</a></li>
+                <li><a href="login.php">Login</a></li>
                 <li><a href="user/register.php">Register</a></li>
             ';
 }
