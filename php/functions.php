@@ -125,6 +125,7 @@ function hasAdminProfile($id){
 
                 $row = $result->fetch_assoc();
                 $_SESSION["AdminID"] = $row['AdminID'];
+                $_SESSION["AdminRole"] = $row['Role'];
 
                 return true;
             }else {
