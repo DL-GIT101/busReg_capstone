@@ -1,16 +1,21 @@
 <?php
 session_start();
-require_once "../php/connection.php";
-require_once "../php/functions.php";
+require_once "../../php/connection.php";
+require_once "../../php/functions.php";
 
 if($_SESSION["role"] !== "Admin"){
-    header("location: ../index.php");
+    header("location: ../../index.php");
     exit;
 }
 
 if(isset($_GET['message'])){
     $modal_get = urldecode($_GET['message']);
     echo $modal_get;
+}
+
+if($_SESSION["AdminRole"] !== "Superadmin"){
+    header("location: ../dashboard.php");
+    exit;
 }
 
 $modal_display = "hidden";
@@ -65,10 +70,12 @@ $mysqli->close();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="../js/script.js" defer></script>
-    <script src="../js/modal.js" defer></script>
-    <script src="../js/table.js" defer></script>
+    <link rel="shortcut icon" href="../../img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="icon" href="../../img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script src="../../js/script.js" defer></script>
+    <script src="../../js/modal.js" defer></script>
+    <script src="../../js/table.js" defer></script>
     <title>Management</title>
 </head>
 <body>
@@ -84,19 +91,19 @@ $mysqli->close();
 
     <nav>
         <div class="logo">
-            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
             <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
-        <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
+        <img id="toggle" src="../../img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
-                <li class="current"><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="management/users.php">Management</a></li>
-                <li><a href="permit/msme.php">Permit</a></li>
-                <li><a href="../php/logout.php">Logout</a></li>
+                <li class="current"><a href="../dashboard.php">Dashboard</a></li>
+                <li><a href="../management/users.php">Management</a></li>
+                <li><a href="../permit/msme.php">Permit</a></li>
+                <li><a href="../../php/logout.php">Logout</a></li>
             </ul>
             <ul id="subnav-links">
-                <li><a href="edit_profile.php">Edit Profile</a></li>
+                <li><a href="../edit_profile.php">Edit Profile</a></li>
                 <li class="current"><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
@@ -104,12 +111,12 @@ $mysqli->close();
 
     <nav id="subnav">
         <div class="logo">
-            <img src="../img/admin.svg" alt="Tarlac City Seal">
+            <img src="../../img/admin.svg" alt="Tarlac City Seal">
             <p>Admin</p>  
         </div>
         <div class="button-group">
             <ul>
-                <li><a href="edit_profile.php">Edit Profile</a></li>
+                <li><a href="../edit_profile.php">Edit Profile</a></li>
                 <li class="current"><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
@@ -122,7 +129,7 @@ $mysqli->close();
                     <tr>
                         <td colspan="5"> 
                             <div class="data">
-                                <img src="../img/add-user.svg" alt=""> Add Admin
+                                <img src="../../img/add-user.svg" alt=""> Add Admin
                             </div>
                         </td>
                     </tr>  
@@ -141,7 +148,7 @@ $mysqli->close();
                                     <td><div class="data">'.$admin['profile'].'</div></td>
                                     <td><div class="data">'.$admin['role'].'</div></td>
 
-                                    <td><div class="action delete"><img class="deleteUser" src="../img/delete.svg" alt="Delete"></div></td>
+                                    <td><div class="action delete"><img class="deleteUser" src="../../img/delete.svg" alt="Delete"></div></td>
 
                                 </tr>';
                 }
