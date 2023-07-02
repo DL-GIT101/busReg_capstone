@@ -8,6 +8,10 @@ if($_SESSION["role"] !== "Admin"){
     exit;
 }
 
+if($_SESSION["AdminRole"] === "Superadmin"){
+    $adminLinks = '<li><a href="Superadmin/admins.php">Admin List</a></li>';
+}
+
 $sql_owner = "SELECT COUNT(*) FROM Owner";
     if($stmt_owner = $mysqli->prepare($sql_owner)){
         if($stmt_owner->execute()){
@@ -102,7 +106,7 @@ if($stmt_permit = $mysqli->prepare($sql_permit)){
             </ul>
             <ul id="subnav-links">
                 <li><a href="edit_profile.php">Edit Profile</a></li>
-                <li><a href="admins.php">Admin List</a></li>
+                <?= $adminLinks ?>
             </ul>
         </div>
     </nav>
@@ -115,7 +119,7 @@ if($stmt_permit = $mysqli->prepare($sql_permit)){
         <div class="button-group">
             <ul>
                 <li><a href="edit_profile.php">Edit Profile</a></li>
-                <li><a href="admins.php">Admin List</a></li>
+                <?= $adminLinks ?>
             </ul>
         </div>
     </nav>
