@@ -263,13 +263,13 @@ $mysqli->close();
                     </select>
                     <div class="error-msg"><?= $errors["uploadReqName"]; ?></div>
                 </td>
-                <td colspan="3">
+                <td colspan="2">
                     <input type="file" name="uploadReq" id="uploadReq">
                     <div class="error-msg"><?= $errors["uploadReq"]; ?></div>
                 </td>
                 </tr>
                 <tr>
-                    <td class="uploadBtn" colspan="4">
+                    <td class="uploadBtn" colspan="3">
                         <input type="submit" value="Upload">
                         
                     </td>
