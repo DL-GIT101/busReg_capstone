@@ -265,6 +265,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="column-container">   
             <div class="text-center">
                 <p class="title">Admin Profile</p>
+                <p class="title"><?= $editUserID ?></p>
                 <p class="sentence">Enter your informations to make a profile</p>
             </div>
 
