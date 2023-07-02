@@ -220,14 +220,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <nav>
         <div class="logo">
-                <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City Business Permit & Licensing Office</p>  
+            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
         <img id="toggle" src="../img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
-                <li><a href="dashboard.php">Dashboard</a></li>
+                <li class="current"><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="management/users.php">Management</a></li>
+                <li><a href="permit/msme.php">Permit</a></li>
                 <li><a href="../php/logout.php">Logout</a></li>
+            </ul>
+            <ul id="subnav-links">
+                <li class="current"><a href="edit_profile.php">Edit Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="subnav">
+        <div class="logo">
+            <img src="../img/admin.svg" alt="Tarlac City Seal">
+            <p>Admin</p>  
+        </div>
+        <div class="button-group">
+            <ul>
+                <li class="current"><a href="edit_profile.php">Edit Profile</a></li>
             </ul>
         </div>
     </nav>
