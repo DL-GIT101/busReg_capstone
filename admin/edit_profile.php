@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if(empty($errors)){ 
 
         if($submit_btn === "Update"){
-            $sql = "UPDATE Owner SET FirstName = ?, MiddleName = ?, LastName = ?, Suffix = ?, Role = ? WHERE OwnerID = ?";
+            $sql = "UPDATE Admin SET FirstName = ?, MiddleName = ?, LastName = ?, Suffix = ?, Role = ? WHERE AdminID = ?";
         }else {
 
             $sql_owner = "SELECT AdminID as maxID FROM Admin ORDER BY AdminID DESC LIMIT 1";
