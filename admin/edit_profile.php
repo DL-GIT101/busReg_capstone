@@ -233,6 +233,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </ul>
             <ul id="subnav-links">
                 <li class="current"><a href="edit_profile.php">Edit Profile</a></li>
+                <li><a href="add_admin.php">Add Admin</a></li>
             </ul>
         </div>
     </nav>
@@ -245,6 +246,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="button-group">
             <ul>
                 <li class="current"><a href="edit_profile.php">Edit Profile</a></li>
+                <li><a href="add_admin.php">Add Admin</a></li>
             </ul>
         </div>
     </nav>
