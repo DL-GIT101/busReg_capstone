@@ -1,13 +1,13 @@
 <?php 
 session_start();
-require_once "../php/connection.php";
-require_once "../php/functions.php";
+require_once "php/connection.php";
+require_once "php/functions.php";
 
-if($_SESSION["role"] === "user") {
-    header("location: dashboard.php");
+if($_SESSION["role"] === "Owner") {
+    header("location: user/dashboard.php");
     exit;
-}elseif($_SESSION["role"] === "admin") {
-    header("location: ../admin/dashboard.php");
+}elseif($_SESSION["role"] === "Admin") {
+    header("location: admin/dashboard.php");
     exit;
 }
 
@@ -35,7 +35,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if(empty($errors)) {
 
-        $sql = "SELECT UserID, Email, Password FROM User WHERE Email = ?";
+        $sql = "SELECT * FROM User WHERE Email = ?";
 
         if($stmt = $mysqli->prepare($sql)){
 
@@ -49,28 +49,36 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if($stmt->num_rows === 1) {
 
-                    $stmt->bind_result($id,$email,$hashed_pword);
+                    $stmt->bind_result($UserID,$email,$hashed_pword,$role);
 
                     if($stmt->fetch()){
 
                         if(password_verify($password, $hashed_pword)){
 
-                            $_SESSION["UserID"] = $id;
-                            $_SESSION["role"] = "user";
+                            $_SESSION["UserID"] = $UserID;
+                            $_SESSION["role"] = $role;
 
-                            if(hasOwnerProfile($id) === true){
-                                if(hasBusinessProfile($_SESSION["OwnerID"]) === true){
-                                header("location: dashboard.php");
-                                }else{
-                                header("location: Business/edit_profile.php");
-                                }
-                                exit;
-                            }else{
-                                header("location: Owner/edit_profile.php");
-                            }
+    if($role === "Owner"){
+        if(hasOwnerProfile($UserID) === true){
+            if(hasBusinessProfile($_SESSION["OwnerID"]) === true){
+            header("location: user/dashboard.php");
+            }else{
+            header("location: user/Business/edit_profile.php");
+            }
+            exit;
+        }else{
+            header("location: user/Owner/edit_profile.php");
+        }
+    }else if($role === "Admin"){
+        if(hasAdminProfile($UserID) === true){
+            header("location: admin/dashboard.php");
+        }else{
+            header("location: admin/edit_profile.php");
+        }
+        exit;
+    }
 
-                            exit;
-
+    exit;
                         }else{
 
                             $login_err = "Invalid email or password";
@@ -84,7 +92,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $modal_title = "Login Error";
                 $modal_message = "Try again later";
-                $modal_button = '<a href="../index.php">OK</a>';
+                $modal_button = '<a href="index.php">OK</a>';
 
                 $modal_status = "error";
                 $modal_display = "";
@@ -106,12 +114,12 @@ $mysqli->close();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../img/tarlac-seal.ico" type="image/x-icon">
-    <link rel="icon" href="../img/tarlac-seal.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="shortcut icon" href="img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="icon" href="img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/style.css">
     <!-- Javascript -->
-    <script src="../js/script.js" defer></script>
-    <script src="../js/form.js" defer></script>
+    <script src="js/script.js" defer></script>
+    <script src="js/form.js" defer></script>
     <title>Login</title>
 </head>
 <body>
@@ -128,13 +136,13 @@ $mysqli->close();
 
     <nav>
         <div class="logo">
-            <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <img src="img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
             <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
         <img id="toggle" src="img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
-                <li><a href="register.php">Register</a></li>
+                <li><a href="user/register.php">Register</a></li>
             </ul>
         </div>
     </nav>
@@ -160,7 +168,7 @@ $mysqli->close();
                 <div class="error-msg"><?= $errors["password"]; ?></div>
 
                 <input type="submit" value="Login">
-                <a href="register.php">Don't have an account? Click Here</a>
+                <a href="user/register.php">Don't have an account? Click Here</a>
             </form>
 
         </div>
