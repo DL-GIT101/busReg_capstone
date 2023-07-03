@@ -3,7 +3,7 @@ session_start();
 require_once "connection.php";
 require_once "functions.php";
 
-if(checkRole($_SESSION["role"]) !== "admin"){
+if($_SESSION["role"] !== "Admin"){
     header("location: ../index.php");
     exit;
 }
@@ -13,7 +13,7 @@ if(isset($_GET['user'])){
     $user_id = urldecode($_GET['user']);
     $sql = "DELETE FROM users WHERE id = ?";
     $page = "management";
-
+    $link = "../admin/management/users.php";
 }else if(isset($_GET['profile'])){
 
     $user_id = validate($_GET['profile']);
@@ -22,17 +22,23 @@ if(isset($_GET['user'])){
         LEFT JOIN new_documents ON user_profile.user_id = new_documents.user_id
         WHERE user_profile.user_id = ?";
     $page = "profile";
-
+    $link = "../admin/management/users.php";
 }else if(isset($_GET['documents'])){
 
     $user_id = validate($_GET['documents']);
     $sql = "DELETE FROM new_documents WHERE user_id = ?";
     $page = "documents";
+    $link = "../admin/management/users.php";
+}else if(isset($_GET['admin'])){
 
+    $user_id = validate($_GET['admin']);
+    $sql = "DELETE FROM User WHERE UserID = ?";
+    $page = "admin";
+    $link = "../admin/Superadmin/admins.php";
 }else{
-    header("location: ../admin/management/users.php");
+    $link = "../admin/dashboard.php";
 }
-$link = "../admin/management/users.php";
+
 $userDirectory = '../user/upload/' . $user_id;
 $error = "";
 
@@ -58,6 +64,10 @@ if(checkPermit($user_id) === "None"){
             } else if($page === "documents"){
                 
                 $title = "All Docuements has been deleted";
+
+            }else if($page === "admin"){
+                
+                $title = "The admin account has been deleted";
             }
         
             $message = '<modal>
