@@ -86,7 +86,7 @@ if(delete_user){
 
       let link = document.createElement('a');
 
-      if(admin_page.innerText === "Management"){
+      if(admin_page.innerText === "User Management"){
         let row = btn.parentNode.parentNode;
         let idTD = row.firstElementChild;
         let id = idTD.innerText;
