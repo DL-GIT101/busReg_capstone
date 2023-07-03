@@ -288,7 +288,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <li><a href="../../php/logout.php">Logout</a></li>
             </ul>
             <ul id="subnav-links">
-                <li class="current"><a href="users.php">List</a></li>
+                <li><a href="users.php">List</a></li>
                 <li class="current"><a href="edit_owner.php">Profile</a></li>
                 <li><a href="edit_business.php">Business</a></li>
                 <li><a href="documents.php">Documents</a></li>
