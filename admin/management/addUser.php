@@ -143,9 +143,8 @@ $stmt->bind_param("ssss",$param_id, $param_email, $param_pword,$param_role);
         if($stmt->execute()) {
 
             $modal_title = "Registration Successful";
-            $modal_message = "Your account has been successfully created <br>";
-            $modal_message .= "You can now log in using your credentials";
-            $modal_button = '<a href="users.php">Login</a>';
+            $modal_message = "User has been successfully created <br>";
+            $modal_button = '<a href="users.php">View</a>';
 
             $modal_status = "success";
             $modal_display = "";
@@ -173,8 +172,8 @@ $mysqli->close();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../img/tarlac-seal.ico" type="image/x-icon">
-    <link rel="icon" href="img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="../../img/tarlac-seal.ico" type="image/x-icon">
+    <link rel="icon" href="../../img/tarlac-seal.ico" type="image/x-icon">
     <link rel="stylesheet" href="../../css/style.css">
     <script src="../../js/script.js" defer></script>
     <script src="../../js/form.js" defer></script>
@@ -205,7 +204,7 @@ $mysqli->close();
                 <li><a href="../../php/logout.php">Logout</a></li>
             </ul>
             <ul id="subnav-links">
-                <li><a href="users.php">Owner List</a></li>
+                <li><a href="users.php">List</a></li>
                 <li class="current"><a href="addUser.php">Add Owner</a></li>
             </ul>
         </div>
