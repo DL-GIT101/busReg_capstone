@@ -11,7 +11,7 @@ if($_SESSION["role"] !== "Admin"){
 if(isset($_GET['user'])){
 
     $user_id = urldecode($_GET['user']);
-    $sql = "DELETE FROM users WHERE id = ?";
+    $sql = "DELETE FROM User WHERE UserID = ?";
     $page = "management";
     $link = "../admin/management/users.php";
 }else if(isset($_GET['profile'])){
