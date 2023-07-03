@@ -44,10 +44,10 @@ if ($result = $mysqli->query($sql_user)) {
             }
             if($row['Uploaded'] === 12){
                 $uploaded = "Complete";
-            }else if($row['Uploaded'] === 0){
-                $uploaded = "None";
-            }else{
+            }else if($row['Uploaded'] > 0){
                 $uploaded = "Incomplete";
+            }else{
+                $uploaded = "None";
             }
             if($row['PermitID'] !== null){
                 $permit = "Issued";
