@@ -205,6 +205,7 @@ $mysqli->close();
                 <li><a href="../../php/logout.php">Logout</a></li>
             </ul>
             <ul id="subnav-links">
+                <li><a href="users.php">Owner List</a></li>
                 <li class="current"><a href="addUser.php">Add Owner</a></li>
             </ul>
         </div>
@@ -217,6 +218,7 @@ $mysqli->close();
         </div>
         <div class="button-group">
             <ul>
+                <li><a href="users.php">Owner List</a></li>
                 <li class="current"><a href="addUser.php">Add Owner</a></li>
             </ul>
         </div>
