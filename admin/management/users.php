@@ -132,7 +132,7 @@ $mysqli->close();
 
     <main>
         <div class="column-container height-auto">
-            <p id="page" class="title text-center">Owner Management</p>
+            <p id="page" class="title text-center">User Management</p>
                 <table id="users"> 
                     <tr>
                         <td colspan="6"> 
