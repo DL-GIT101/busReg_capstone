@@ -26,9 +26,13 @@ function hasOwnerProfile($id){
             if($result->num_rows === 1){
 
                 $row = $result->fetch_assoc();
-                $_SESSION["OwnerID"] = $row['OwnerID'];
-
-                return true;
+                if($_SESSION["role"] === "Admin"){
+                    return $row['OwnerID'];
+                }else{
+                    $_SESSION["OwnerID"] = $row['OwnerID'];
+                    return true;
+                }
+                
             }else {
                 return false;
             }
