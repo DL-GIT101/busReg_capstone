@@ -110,7 +110,8 @@ $mysqli->close();
             </ul>
             <ul id="subnav-links">
                 <li class="current"><a href="users.php">List</a></li>
-                <li><a href="profiles.php">Profile</a></li>
+                <li><a href="edit_owner.php">Profile</a></li>
+                <li><a href="edit_business.php">Business</a></li>
                 <li><a href="documents.php">Documents</a></li>
             </ul>
         </div>
@@ -124,7 +125,8 @@ $mysqli->close();
         <div class="button-group">
             <ul>
                 <li class="current"><a href="users.php">List</a></li>
-                <li><a href="profiles.php">Profile</a></li>
+                <li><a href="edit_owner.php">Profile</a></li>
+                <li><a href="edit_business.php">Business</a></li>
                 <li><a href="documents.php">Documents</a></li>
             </ul>
         </div>
