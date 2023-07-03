@@ -729,6 +729,11 @@ table#admin td .data:hover{
     filter: none;
 }
 
+table#admin td #addUser:hover{
+    cursor: pointer;
+    filter: brightness(0.8);
+}
+
 /* Single Styles */
 
 .height-auto {
