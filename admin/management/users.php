@@ -3,7 +3,7 @@ session_start();
 require_once "../../php/connection.php";
 require_once "../../php/functions.php";
 
-if(checkRole($_SESSION["role"]) !== "admin"){
+if($_SESSION["role"] !== "Admin"){
     header("location: ../../index.php");
     exit;
 }
@@ -15,101 +15,59 @@ if(isset($_GET['message'])){
 
 $modal_display = "hidden";
 
-$all_business = array(); 
+$owners = array(); 
 
-$user_sql = "SELECT id FROM users WHERE id <> ? ORDER BY id DESC";
-    if($user_stmt = $mysqli->prepare($user_sql)){
-        $user_stmt->bind_param("s", $adminID);
-        $adminID = validate($_SESSION['id']);
-        if($user_stmt->execute()) {
-            $user_stmt->bind_result($id);
+$sql_user = "SELECT User.UserID, Owner.OwnerID, Business.BusinessID, COUNT(Requirement.BusinessID) AS Uploaded, Permit.PermitID
+FROM User
+LEFT JOIN Owner ON User.UserID = Owner.UserID
+LEFT JOIN Business ON Owner.OwnerID = Business.OwnerID
+LEFT JOIN Requirement ON Business.BusinessID = Requirement.BusinessID
+LEFT JOIN Permit ON Business.BusinessID = Permit.BusinessID
+WHERE User.Role = 'Owner'
+GROUP BY User.UserID, Owner.OwnerID, Business.BusinessID
+ORDER BY User.UserID DESC;";
 
-            while($user_stmt->fetch()){
-                $row = array(
-                    'id' => $id,
-                );             
+if ($result = $mysqli->query($sql_user)) {
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
 
-            $all_business[] = $row;
-
+            if($row['OwnerID'] !== null){
+                $ownerProfile = "Created";
+            }else{
+                $ownerProfile = "None";
             }
-            $user_stmt->close(); 
+
+            if($row['BusinessID'] !== null){
+                $businessProfile = "Created";
+            }else{
+                $businessProfile = "None";
+            }
+            if($row['Uploaded'] === 12){
+                $uploaded = "Complete";
+            }else if($row['Uploaded'] === 0){
+                $uploaded = "None";
+            }else{
+                $uploaded = "Incomplete";
+            }
+            if($row['PermitID'] !== null){
+                $permit = "Issued";
+            }else{
+                $permit = "None";
+            }
+            $owner = array(
+                'UserID' => $row['UserID'],
+                'Owner' => $ownerProfile,
+                'Business' => $businessProfile,
+                'Requirements' => $uploaded,
+                'Permit' => $permit
+            );
+        $owners[] = $owner;
         }
-        
+    } else {
+        echo "No users found with the role of Owner.";
     }
-
-   foreach ($all_business as &$business) {
-        $profile_sql = "SELECT COUNT(*) FROM user_profile WHERE user_id = ? ORDER BY user_id DESC";
-            if ($profile_stmt = $mysqli->prepare($profile_sql)) {
-               $profile_stmt->bind_param("s", $current_id);
-               $current_id = $business['id'];
-                 if ($profile_stmt->execute()) {
-                     $profile_stmt->bind_result($profile_check);
-             
-                     if ($profile_stmt->fetch()) {
-                         if ($profile_check === 1) {
-                             $business['profile'] = "Created";
-                         } else {
-                             $business['profile'] = "None";
-                         }
-                     }
-             
-                     $profile_stmt->close(); 
-                 } else {
-                     echo "Oops! Something went wrong with the second query. Please try again later";
-                 }
-             }
-        
-   }
-   
-   foreach ($all_business as &$business) {
-        $document_sql = "SELECT * FROM new_documents WHERE user_id = ? ORDER BY user_id DESC";
-                if ($document_stmt = $mysqli->prepare($document_sql)) {
-                    $document_stmt->bind_param("s", $current_id);
-                    $current_id = $business['id'];
-                    if ($document_stmt->execute()) {
-                        $result = $document_stmt->get_result();
-                        if ($result->num_rows === 1) {
-                            $row = $result->fetch_array(MYSQLI_ASSOC);
-                            $serializedRequirements = $row["requirements"];
-                            $requirements = unserialize($serializedRequirements);
-                            
-                            if (in_array(null, $requirements)) {
-                                $business['documents'] = "Incomplete";
-                            } else {
-                                $business['documents'] = "Complete";
-                            }
-                        } else {
-                            $business['documents'] = "None";
-                        }
-                    } else {
-                        echo "Error retrieving data";
-                    }
-                    $document_stmt->close();
-                }   
-        
-    } 
-
-    foreach ($all_business as &$business) {
-        $permit_sql = "SELECT * FROM permit WHERE user_id = ? ORDER BY user_id DESC";
-                if ($permit_stmt = $mysqli->prepare($permit_sql)) {
-                    $permit_stmt->bind_param("s", $current_id);
-                    $current_id = $business['id'];
-                    if ($permit_stmt->execute()) {
-                        $result = $permit_stmt->get_result();
-                        if ($result->num_rows === 1) {
-                            $row = $result->fetch_array(MYSQLI_ASSOC);
-                            $permit = $row["status"];
-                            $business['permit'] = $permit;
-                        } else {
-                            $business['permit'] = "None";
-                        }
-                    } else {
-                        echo "Error retrieving data";
-                    }
-                    $permit_stmt->close();
-                }   
-        
-    } 
+    $result->free();
+}
 
 $mysqli->close();
 
@@ -174,31 +132,38 @@ $mysqli->close();
 
     <main>
         <div class="column-container height-auto">
-            <p id="page" class="title text-center">Management</p>
-                <table id="users">   
+            <p id="page" class="title text-center">Owner Management</p>
+                <table id="users"> 
                     <tr>
-                        <th>ID</th>
-                        <th>Profile</th>
-                        <th>Documents</th>
-                        <th>Permit</th>
-                        <th>Delete</th>
-                    </tr>
-                    <tr>
-                        <td colspan="5"> 
+                        <td colspan="6"> 
                             <div class="data">
                                 <img src="../../img/add-user.svg" alt=""> Add User
                             </div>
-                    </td>
+                        </td>
+                    </tr>  
+                    <tr>
+                        <th>User ID</th>
+                        <th>Profile</th>
+                        <th>Business</th>
+                        <th>Documents</th>
+                        <th>Permit</th>
+                        <th>Action</th>
                     </tr>
                     <?php 
-                    foreach ($all_business as &$business) {
-                        echo '  <tr class="user_info">  
-                                    <td>'.$business['id'].'</td>
-                                    <td><div class="data">'.$business['profile'].'</div></td>
-                                    <td><div class="data">'.$business['documents'].'</div></td>
-                                    <td><div class="data">'.$business['permit'].'</div></td>
-                                    <td><div class="action delete"><img class="deleteUser" src="../../img/delete.svg" alt="Delete"></div></td>
-                                </tr>';
+                    foreach ($owners as &$owner) {
+        echo '  <tr class="user_info">  
+                    <td>'.$owner['UserID'].'</td>
+
+                    <td><div class="data">'.$owner['Owner'].'</div></td>
+
+                    <td><div class="data">'.$owner['Business'].'</div></td>
+
+                    <td><div class="data">'.$owner['Requirements'].'</div></td>
+
+                    <td><div class="data">'.$owner['Permit'].'</div></td>
+
+                    <td><div class="action delete"><img class="deleteUser" src="../../img/delete.svg" alt="Delete"></div></td>
+                </tr>';
                 }
                     ?>
                 </table>
