@@ -76,7 +76,7 @@ $mysqli->close();
     <script src="../../js/script.js" defer></script>
     <script src="../../js/modal.js" defer></script>
     <script src="../../js/table.js" defer></script>
-    <title>Management</title>
+    <title>Admin Management</title>
 </head>
 <body>
     <modal class="<?= $modal_display ?>">
