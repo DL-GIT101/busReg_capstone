@@ -22,13 +22,28 @@ $modal_display = "hidden";
 
 $admins = array(); 
 
-$sql_user = "SELECT UserID FROM User WHERE Role = 'Admin' ORDER BY UserID ASC";
+$sql_user = "SELECT User.UserID, Admin.AdminID, Admin.Role FROM User 
+LEFT JOIN Admin ON User.UserID = Admin.UserID
+WHERE User.Role = 'Admin'
+ORDER BY User.UserID ASC";
 
 if ($result = $mysqli->query($sql_user)) {
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
+            if($row['AdminID'] !== null){
+                $admin = "Created";
+            }else{
+                $admin = "None";
+            }
+            if($row['AdminID'] !== null){
+                $role = $row['Role'];
+            }else{
+                $role = "None";
+            }
             $admin = array(
-                'UserID' => $row['UserID']
+                'UserID' => $row['UserID'],
+                'Profile' => $admin,
+                'Role' => $role
             );
         $admins[] = $admin;
         }
@@ -37,29 +52,6 @@ if ($result = $mysqli->query($sql_user)) {
     }
     $result->free();
 }
-
-   foreach ($admins as &$admin) {
-        $sql_profile = "SELECT * FROM Admin WHERE UserID = ? ORDER BY UserID ASC";
-        if($stmt_profile = $mysqli->prepare($sql_profile)){
-            $stmt_profile->bind_param('s',$param_UserID);
-
-            $param_UserID = $admin['UserID'];
-
-            if($stmt_profile->execute()){
-                $result = $stmt_profile->get_result();
-
-                if($result->num_rows === 1){
-                    $row = $result->fetch_assoc();
-                    $admin['profile'] = "Created";
-                    $admin['role'] = $row['Role'];
-                }else{
-                    $admin['profile'] = "None";
-                    $admin['role'] = "None";
-                }
-            }
-        }
-        
-   }
 
 $mysqli->close();
 
@@ -145,8 +137,8 @@ $mysqli->close();
 
                         <td id="user_id">'.$admin['UserID'].'</td>
 
-                        <td><div  class="data">'.$admin['profile'].'</div></td>
-                        <td><div class="data">'.$admin['role'].'</div></td>
+                        <td><div  class="data">'.$admin['Profile'].'</div></td>
+                        <td><div class="data">'.$admin['Role'].'</div></td>
 
                         <td class="actions">
                             <div class="action delete">
