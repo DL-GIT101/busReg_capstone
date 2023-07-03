@@ -42,9 +42,9 @@ if(add_user){
 });
 };
 
-const profile = document.querySelectorAll('table#users td:nth-child(2) div.data');
-if(profile){
-  profile.forEach(status => {
+const user_owner = document.querySelectorAll('table#users td:nth-child(2) div.data');
+if(user_owner){
+  user_owner.forEach(status => {
       if(status.innerText === "Created"){
         status.className = "data green";
       }else{
@@ -57,13 +57,11 @@ if(profile){
   });
 };
 
-const user_documents = document.querySelectorAll('table#users td:nth-child(3) div.data');
-if(user_documents){
-  user_documents.forEach(status => {
-    if(status.innerText === "Complete"){
+const user_business = document.querySelectorAll('table#users td:nth-child(3) div.data');
+if(user_business){
+  user_business.forEach(status => {
+    if(status.innerText === "Created"){
       status.className = "data green";
-    }else if(status.innerText === "Incomplete"){
-      status.className = "data orange";
     }else{
       status.className = "data gray";
     }
@@ -74,10 +72,23 @@ if(user_documents){
   });
 };
 
-const user_permit = document.querySelectorAll('table#users td:nth-child(4) div.data');
+const user_documents = document.querySelectorAll('table#users td:nth-child(4) div.data');
+if(user_documents){
+  user_documents.forEach(status => {
+    if(status.innerText === "Complete"){
+      status.className = "data green";
+    }else if(status.innerText === "Incomplete"){
+      status.className = "data orange";
+    }else{
+      status.className = "data gray";
+    }
+  });
+};
+
+const user_permit = document.querySelectorAll('table#users td:nth-child(5) div.data');
 if(user_permit){
   user_permit.forEach(status => {
-      if(status.innerText === "Approved"){
+      if(status.innerText === "Issued"){
         status.className = "data green";
       }else{
         status.className = "data gray";
@@ -158,7 +169,7 @@ if(adminRole){
 };
 
 const edit_adminAction = document.querySelectorAll('table#admin td.actions div.edit');
-console.log(edit_adminAction);
+
 if(edit_adminAction){
   edit_adminAction.forEach(status => {
       status.addEventListener('click', () => {
