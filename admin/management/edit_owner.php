@@ -18,13 +18,15 @@ if(isset($_GET['id'])){
     header("location: users.php");
 }
 
+$user_id = validate($_SESSION['user_id']);
+
 $sql = "SELECT * FROM Owner WHERE UserID = ?";
 
 if($stmt = $mysqli->prepare($sql)){
 
     $stmt->bind_param("s",$param_id);
 
-    $param_id = validate($_SESSION['user_id']);
+    $param_id = $user_id;
 
     if($stmt->execute()){ 
 
@@ -189,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }else {
                 $stmt->bind_param("ssssssssss",$param_UserID, $param_OwnerID, $param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_contact, $param_address, $param_barangay);
 
-                $param_UserID = validate($_SESSION['user_id']);
+                $param_UserID = $user_id;
             }
             $param_OwnerID = $ownerID;
             $param_fname = $fname;
