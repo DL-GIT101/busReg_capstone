@@ -34,6 +34,7 @@ if($stmt = $mysqli->prepare($sql)){
                 $submit_btn = "Update";
 
                 $row = $result->fetch_array(MYSQLI_ASSOC);
+                $ownerID = $row['OwnerID'];
                 $fname = $row["FirstName"];
                 $mname = $row["MiddleName"];
                 $lname = $row["LastName"];
@@ -185,14 +186,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if($submit_btn === "Update"){
                 $stmt->bind_param("sssssssss",$param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_contact, $param_address, $param_barangay, $param_OwnerID);
 
-                $param_OwnerID = validate($_SESSION['OwnerID']);
             }else {
                 $stmt->bind_param("ssssssssss",$param_UserID, $param_OwnerID, $param_fname, $param_mname, $param_lname, $param_suffix, $param_gender, $param_contact, $param_address, $param_barangay);
 
-                $param_OwnerID = $ownerID;
-                $param_UserID = validate($_SESSION['UserID']);
+                $param_UserID = validate($_SESSION['user_id']);
             }
-            
+            $param_OwnerID = $ownerID;
             $param_fname = $fname;
             $param_mname = $mname;
             $param_lname = $lname;
@@ -208,19 +207,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if($submit_btn === "Update"){
                     $modal_title = "Owner Profile Information Updated";
-                    $modal_message = "Your Owner Profile has been updated";
+                    $modal_message = "Owner Profile has been updated";
                 }else{
                     $_SESSION['OwnerID'] = $ownerID;
                     $modal_title = "Owner Profile Creation Success";
                     $modal_message = "You can now create a business Profile ";
                 }
-                $modal_button = '<a href="../dashboard.php">View</a>';
+                $modal_button = '<a href="edit_owner.php">View</a>';
             } else{
                 $modal_display = "";
                 $modal_status = "error";
                 $modal_title = "Owner Profile Information Error";
                 $modal_message = "Try again later";
-                $modal_button = '<a href="../../index.php">OK</a>';
+                $modal_button = '<a href="users.php">OK</a>';
             }
             $stmt->close();
           }
@@ -232,14 +231,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $modal_status = "warning";
         $modal_title = "Owner Profile cannot be updated";
         $modal_message = "The permit has already been issued";
-        $modal_button = '<a href="../dashboard.php">OK</a>';
+        $modal_button = '<a href="users.php">OK</a>';
 
     }else{
         $modal_display = "";
         $modal_status = "error";
         $modal_title = "Business Permit Error";
         $modal_message = "Try again Later";
-        $modal_button = '<a href="../../index.php">OK</a>';
+        $modal_button = '<a href="users.php">OK</a>';
     }  
 }
 
@@ -314,6 +313,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="column-container">   
             <div class="text-center">
                 <p class="title">Owner Profile</p>
+                <p class="title"><?= $user_id ?></p>
                 <p class="sentence">Enter your informations to make a profile</p>
             </div>
 
