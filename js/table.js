@@ -52,7 +52,7 @@ if(user_owner){
       }
       status.addEventListener('click', () => {
           let id = status.parentNode.previousElementSibling.textContent;
-          window.location.href = "profiles.php?id=" + encodeURIComponent(id);
+          window.location.href = "edit_owner.php?id=" + encodeURIComponent(id);
       });
   });
 };
