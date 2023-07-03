@@ -67,7 +67,7 @@ if(user_business){
     }
     status.addEventListener('click', () => {
       let id = status.parentNode.parentNode.firstElementChild.textContent;
-      window.location.href = "documents.php?id=" + encodeURIComponent(id);
+      window.location.href = "edit_business.php?id=" + encodeURIComponent(id);
     });
   });
 };
