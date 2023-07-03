@@ -3,20 +3,30 @@ session_start();
 require_once "../../php/connection.php";
 require_once "../../php/functions.php";
 
-if($_SESSION["role"] !== "Owner"){
+if($_SESSION["role"] !== "Admin"){
     header("location: ../../index.php");
     exit;
 }
 
 $modal_display = "hidden";
 
-$sql = "SELECT * FROM Business WHERE BusinessID = ?";
+if(isset($_GET['id'])){
+    $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
+}else if(isset($_SESSION['user_id'])){
+    $user_id = $_SESSION['user_id'];
+}else{
+    header("location: users.php");
+}
+$user_id = validate($_SESSION['user_id']);
+$ownerID = hasOwnerProfile($user_id);
+
+$sql = "SELECT * FROM Business WHERE OwnerID = ?";
 
 if($stmt = $mysqli->prepare($sql)){
 
     $stmt->bind_param("s",$param_id);
 
-    $param_id = validate($_SESSION['BusinessID']);
+    $param_id = $ownerID;
 
     if($stmt->execute()){ 
 
@@ -26,7 +36,7 @@ if($stmt = $mysqli->prepare($sql)){
                 $submit_btn = "Update";
 
                 $row = $result->fetch_array(MYSQLI_ASSOC);
-                $_SESSION['BusinessID'] = $row['BusinessID'];
+                $businessID = $row['BusinessID'];
                 $bus_name = $row["Name"];
                 $logo = $row["Logo"];
                 if($row["Logo"] == null){
@@ -50,16 +60,10 @@ if($stmt = $mysqli->prepare($sql)){
             $modal_status = "error";
             $modal_title = "Owner Profile Information Error";
             $modal_message = "Profile cannot be retrieve";
-            $modal_button = '<a href="../dashboard.php">OK</a>';
+            $modal_button = '<a href="users.php">OK</a>';
         }
 
     $stmt->close();
-}
-
-if(isset($_SESSION['BusinessID'])){
-    $businessID = validate($_SESSION['BusinessID']);
-}else{
-    $businessID = "";
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -153,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $countDash = substr_replace($count, "-", 3, 0);
             $businessID = "B-" . $currentYear . "-" . $countDash;
 
-            $directoryName = "upload/". $businessID;
+            $directoryName = "../../user/Business/upload/". $businessID;
             mkdir($directoryName, 0777, true);
 
             $sql = "INSERT INTO Business (BusinessID, OwnerID, Name, Logo, Activity, ContactNumber, Address, Barangay, Latitude, Longitude) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -168,7 +172,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->bind_param("ssssssssdd",$param_BusinessID, $param_OwnerID, $param_bname, $param_logo, $param_activity, $param_contact, $param_address, $param_barangay, $param_latitude, $param_longitude);
 
                
-                $param_OwnerID = validate($_SESSION['OwnerID']);
+                $param_OwnerID = $ownerID;
             }
 
             $param_BusinessID = $businessID;
@@ -181,7 +185,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $param_longitude = $longitude;
 
         //logo
-        $targetDir = "upload/".$businessID."/";
+        $targetDir = "../../user/Business/upload/".$businessID."/";
         $fileName = basename($_FILES["logo"]["name"]);
         $targetFilePath = $targetDir . $fileName;
         $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
@@ -217,19 +221,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                             if($submit_btn === "Update"){
                                 $modal_title = "Business Profile Information Updated";
-                                $modal_message = "Your Business Profile has been updated";
+                                $modal_message = "Business Profile has been updated";
                             }else{
                                 $_SESSION['BusinessID'] = $businessID;
                                 $modal_title = "Business Profile Creation Success";
-                                $modal_message = "You can now view your business profile and use our services";
+                                $modal_message = "You can now view the business profile";
                             }
-                            $modal_button = '<a href="../dashboard.php">Dashboard</a>';
+                            $modal_button = '<a href="edit_business.php">View</a>';
                         } else{
                             $modal_display = "";
                             $modal_status = "error";
                             $modal_title = "Business Profile Information Error";
                             $modal_message = "Try again later";
-                            $modal_button = '<a href="../../index.php">OK</a>';
+                            $modal_button = '<a href="users.php">OK</a>';
                         }
                 }else{
                     $errors["logo"] = "Error uploading " . $_FILES['logo']['error'];
@@ -257,20 +261,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 if($submit_btn === "Update"){
                     $modal_title = "Business Profile Information Updated";
-                    $modal_message = "Your Business Profile has been updated <br>";
+                    $modal_message = "Business Profile has been updated <br>";
                 }else{
                     $_SESSION['BusinessID'] = $businessID;
                     $modal_title = "Business Profile Creation Success";
-                    $modal_message = "You can now view your Business profile and use our services  <br>";
+                    $modal_message = "You can now view the Business profile<br>";
                 }
-                $modal_button = '<a href="../dashboard.php">Dashboard</a>';
+                $modal_button = '<a href="edit_business.php">View</a>';
 
             } else{
                 $modal_display = "";
                 $modal_status = "error";
                 $modal_title = "Business Profile Information Error";
                 $modal_message = "Try again later";
-                $modal_button = '<a href="../../index.php">OK</a>';
+                $modal_button = '<a href="users.php">OK</a>';
             }
           }
            
@@ -284,14 +288,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $modal_status = "warning";
         $modal_title = "Business Profile cannot be updated";
         $modal_message = "The permit has already been issued";
-        $modal_button = '<a href="dashboard.php">OK</a>';
+        $modal_button = '<a href="edit_business.php">OK</a>';
 
     }else{
         $modal_display = "";
         $modal_status = "error";
         $modal_title = "Business Permit Error";
         $modal_message = "Try again Later";
-        $modal_button = '<a href="../../index.php">OK</a>';
+        $modal_button = '<a href="users.php">OK</a>';
     } 
 }
     $mysqli->close();
@@ -334,14 +338,37 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <nav>
         <div class="logo">
-                <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
-                <p>Tarlac City Business Permit & Licensing Office</p>  
+            <img src="../../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
+            <p>Tarlac City Business Permit & Licensing Office</p>  
         </div>
         <img id="toggle" src="../../img/navbar-toggle.svg" alt="Navbar Toggle">
         <div class="button-group">
             <ul>
                 <li><a href="../dashboard.php">Dashboard</a></li>
+                <li class="current"><a href="users.php">Management</a></li>
+                <li><a href="../permit/msme.php">Permit</a></li>
                 <li><a href="../../php/logout.php">Logout</a></li>
+            </ul>
+            <ul id="subnav-links">
+                <li><a href="users.php">List</a></li>
+                <li><a href="edit_owner.php">Profile</a></li>
+                <li class="current"><a href="edit_business.php">Business</a></li>
+                <li><a href="documents.php">Documents</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <nav id="subnav">
+        <div class="logo">
+            <img src="../../img/admin.svg" alt="Tarlac City Seal">
+            <p>Admin</p>  
+        </div>
+        <div class="button-group">
+            <ul>
+                <li><a href="users.php">List</a></li>
+                <li><a href="edit_owner.php">Profile</a></li>
+                <li class="current"><a href="edit_business.php">Business</a></li>
+                <li><a href="documents.php">Documents</a></li>
             </ul>
         </div>
     </nav>
@@ -350,7 +377,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="column-container height-auto">   
             <div class="text-center">
                 <p class="title">Business Profile</p>
-                <p class="sentence">Enter your informations to make a profile</p>
+                <p class="title"><?= $ownerID ?></p>
+                <p class="sentence">Enter Business informations to make a profile</p>
             </div>
 
             <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
