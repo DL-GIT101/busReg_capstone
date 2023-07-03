@@ -217,7 +217,7 @@ $mysqli->close();
         </div>
         <div class="button-group">
             <ul>
-                <li><a href="users.php">Owner List</a></li>
+                <li><a href="users.php">List</a></li>
                 <li class="current"><a href="addUser.php">Add Owner</a></li>
             </ul>
         </div>
