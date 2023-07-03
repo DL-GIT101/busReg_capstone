@@ -116,8 +116,9 @@ if(delete_user){
 
         link.href = "../../php/userDelete.php?documents=" + encodeURIComponent(id);
       }else if(admin_page.innerText === "Admin Management"){
-        let user_id = document.querySelector('#user_id');
-        id = user_id.innerText;
+        let row = btn.parentNode.parentNode;
+        let idTD = row.firstElementChild;
+        let id = idTD.innerText;
 
         title.innerText = "Delete Admin";
 
