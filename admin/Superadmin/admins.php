@@ -95,7 +95,6 @@ $mysqli->close();
                 <li><a href="../../php/logout.php">Logout</a></li>
             </ul>
             <ul id="subnav-links">
-                <li><a href="../edit_profile.php">Edit Profile</a></li>
                 <li class="current"><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
@@ -108,7 +107,6 @@ $mysqli->close();
         </div>
         <div class="button-group">
             <ul>
-                <li><a href="../edit_profile.php">Edit Profile</a></li>
                 <li class="current"><a href="admins.php">Admin List</a></li>
             </ul>
         </div>
