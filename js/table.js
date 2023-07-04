@@ -140,16 +140,18 @@ if(user_permit){
 const msme_documents = document.querySelectorAll('table#msme td:nth-child(4) div.data');
 if(msme_documents){
   msme_documents.forEach(status => {
-    status.style.pointerEvents = 'none';
-    let documentCount = status.innerText;
-    let count = documentCount.split('/')[0];
-    if(count == 12){
+    if(status.innerText === "Complete"){
       status.className = "data green";
-    }else if(count >= 1){
+
+    }else if(status.innerText === "Incomplete"){
       status.className = "data orange";
     }else{
       status.className = "data gray";
     }
+      status.addEventListener('click', () => {
+      let id = status.parentNode.parentNode.firstElementChild.textContent;
+      window.location.href = "review.php?id=" + encodeURIComponent(id);
+    });
   });
 };
 
