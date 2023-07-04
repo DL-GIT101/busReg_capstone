@@ -331,7 +331,7 @@ if(!empty($_FILES['uploadReq']['name'])){
                                 <div class="message">'.$requirement['Review'].'</div>
                             </td>
                             <td class="table-actions">
-                                <a class="view" target="_blank" href="upload/'.$_SESSION['BusinessID'].'/'.$requirement['FileName'].'"><img src="../../img/view.svg" alt="View"></a>
+                                <a class="view" target="_blank" href="../../user/Business/upload/'.$businessID.'/'.$requirement['FileName'].'"><img src="../../img/view.svg" alt="View"></a>
             
                                 <img class="delete" src="../../img/delete.svg" alt="Delete">
                             </td>
