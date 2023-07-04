@@ -377,7 +377,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="column-container height-auto">   
             <div class="text-center">
                 <p class="title">Business Profile</p>
-                <p class="title"><?= $ownerID ?></p>
+                <p class="title"><?= $user_id ?></p>
                 <p class="sentence">Enter Business informations to make a profile</p>
             </div>
 
