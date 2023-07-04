@@ -3,10 +3,12 @@ session_start();
 require_once "connection.php";
 require_once "functions.php";
 
-if($_SESSION["role"] === "admin"){
-    $id = validate($_SESSION['user_id']);
+if($_SESSION["role"] === "Admin"){
+    $user_id = validate($_SESSION['user_id']);
+    $ownerID = hasOwnerProfile($user_id);
+    $id = hasBusinessProfile($ownerID);
     $link = "../admin/management/documents.php";
-}elseif($_SESSION["role"] === "user"){
+}elseif($_SESSION["role"] === "User"){
     $id = validate($_SESSION['BusinessID']);
     $link = "../user/Business/upload_requirement.php";
 }else{
