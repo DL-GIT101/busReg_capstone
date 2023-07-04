@@ -3,7 +3,7 @@ session_start();
 require_once "../../php/connection.php";
 require_once "../../php/functions.php";
 
-if(checkRole($_SESSION["role"]) !== "admin"){
+if($_SESSION["role"] !== "Admin"){
     header("location: ../../index.php");
     exit;
 }
@@ -15,105 +15,41 @@ if(isset($_GET['message'])){
 
 $modal_display = "hidden";
 
-$all_business = array();
 
-$user_sql = "SELECT users.id FROM users
-             INNER JOIN user_profile ON users.id = user_profile.user_id
-             WHERE users.id <> ?
-             ORDER BY users.id DESC";
-    if($user_stmt = $mysqli->prepare($user_sql)){
-        $user_stmt->bind_param("s", $adminID);
-        $adminID = validate($_SESSION['id']);
-        if($user_stmt->execute()) {
-            $user_stmt->bind_result($id);
+$owners = array(); 
 
-            while($user_stmt->fetch()){
-                $row = array(
-                    'id' => $id,
-                );             
+$sql_user = "SELECT Business.BusinessID, Business.Name, Business.Activity, COUNT(CASE WHEN Requirement.Status = 'Approved' THEN 1 ELSE NULL END) AS Approved, Permit.PermitID FROM Business LEFT JOIN Requirement ON Business.BusinessID = Requirement.BusinessID LEFT JOIN Permit ON Business.BusinessID = Permit.BusinessID GROUP BY Business.BusinessID ORDER BY Business.BusinessID DESC;";
 
-            $all_business[] = $row;
+if ($result = $mysqli->query($sql_user)) {
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
 
+            if($row['Approved'] == 11){
+                $approved = "Complete";
+            }else if($row['Uploaded'] > 0){
+                $approved = "Incomplete";
+            }else{
+                $approved = "None";
             }
-            $user_stmt->close(); 
+            if($row['PermitID'] !== null){
+                $permit = "Issued";
+            }else{
+                $permit = "None";
+            }
+            $owner = array(
+                'BusinessID' => $row['BusinessID'],
+                'Name' => $row['Name'],
+                'Activity' => $row['Activity'],
+                'Approved' => $approved,
+                'Permit' => $permit
+            );
+        $owners[] = $owner;
         }
-        
+    } else {
+        echo "No users found with the role of Owner.";
     }
-
-    foreach ($all_business as &$business) {
-        $profile_sql = "SELECT * FROM user_profile WHERE user_id = ? ORDER BY user_id DESC";
-                if ($profile_stmt = $mysqli->prepare($profile_sql)) {
-                    $profile_stmt->bind_param("s", $current_id);
-                    $current_id = $business['id'];
-                    if ($profile_stmt->execute()) {
-                        $result = $profile_stmt->get_result();
-                        if ($result->num_rows === 1) {
-                            $row = $result->fetch_array(MYSQLI_ASSOC);
-
-                            $name = $row["business_name"];
-                            $business['name'] = $name;
-                            $activity = $row["activity"];
-                            $business['activity'] = $activity;
-                        }
-                    } else {
-                        echo "Error retrieving data";
-                    }
-                    $profile_stmt->close();
-                }   
-        
-    } 
-
-    foreach ($all_business as &$business) {
-        $permit_sql = "SELECT * FROM permit WHERE user_id = ? ORDER BY user_id DESC";
-                if ($permit_stmt = $mysqli->prepare($permit_sql)) {
-                    $permit_stmt->bind_param("s", $current_id);
-                    $current_id = $business['id'];
-                    if ($permit_stmt->execute()) {
-                        $result = $permit_stmt->get_result();
-                        if ($result->num_rows === 1) {
-                            $row = $result->fetch_array(MYSQLI_ASSOC);
-                            $permit = $row["status"];
-                            $business['permit'] = $permit;
-                        } else {
-                            $business['permit'] = "None";
-                        }
-                    } else {
-                        echo "Error retrieving data";
-                    }
-                    $permit_stmt->close();
-                }   
-        
-    } 
-   
-   foreach ($all_business as &$business) {
-        $document_sql = "SELECT * FROM new_documents WHERE user_id = ? ORDER BY user_id DESC";
-                if ($document_stmt = $mysqli->prepare($document_sql)) {
-                    $document_stmt->bind_param("s", $current_id);
-                    $current_id = $business['id'];
-                    if ($document_stmt->execute()) {
-                        $result = $document_stmt->get_result();
-                        if ($result->num_rows === 1) {
-                            $row = $result->fetch_array(MYSQLI_ASSOC);
-                            
-                            $serializedRequirements = $row["requirements"];
-                            $requirements = unserialize($serializedRequirements);
-                            
-                            $totalRequirements = count($requirements);
-                            $completedRequirements = count(array_filter($requirements, function ($value) {
-                                return !is_null($value);
-                            }));
-
-                            $business['documents'] = $completedRequirements . '/' . $totalRequirements;
-                        } else {
-                            $business['documents'] = "0/11";
-                        }
-                    } else {
-                        echo "Error retrieving data";
-                    }
-                    $document_stmt->close();
-                }   
-        
-    } 
+    $result->free();
+}
 
 $mysqli->close();
 
@@ -184,18 +120,18 @@ $mysqli->close();
                         <th>ID</th>
                         <th>Name</th>
                         <th>Activity</th>
-                        <th>Documents</th>
+                        <th>Approved</th>
                         <th>Permit</th>
                         <th>Review</th>
                     </tr>
                     <?php 
-                    foreach ($all_business as &$business) {
+                    foreach ($owners as &$owner) {
                         echo '  <tr class="msme_details">  
-                                    <td>'.$business['id'].'</td>
-                                    <td>'.$business['name'].'</td>
-                                    <td>'.$business['activity'].'</td>
-                                    <td><div class="data">'.$business['documents'].'</div></td>
-                                    <td><div class="data">'.$business['permit'].'</div></td>
+                                    <td>'.$owner['BusinessID'].'</td>
+                                    <td>'.$owner['Name'].'</td>
+                                    <td>'.$owner['Activity'].'</td>
+                                    <td><div class="data">'.$owner['Approved'].'</div></td>
+                                    <td><div class="data">'.$owner['Permit'].'</div></td>
                                     <td><img src="../../img/review.svg" alt="Review"></td>
                                 </tr>';
                 }
