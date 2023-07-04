@@ -65,10 +65,12 @@ function hasBusinessProfile($id){
             if($result->num_rows === 1){
 
                 $row = $result->fetch_assoc();
-                $businessID = $row['BusinessID'];
-                $_SESSION["BusinessID"] = $businessID;
-
-                return true;
+                if($_SESSION["role"] === "Admin"){
+                    return $row['BusinessID'];
+                }else{
+                    $_SESSION["BusinessID"] = $row['BusinessID'];
+                    return true;
+                }
             }else {
                 return false;
             }
