@@ -42,7 +42,7 @@ if ($result = $mysqli->query($sql_user)) {
             }else{
                 $businessProfile = "None";
             }
-            if($row['Uploaded'] === 12){
+            if($row['Uploaded'] == 11){
                 $uploaded = "Complete";
             }else if($row['Uploaded'] > 0){
                 $uploaded = "Incomplete";
