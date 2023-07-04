@@ -3,9 +3,25 @@ session_start();
 require_once "../php/connection.php";
 require_once "../php/functions.php";
 
+$modal_display = "hidden";
+
 if($_SESSION["role"] !== "Admin"){
     header("location: ../index.php");
     exit;
+}else{
+    if(hasAdminProfile($_SESSION['UserID']) === false){
+        $modal_display = "";
+        $modal_status = "error";
+        $modal_title = "Admin Profile not Found";
+        $modal_message = "Request to Superadmin to create a profile";
+        $modal_button = '<a href="../php/logout.php">Logout</a>';
+    }else if(hasAdminProfile($_SESSION['UserID']) === "Error"){
+        $modal_display = "";
+        $modal_status = "error";
+        $modal_title = "Admin Profile Error";
+        $modal_message = "Please try again later";
+        $modal_button = '<a href="../php/logout.php">Logout</a>';
+    }
 }
 
 if($_SESSION["AdminRole"] === "Superadmin"){
@@ -23,7 +39,7 @@ $sql_owner = "SELECT COUNT(*) FROM Owner";
     $stmt_owner->close();
     }
 
-$sql_business = "SELECT COUNT(*) FROM Owner";
+$sql_business = "SELECT COUNT(*) FROM Business";
     if($stmt_business = $mysqli->prepare($sql_business)){
         if($stmt_business->execute()){
             $stmt_business->bind_result($businessCount);
@@ -91,6 +107,17 @@ if($stmt_permit = $mysqli->prepare($sql_permit)){
     <title>Dashboard</title>
 </head>
 <body>
+
+    <modal class="<?= $modal_display ?>">
+        <div class="content <?= $modal_status ?>">
+            <p class="title"><?= $modal_title ?></p>
+            <p class="sentence"><?= $modal_message ?></p>
+            <div class="button-group">
+                <?= $modal_button ?>
+            </div>
+        </div>
+    </modal>
+
     <nav>
         <div class="logo">
             <img src="../img/Tarlac_City_Seal.png" alt="Tarlac City Seal">
@@ -105,7 +132,6 @@ if($stmt_permit = $mysqli->prepare($sql_permit)){
                 <li><a href="../php/logout.php">Logout</a></li>
             </ul>
             <ul id="subnav-links">
-                <li><a href="edit_profile.php">Edit Profile</a></li>
                 <?= $adminLinks ?>
             </ul>
         </div>
@@ -118,7 +144,6 @@ if($stmt_permit = $mysqli->prepare($sql_permit)){
         </div>
         <div class="button-group">
             <ul>
-                <li><a href="edit_profile.php">Edit Profile</a></li>
                 <?= $adminLinks ?>
             </ul>
         </div>
