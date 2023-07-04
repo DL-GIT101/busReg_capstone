@@ -3,10 +3,12 @@ session_start();
 require_once "../../php/connection.php";
 require_once "../../php/functions.php";
 
-if(checkRole($_SESSION["role"]) !== "admin"){
+if($_SESSION["role"] !== "Admin"){
     header("location: ../../index.php");
     exit;
 }
+
+$modal_display = "hidden";
 
 if(isset($_GET['message'])){
     $modal_get = urldecode($_GET['message']);
@@ -21,165 +23,179 @@ if(isset($_GET['id'])){
     header("location: users.php");
 }
 
-$modal_display = "hidden";
+$user_id = validate($_SESSION['user_id']);
+$ownerID = hasOwnerProfile($user_id);
 
-    $sql = "SELECT * FROM new_documents WHERE user_id = ?";
+if(hasBusinessProfile($ownerID) === false){
+    $modal_display = "";
+    $modal_status = "warning";
+    $modal_title = "Business Profile not Found";
+    $modal_message = "Create a Business Profile first before uploading requirements";
+    $modal_button = '<a href="users.php">OK</a>';
+}
+
+$businessID = hasBusinessProfile($ownerID);
+
+$sql = "SELECT * FROM Requirement WHERE BusinessID = ?";
    
     if($stmt = $mysqli->prepare($sql)){
         
         $stmt->bind_param("s",$param_id);
         
-        $param_id = $user_id;
+        $param_id = $businessID;
        
         if($stmt->execute()){
             $result = $stmt->get_result();
-            if($result->num_rows == 1){
-           
-               $row = $result->fetch_array(MYSQLI_ASSOC);
+            $requirements = array();
+            $uploadRequirementsName = array();
 
-                $serialized_requirements_fetch = $row["requirements"];
-                $serialized_status_fetch = $row["status"];
-                $serialized_denied_fetch = $row['message'];
-                $requirements_fetch = unserialize($serialized_requirements_fetch);
-                $status_fetch = unserialize($serialized_status_fetch);    
-                $denied_fetch = unserialize($serialized_denied_fetch);
-                $update = true;            
-            }else{
-                $update = false;
+            while ($row = $result->fetch_assoc()) {
+
+            array_push($uploadRequirementsName,$row['Name']);
+                
+               $requirement = array(
+                'Name' => $row['Name'],
+                'FileName' => $row['FileName'],
+                'Status' => $row['Status'],
+                'Review' => $row['Review']
+               );
+
+               $requirements[] = $requirement;
             }
         }else {
             $modal_display = "";
             $modal_status = "error";
-            $modal_title = "Something went wrong";
-            $modal_message = "Try again later";
-            $modal_button = '<a href="users.php">OK</a>';
+            $modal_title = "Requirement Error";
+            $modal_message = "Requirements cannot be retrieve";
+            $modal_button = '<a href="../dashboard.php">OK</a>';
         }
-    $stmt->close();
+        $stmt->close();
     }
-    
+
+    $documents = array(
+        'Barangay Clearance for business',
+        'DTI Certificate of Registration',
+        'On the Place of Business <img class="info" src="../../img/info.svg" alt="Info">',
+        'Community Tax Certificate',
+        'Certificate of Zoning Compliance',
+        'Business Inspection Clearance',
+        'Fire Safety Inspection Certificate',
+        'Sanitary Permit',
+        'Environmental Compliance Clearance',
+        'Latest 2x2 picture',
+        'Tax Order of Payment'
+    );
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    
-    if(hasProfile($user_id) === true){
 
-        if(checkPermit($user_id) === "None"){
+        if(checkPermit($businessID) === "None"){
 
-        $allowTypes = array('jpg', 'jpeg', 'png', 'pdf');
-    
-        $file_inputs_count = count($_FILES);
-    
-        $requirements = array();
-        $status = array();
-        $denied_msg = array();
+            $errors = [];
 
-        $error_count = 0;
+    $uploadReqName = validate($_POST["uploadReqName"]);
 
-        for ($i = 1; $i <= $file_inputs_count; $i++) {
-            $errorMsg = 'errorMsg_' . $i;
-    
-            $targetDir = "../../user/upload/".$user_id."/";
-            $fileName = basename($_FILES['requirement_' . $i]['name']);
-            $targetFilePath = $targetDir. $fileName;
-            $fileSize = $_FILES['requirement_' . $i]['size'];
-            $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-    
-            $new_fileName = 'requirement_' . $i.'.'.$fileType;
-            $targetFilePath = $targetDir . $new_fileName;
-            
-            if(!empty($_FILES['requirement_' . $i]['name'])){
-                if(empty($requirements_fetch[$i-1])){
-                    if ($_FILES['requirement_' . $i]['error'] === UPLOAD_ERR_OK){
-                        if (in_array($fileType, $allowTypes)) {
-                            if ($fileSize <= 2097152) {
-                                if(move_uploaded_file($_FILES['requirement_' . $i]['tmp_name'], $targetFilePath)){
-                                    array_push($requirements,$new_fileName);
-                                    array_push($status,'Uploaded');
-                                    array_push($denied_msg,null);    
-                                }else{
-                                    $$errorMsg  = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
-                                    $error_count++;
-                                    pushNullValues($requirements, $status, $denied_msg);
-                                }
-                            } else {
-                                $$errorMsg = 'File size should be 2MB or less.';
-                                $error_count++;
-                                pushNullValues($requirements, $status, $denied_msg);
-                            }
-                        } else {
-                            $$errorMsg = 'Only JPG, JPEG, PNG and PDF files are allowed.';
-                            $error_count++;
-                            pushNullValues($requirements, $status, $denied_msg);
-                        } 
-                    } else {
-                        $$errorMsg = 'Error uploading file: ' . $_FILES['requirement_' . $i]['error'];
-                        $error_count++;
-                        pushNullValues($requirements, $status, $denied_msg);
+    $allowTypes = array('jpg', 'jpeg', 'png', 'pdf');
+    $targetDir = "../../user/Business/upload/".$businessID."/";
+    $fileName = basename($_FILES['uploadReq']['name']);
+    $targetFilePath = $targetDir. $fileName;
+    $fileSize = $_FILES['uploadReq']['size'];
+    $fileType = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+    $new_fileName = 'REQUIREMENT-' . uniqid().'.'.$fileType;
+    $targetFilePath = $targetDir . $new_fileName;
+        
+if(!empty($_FILES['uploadReq']['name'])){
+    if(!empty($uploadReqName)){
+        if(!in_array($uploadReqName, $uploadRequirementsName)){
+            if (in_array($fileType, $allowTypes)) {
+                if ($fileSize <= 2097152) {
+                    if(move_uploaded_file($_FILES['uploadReq']['tmp_name'], $targetFilePath)){
+
+            $sql_id = "SELECT RequirementID as maxID FROM Requirement ORDER BY RequirementID DESC LIMIT 1";
+
+            if($stmt_id = $mysqli->prepare($sql_id)) {
+
+                if($stmt_id->execute()){  
+
+                    $stmt_id->bind_result($maxID);
+
+                    if($stmt_id->fetch()) {
+                        $lastID = $maxID;
                     }
-                }else{
-                    $$errorMsg = 'Delete first the uploaded file';
-                    $error_count++;
-                    array_push($requirements,$requirements_fetch[$i-1]);
-                    array_push($status,$status_fetch[$i-1]);
-                    array_push($denied_msg,$denied_fetch[$i-1]);  
                 }
-            } else {
-                if(!empty($requirements_fetch[$i-1])){
-                    array_push($requirements,$requirements_fetch[$i-1]);
-                    array_push($status,$status_fetch[$i-1]);
-                    array_push($denied_msg,$denied_fetch[$i-1]);  
-                }else{
-                    pushNullValues($requirements, $status, $denied_msg);
+            $stmt_id->close();
+            }
+            $currentYear = date('Y');
+            if($lastID !== null) {
+                $year = substr($lastID, 2, 4);
+                $countDash = substr($lastID, 7);
+                $count = str_replace("-","",$countDash);
+
+                if($year === $currentYear) {
+                    $count += 1;
+                }else {
+                    $count = 0;
                 }
+            }else {
+                $count = 0;
             }
-        }
-          
-            $serialized_requirements = serialize($requirements);
-            $serialized_status = serialize($status);
-            $serialized_msg = serialize($denied_msg);
-    
-            if($update === true){
-                $sql = "UPDATE new_documents SET requirements = ?, status = ? , message = ? WHERE user_id = ?";
-            }else{
-                $sql = "INSERT INTO new_documents (user_id, requirements, status, message) VALUES (?, ?, ?, ?)";
-            }
-            
+
+            $count = str_pad($count, 6, '0', STR_PAD_LEFT);
+            $countDash = substr_replace($count, "-", 3, 0);
+            $requirementID = "R-" . $currentYear . "-" . $countDash;
+
+            $sql = "INSERT INTO Requirement (RequirementID, BusinessID, Name, FileName, Status) VALUES (?, ?, ?, ?, ?)";
             if($stmt = $mysqli->prepare($sql)){
-    
-                if($update === true){
-                    $stmt->bind_param('ssss',$param_req, $param_Stat,$param_msg, $param_id);
-                }else{
-                    $stmt->bind_param('ssss', $param_id, $param_req, $param_Stat,$param_msg);
-                }
-    
-                $param_id = $user_id;
-                $param_req = $serialized_requirements;
-                $param_Stat = $serialized_status;
-                $param_msg = $serialized_msg;
-    
+
+                $stmt->bind_param("sssss", $param_RequirementID,$param_BusinessID, $param_Name, $param_FileName, $param_Status);
+
+                $param_RequirementID = $requirementID;
+                $param_BusinessID = $businessID;
+                $param_Name = $uploadReqName;
+                $param_FileName = $new_fileName;
+                $param_Status = "Uploaded";
+
                 if($stmt->execute()){
-    
-                    if ($error_count > 0) {
-                        $modal_display = "";
-                        $modal_status = "warning";
-                        $modal_title = "Refresh to see Changes";
-                        $modal_message = "Some Changes are not updated";
-                        $modal_button = '<button class="close">OK</button>';
-                    } else {
-                        $modal_display = "";
-                        $modal_status = "success";
-                        $modal_title = "Successful";
-                        $modal_message = "All changes has been updated";
-                        $modal_button = '<a href="documents.php">OK</a>';
-                    }
+                    $modal_display = "";
+                    $modal_status = "success";
+                    $modal_title = "Requirement Upload Successfully";
+                    $modal_message = "The file has been uploaded";
+                    $modal_button = '<a href="documents.php">OK</a>';
                 }else{
                     $modal_display = "";
-                    $modal_status = "fail";
-                    $modal_title = "Updating Error";
+                    $modal_status = "error";
+                    $modal_title = "Something went wrong";
                     $modal_message = "Try again later";
-                    $modal_button = '<a href="manangement.php">OK</a>';
+                    $modal_button = '<a href="users.php">OK</a>';
                 }
-            $stmt->close();
+                $stmt->close();
+            }else{
+                $modal_display = "";
+                $modal_status = "error";
+                $modal_title = "Something went wrong";
+                $modal_message = "Try again later";
+                $modal_button = '<a href="users.php">OK</a>';
             }
-        }else if(checkPermit($user_id) === "Approved"){
+                    }else{
+                        $errors['uploadReq']  = 'Error uploading file';
+                    }
+                } else {
+                    $errors['uploadReq'] = 'File size should be 2MB or less.';
+                }
+            } else {
+                $errors['uploadReq'] = 'Only JPG, JPEG, PNG and PDF files are allowed.';;
+            } 
+        } else {
+            $errors['uploadReq'] = 'Delete first the uploaded file';
+        }
+    }else{
+        $errors['uploadReqName'] = 'Select Requirement to Upload ';
+    }
+}else{
+    $errors['uploadReq'] = "File upload is empty";
+}
+        
+        }else if(checkPermit($user_id) === "Issued"){
             $modal_display = "";
             $modal_status = "warning";
             $modal_title = "Documents cannot be updated";
@@ -192,30 +208,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $modal_message = "Try again later";
             $modal_button = '<a href="users.php">OK</a>';
         }     
-    }else if(hasProfile($user_id) === false){
-        $modal_display = "";
-        $modal_status = "warning";
-        $modal_title = "User did not create a profile yet";
-        $modal_message = "No profile found for the user <br>
-                        Cannot upload documents without a profile";
-        $modal_button = '<a href="users.php">Back</a>
-                        <a href="editProfile.php">Create</a>';
-    }else {
-        $modal_display = "";
-        $modal_status = "error";
-        $modal_title = "Something went wrong";
-        $modal_message = "Try again later";
-        $modal_button = '<a href="users.php">OK</a>';
-    }  
 }
 
     $mysqli->close();
-
-function pushNullValues(&$array1, &$array2, &$array3) {
-        array_push($array1, null);
-        array_push($array2, null);
-        array_push($array3, null);
-}
 
 ?>
 <!DOCTYPE html>
@@ -258,7 +253,8 @@ function pushNullValues(&$array1, &$array2, &$array3) {
             </ul>
             <ul id="subnav-links">
                 <li><a href="users.php">List</a></li>
-                <li><a href="profiles.php">Profile</a></li>
+                <li><a href="edit_owner.php">Profile</a></li>
+                <li><a href="edit_business.php">Business</a></li>
                 <li class="current"><a href="documents.php">Documents</a></li>
             </ul>
         </div>
@@ -272,7 +268,8 @@ function pushNullValues(&$array1, &$array2, &$array3) {
         <div class="button-group">
             <ul>
                 <li><a href="users.php">List</a></li>
-                <li><a href="profiles.php">Profile</a></li>
+                <li><a href="edit_owner.php">Profile</a></li>
+                <li><a href="edit_business.php">Business</a></li>
                 <li class="current"><a href="documents.php">Documents</a></li>
             </ul>
         </div>
@@ -280,73 +277,73 @@ function pushNullValues(&$array1, &$array2, &$array3) {
 
 
     <main>
-    <div class="column-container height-auto">
+    <div class="column-container">
         <div class="text-center">
-            <p id="page" class="title">Uploaded Documents</p>
-            <p id="user_id" class="sentence"><?= $user_id ?></p>
+            <p class="title">New Business</p>
+            <p class="title"><?= $user_id ?></p>
+            <p class="sentence">Please upload the file of the following requirements</p>
         </div>
         <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
             <table>
                 <tr>
+                <td colspan="1">
+                    <select name="uploadReqName" id="uploadReqName">
+                    <option value="" disabled selected>Select Requirement...</option>
+        <?php 
+            foreach($documents as $documentName){
+                echo "<option value='$documentName' " . ($uploadReqName === $documentName ? "selected" : "") . ">$documentName</option>";
+            }   
+        ?>
+                    </select>
+                    <div class="error-msg"><?= $errors["uploadReqName"]; ?></div>
+                </td>
+                <td colspan="2">
+                    <input type="file" name="uploadReq" id="uploadReq">
+                    <div class="error-msg"><?= $errors["uploadReq"]; ?></div>
+                </td>
+                </tr>
+                <tr>
+                    <td class="uploadBtn" colspan="3">
+                        <input type="submit" value="Upload">
+                        
+                    </td>
+                </tr>
+                <tr>
                     <th>Requirement</th>
-                    <th>Actions</th>
                     <th>Status</th>
-                    <th>File Upload</th>
+                    <th>Actions</th>
                 </tr>
                 <?php 
-                    $requirements_names = array(
-                        'Barangay Clearance for business',
-                        'DTI Certificate of Registration',
-                        'On the Place of Business <img class="info" src="../../img/info.svg" alt="Info">',
-                        'Community Tax Certificate',
-                        'Certificate of Zoning Compliance',
-                        'Business Inspection Clearance',
-                        'Fire Safety Inspection Certificate',
-                        'Sanitary Permit',
-                        'Environmental Compliance Clearance',
-                        'Latest 2x2 picture',
-                        'Tax Order of Payment'
-                    );
-                    $count = 1;
-                    foreach($requirements_names as $fileName){
-                            $errorMsg = 'errorMsg_' . $count;
-                        echo '  <tr>
-                                    <td>'.$fileName.'</td>';
-
-                        if(empty($requirements_fetch[$count-1])){
-                            echo '  <td></td>
-                                    <td></td>
-                                   ';
-                        }else{
-                            echo    '<td class="table-actions">
-
-                                    <a class="view" target="_blank" href="../../user/upload/'.$user_id.'/'.$requirements_fetch[$count-1].'"><img src="../../img/view.svg" alt="View"></a>
-
-                                    <img class="delete" src="../../img/delete.svg" alt="Delete">
+        
+        foreach($documents as $documentName){
+            echo '  <tr>
+                        <td>'.$documentName.'</td>';
+            $found = false;
+            foreach($requirements as $requirement){
+                if($requirement['Name'] === $documentName){
+                    echo '  <td>
+                                <div class="status">'.$requirement['Status'].'</div>
+                                <div class="message">'.$requirement['Review'].'</div>
                             </td>
-
-                                    <td>
-                                        <div class="status">'.$status_fetch[$count-1].'</div>
-                                        <div class="message">'.$denied_fetch[$count-1].'</div>
-                                    </td>';
-                        }
-                                echo '<td>
-                                        <input type="file" id="requirement_'.$count.'" name="requirement_'.$count.'">
-                                        <div class="error_msg">'.${$errorMsg}.'</div>
-                                    </td>
-                                </tr>';
-                    $count++;
-                    }
-                ?>
-                
-            </table>
-
-            <div class="button-group">
-                <input type="submit" value="Upload">
-                <div class="action delete">Delete All</div>
-            </div>
+                            <td class="table-actions">
+                                <a class="view" target="_blank" href="upload/'.$_SESSION['BusinessID'].'/'.$requirement['FileName'].'"><img src="../../img/view.svg" alt="View"></a>
             
-        </form>   
+                                <img class="delete" src="../../img/delete.svg" alt="Delete">
+                            </td>
+                        ';
+                $found = true;
+                }
+            }
+            if(!$found){
+                echo '  <td></td>
+                        <td></td>
+                ';
+            }
+            echo '</tr>';
+        }
+    ?>
+        </table>  
+        </form>
     </div>    
 </main>
 </body>
