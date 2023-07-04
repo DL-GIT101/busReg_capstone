@@ -3,206 +3,175 @@ session_start();
 require_once "../../php/connection.php";
 require_once "../../php/functions.php";
 
-if(checkRole($_SESSION["role"]) !== "admin"){
+if($_SESSION["role"] !== "Admin"){
     header("location: ../../index.php");
     exit;
 }
 
 if(isset($_GET['id'])){
-    $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
-}else if(isset($_SESSION['user_id'])){
-    $user_id = $_SESSION['user_id'];
+    $businessID = $_SESSION['businessID'] =  urldecode($_GET['id']);
+}else if(isset($_SESSION['businessID'])){
+    $businessID = $_SESSION['businessID'];
 }else{
     header("location: msme.php");
 }
-
+$businessID = validate($businessID);
 $modal_display = "hidden";
 
-$sql = "SELECT * FROM user_profile WHERE user_id = ?";
+$logo = "../img/No_image_available.svg";
 
-    if($stmt = $mysqli->prepare($sql)){
-        $stmt->bind_param("s",$param_id);
+$sql_business = "SELECT * FROM Business WHERE BusinessID = ?";
 
-        $param_id = $user_id;
+    if($stmt_business = $mysqli->prepare($sql_business)){
+        $stmt_business->bind_param("s",$param_id);
 
-        if($stmt->execute()){
-            $result = $stmt->get_result();
+        $param_id = $businessID;
 
-            if($result->num_rows == 1){
+        if($stmt_business->execute()){
+            $result = $stmt_business->get_result();
+
+            if($result->num_rows === 1){
+
                 $row = $result->fetch_array(MYSQLI_ASSOC);
-
-                if (!empty($row["logo"])) {
-                    $logo_path = "../../user/upload/".$user_id."/".$row["logo"];
-                } else {
-                    $logo_path = "../../img/No_image_available.svg";
+                $logo = $row["Logo"];
+                if($row["IssuedPermit"] == null){
+                    $permit_status = "None";
+                }else{
+                    $permit_status = "Approved";
                 }
-                $business_name = $row["business_name"];
-                $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"]." ".$row["suffix"];
-                $business_activity = $row["activity"];
-                $latitude = $row["latitude"];
-                $longitude = $row["longitude"];
-                $gender = $row['gender'];
-                $contact = $row['contact_number'];
-                $address = $row["address_1"]." ".$row["address_2"];
+                $bus_name = $row["Name"];
+                $logo = $row["Logo"];
+                if($row["Logo"] == null){
+                    $logo = null;
+                }else{
+                    $logo = "../../user/Business/upload/".$businessID."/".$row["Logo"];
+                }
+                $activity = $row["Activity"];
+                $contact_b = substr($row["ContactNumber"],3);
+                $address_b = $row["Address"];
+                $barangay_b = $row["Barangay"];
+                $latitude = $row["Latitude"];
+                $longitude = $row["Longitude"]; 
+                $ownerID = $row['OwnerID'];
 
-            }else{
-                $profile = "hidden";
-                $none = "";
+            }else {
+                $bus_name = "Not yet created";
             }
         }else{
-            echo "Oops! Something went wrong. Please try again later";
+            $modal_display = "";
+            $modal_status = "error";
+            $modal_title = "Business Profile Information Error";
+            $modal_message = "Profile cannot be retrieve";
+            $modal_button = '<a href="msme.php">OK</a>';
+        }
+        $stmt_business->close();
+    }
+
+$sql_owner = "SELECT * FROM Owner WHERE OwnerID = ?";
+
+    if($stmt_owner = $mysqli->prepare($sql_owner)){
+        $stmt_owner->bind_param("s",$param_id);
+
+        $param_id = $ownerID;
+
+        if($stmt_owner->execute()){
+            $result = $stmt_owner->get_result();
+
+            if($result->num_rows == 1){
+
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+                $fname = $row["FirstName"];
+                $mname = $row["MiddleName"];
+                $lname = $row["LastName"];
+                $suffix = $row["Suffix"];
+                $gender = $row["Gender"];
+                $contact = $row["ContactNumber"];
+                $address = $row["Address"];
+                $barangay = $row["Barangay"];
+                $userID = $row['UserID'];
+            }
+        }else{
+
+            $modal_display = "";
+            $modal_status = "error";
+            $modal_title = "Owner Profile Information Error";
+            $modal_message = "Profile cannot be retrieve";
+            $modal_button = '<a href="msme.php">OK</a>';
+        }
+        $stmt_owner->close();
+    }
+
+    $sql = "SELECT * FROM Requirement WHERE BusinessID = ?";
+   
+    if($stmt = $mysqli->prepare($sql)){
+        
+        $stmt->bind_param("s",$param_id);
+        
+        $param_id = $businessID;
+       
+        if($stmt->execute()){
+            $result = $stmt->get_result();
+            $requirements = array();
+            $uploadRequirementsName = array();
+
+            while ($row = $result->fetch_assoc()) {
+
+            array_push($uploadRequirementsName,$row['Name']);
+                
+               $requirement = array(
+                'Name' => $row['Name'],
+                'FileName' => $row['FileName'],
+                'Status' => $row['Status'],
+                'Review' => $row['Review']
+               );
+
+               $requirements[] = $requirement;
+            }
+        }else {
+            $modal_display = "";
+            $modal_status = "error";
+            $modal_title = "Requirement Error";
+            $modal_message = "Requirements cannot be retrieve";
+            $modal_button = '<a href="msme.php">OK</a>';
         }
         $stmt->close();
     }
 
-    $sql2 = "SELECT * FROM new_documents WHERE user_id = ?";
-   
-    if($stmt2 = $mysqli->prepare($sql2)){
-        
-        $stmt2->bind_param("s",$param_id);
-        
-        $param_id = $user_id;
-       
-        if($stmt2->execute()){
-            $result = $stmt2->get_result();
-            if($result->num_rows == 1){
-           
-               $row = $result->fetch_array(MYSQLI_ASSOC);
+    $documents = array(
+        'Barangay Clearance for business',
+        'DTI Certificate of Registration',
+        'On the Place of Business',
+        'Community Tax Certificate',
+        'Certificate of Zoning Compliance',
+        'Business Inspection Clearance',
+        'Fire Safety Inspection Certificate',
+        'Sanitary Permit',
+        'Environmental Compliance Clearance',
+        'Latest 2x2 picture',
+        'Tax Order of Payment'
+    );
 
-                $serialized_requirements_fetch = $row["requirements"];
-                $serialized_status_fetch = $row["status"];
-                $serialized_message_fetch = $row["message"];
-                $requirements_fetch = unserialize($serialized_requirements_fetch);
-                $status_fetch = unserialize($serialized_status_fetch);
-                $message_fetch = unserialize($serialized_message_fetch);              
-            }else{
-                
-            }
-        }else {
-            echo "error retrieving data";
-        }
-    $stmt2->close();
-    }
+    $review = array(
+        'Incorrect/Outdated Information',
+        'Insufficient Detail',
+        'Incorrect Document',
+        'Low Image Resolution',
+        'Overexposure/Underexposure',
+        'Misleading/Manipulated Visuals',
+        'File Corruption',
+        'Invalid File Extension'
+    );
 
-    $sql3 = "SELECT * FROM permit WHERE user_id = ?";
+    $fileStatus = array(
+        'Uploaded',
+        'Pending',
+        'Approved',
+        'Denied'
+    );
 
-    if($stmt3 = $mysqli->prepare($sql3)){
-        $stmt3->bind_param("s",$param_id);
-
-        $param_id = $user_id;
-
-        if($stmt3->execute()){
-            $result = $stmt3->get_result();
-
-            if($result->num_rows == 1){
-                $row = $result->fetch_array(MYSQLI_ASSOC);
-
-                $permit_status = $row['status'];
-                
-            }else {
-                $permit_status = "None";
-            }
-        }else{
-            echo "Oops! Something went wrong. Please try again later";
-        }
-        $stmt3->close();
-    }
-
-    $sql4 = "SELECT * FROM users WHERE id = ?";
-
-    if($stmt4 = $mysqli->prepare($sql4)){
-        $stmt4->bind_param("s",$param_id);
-
-        $param_id = $user_id;
-
-        if($stmt4->execute()){
-            $result = $stmt4->get_result();
-
-            if($result->num_rows == 1){
-                $row = $result->fetch_array(MYSQLI_ASSOC);
-
-                $email = $row['email'];
-                
-            }
-        }else{
-            echo "Oops! Something went wrong. Please try again later";
-        }
-        $stmt4->close();
-    }
-
-    
-    
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-        $errorMsg = 'errorMsg_';
-        $errorCount = "no";
-        $length = 11;
 
-        $status = array();
-        $denied_msg = array();
-
-        for($i = 1; $i <= $length; $i++){
-            $errorMsg = 'errorMsg_' . $i;
-
-           if(isset($_POST['status_'.$i])){
-
-                $status_review = validate($_POST['status_'.$i]);
-
-                if($status_review === "Denied"){
-
-                    $message_review = validate($_POST['denied_message_'.$i]);
-
-                    if(!empty($message_review)){
-
-                        array_push($status, $status_review);
-                        array_push($denied_msg, $message_review);
-
-                    }else{
-                        $$errorMsg = "Denied Document must have a message";
-                        $errorCount = "yes";
-                    }
-
-                }else{
-                    array_push($status, $status_review);
-                    array_push($denied_msg, null);
-                }
-            
-           }else{
-                array_push($status, null);
-                array_push($denied_msg, null);
-           }
-        }
-
-    if($errorCount === "no"){
-
-        $serialized_status = serialize($status);
-        $serialized_denied = serialize($denied_msg);
-
-        $sql = "UPDATE new_documents SET status = ? , message = ? WHERE user_id = ?";
-       
-        if($stmt = $mysqli->prepare($sql)){
-            $stmt->bind_param('sss',$param_Stat,$param_msg, $param_id);
-
-            $param_id = $user_id;
-            $param_Stat = $serialized_status;
-            $param_msg = $serialized_denied;
-
-            if($stmt->execute()){
-                $modal_display = "";
-                $modal_status = "success";
-                $modal_title = "Successful";
-                $modal_message = "All changes has been updated";
-                $modal_button = '<a href="review.php">OK</a>';
-            }else{
-                $modal_display = "";
-                $modal_status = "error";
-                $modal_title = "Updating Error";
-                $modal_message = "Try again later";
-                $modal_button = '<a href="msme.php">OK</a>';
-            }
-            $stmt->close();
-        }
-    }
 }
 
 $mysqli->close();
@@ -226,8 +195,8 @@ $mysqli->close();
     <script src="../../js/map.js" defer></script>
     <script src="../../js/showLocation.js" defer></script>
     <script src="../../js/form.js" defer></script>
-    <script src="../../js/modal.js" defer></script>
     <script src="../../js/table.js" defer></script>
+    <script src="../../js/modal.js" defer></script>
     <title>Review Information</title>
 </head>
 <body>
@@ -280,53 +249,48 @@ $mysqli->close();
     <main>
     <div class="column-container height-auto">
         <div class="container height-auto">
-            <section>
+        <section>
                 <subsection class="space-between">
-                    <p class="sentence">Business Profile</p>
+                    <p class="title">Business Profile</p>
                     <div class="logo"> 
-                        <img src="<?= $logo_path ?>" alt="Business Logo">
+                        <img src="<?= $logo ?>" alt="Business Logo">
                     </div>
                     <div class="text-center">
-                        <p class="title"><?= $business_name ?></p>
-                        <p class="sentence"><?= $business_activity ?></p> 
+                        <p class="title"><?= $bus_name ?></p>
+                        <p class="sentence"><?= $activity ?></p> 
                     </div>
-                </subsection>
-                <subsection class="space-between">
-                    <p class="sentence">Business Owner</p> 
-                    <p class="sentence-title text-center"><?= $name ?></p> 
-                    <div class="text-center">
-                        <p class="sentence"><?= $gender ?></p> 
-                        <p class="sentence"><?= $contact ?></p>
-                    </div>
-                </subsection>
-            </section>
-            <section class="map-container">
-                <subsection>
-                        <p class="title">Location</p>
-                        <map id="map">
-                            <p id="latitude" class="hidden"><?= $latitude ?></p>
-                            <p id="longitude" class="hidden"><?= $longitude ?></p>
-                        </map>
-                </subsection>
-            </section>
-            <section>
-                <subsection>
-                    <p class="title">Actions</p> 
-
-                    <a class="action approve" href="approve.php"><img src="../../img/approve-doc.svg" alt="Edit"></a>
-                    <p class="sentence text-center">ID: <?= $user_id ?></p>
-                </subsection>
-                <subsection>
-                    <p class="sentence">Address</p> 
-                    <div class="info sentence"><?= $address ?></div>
                 </subsection>
                 <subsection>
                     <p class="sentence">Business Permit Status</p> 
                     <div class="info title" id="permit-status"><?= $permit_status ?></div>
                 </subsection>
                 <subsection>
-                    <p class="sentence">Email</p> 
-                    <div class="info sentence"><?= $email ?></div>
+                    <p class="sentence">Edit Business Profile</p> 
+                    <a class="action edit" href="../management/edit_business.php?id=<?= $userID ?>"><img src="../../img/edit.svg" alt="Edit"></a>
+                </subsection>
+            </section>
+            <section class="map-container">
+                <subsection>
+                        <p class="title">Location </p>
+                        <p class="sentence"><?= $address_b.', '. $barangay_b ?></p> 
+                        <map id="map"></map>
+                        <p id="latitude" class="hidden"><?= $latitude ?></p>
+                        <p id="longitude" class="hidden"><?= $longitude ?></p>
+                </subsection>
+            </section>
+            <section>
+                <subsection>
+                    <p class="title text-center">Owner Profile</p>
+                    <p class="sentence">Name</p>
+                    <div class="info title"><?= $fname.' '. $mname.' '.$lname.' '. $suffix ?></div>
+                    <p class="sentence">Gender</p>
+                    <div class="info title"><?= $gender ?></div>
+                    <p class="sentence">Contact Number</p>
+                    <div class="info title"><?= $contact ?></div>
+                    <p class="sentence">Address</p>
+                    <div class="info title"><?= $address.', '. $barangay ?></div>
+                    <p class="sentence">Edit Owner Profile</p>
+                    <a class="action edit" href="../management/edit_owner.php?id=<?= $userID ?>"><img src="../../img/edit.svg" alt="Edit"></a>
                 </subsection>
             </section>
         </div>
@@ -337,84 +301,60 @@ $mysqli->close();
                 <p class="sentence">Review the following documents carefully</p>
             </div>
             <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" enctype="multipart/form-data">
-                <table>
-                    <tr>
-                        <th>Requirement</th>
-                        <th>View</th>
-                        <th>Status</th>
-                        <th>Review</th>
-                        <th>Message</th>
-                    </tr>
-                    <?php 
-                        $requirements_names = array(
-                            'Barangay Clearance for business',
-                            'DTI Certificate of Registration',
-                            'On the Place of Business <img id="info" src="../../img/info.svg" alt="">',
-                            'Community Tax Certificate',
-                            'Certificate of Zoning Compliance',
-                            'Business Inspection Clearance',
-                            'Valid Fire Safety Inspection Certificate/Official Receipt',
-                            'Sanitary Permit',
-                            'Environmental Compliance Clearance',
-                            'Latest 2x2 picture',
-                            'Tax Order of Payment'
-                        );
-                        $message_array = array(
-                            'Incorrect/Outdated Information',
-                            'Insufficient Detail',
-                            'Incorrect Document',
-                            'Low Image Resolution',
-                            'Overexposure/Underexposure',
-                            'Misleading/Manipulated Visuals',
-                            'File Corruption',
-                            'Invalid File Extension'
-                        );
-                        foreach($requirements_names as $index => $fileName){
-                                $errorMsg = 'errorMsg_' . $index+1;
-                            echo '  <tr>
-                                        <td>'.$fileName.'</td>';
-
-                            if(empty($requirements_fetch[$index])){
-                                echo '  <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    ';
-                            }else{
-                                echo    '<td>
-                                            <a class="view" target="_blank" href="../../user/upload/'.$user_id.'/'.$requirements_fetch[$index].'"><img src="../../img/view.svg" alt="View"></a>
-                                        </td>
-
-                                        <td>
-                                            <div class="status">'.$status_fetch[$index].'</div>
-                                        </td>
-
-                                        <td>
-                                            <select class="review" name="status_'.($index+1).'" id="status_'.($index+1).'">
-                                                <option class="uploaded" value="Uploaded"'.(($status_fetch[$index] === "Uploaded") ? "selected" : "" ).'>Uploaded</option>
-                                                <option class="pending" value="Pending"'.(($status_fetch[$index] === "Pending") ? "selected" : "" ).'>Pending</option>
-                                                <option class="denied" value="Denied"'.(($status_fetch[$index] === "Denied") ? "selected" : "" ).'>Denied</option>
-                                                <option class="approved" value="Approved"'.(($status_fetch[$index] === "Approved") ? "selected" : "" ).'>Approved</option>
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                        <select class="denied-message" id="denied_message_'.($index+1).'" name="denied_message_'.($index+1).'">
-                                        <option value="" disabled selected>Select Message...</option>';
-                                        foreach($message_array as $denied){
-                                            echo "<option value='$denied' " . ($message_fetch[$index] === $denied ? "selected" : "") . ">$denied</option>";
-                                        }
-                                echo    '</select>
-                                        <div class="denied-error">'.${$errorMsg}.'</div>
-                                        </td>';
-                                
-                                
-                            }
-                            echo '</tr>';
+            <table>
+                <tr>
+                    <th>Requirement</th>
+                    <th>Status</th>
+                    <th>Review</th>
+                    <th>Actions</th>
+                </tr>
+                <?php 
+        
+        foreach($documents as $i => $documentName){
+            if($documentName === "On the Place of Business"){
+                echo '  <tr>
+                <td>'.$documentName.'<img class="info" src="../../img/info.svg" alt="Info"></td>';
+            }else{
+                echo '  <tr>
+                <td>'.$documentName.'</td>';
+            }
+            $found = false;
+            foreach($requirements as $requirement){
+                if($requirement['Name'] === $documentName){
+            echo '  <td>
+                        <select id="fileStatus_'.$i.'" name="fileStatus_'.$i.'" class="fileStatus">';
+                        foreach($fileStatus as $status){
+            echo "          <option value='$status' " . ($requirement['Status'] === $status ? "selected" : "") . ">$status</option>";
                         }
-                    ?>  
-                </table>
-                <input type="submit" value="Update">
-            </form> 
+            echo '      </select>         
+                    </td>
+                    <td>
+                        <select id="review_'.$i.'" name="review_'.$i.'" class="review">';
+                        foreach($review as $message){
+            echo "          <option value='$message' " . ($requirement['Review'] === $message ? "selected" : "") . ">$message</option>";
+                        }
+            echo '      </select>
+                        <div class="error-msg">'.$errors["uploadReq_'.$i.'"].'</div>
+                    </td>
+                    <td class="table-actions">
+                        <a class="view" target="_blank" href="../../user/Business/upload/'.$businessID.'/'.$requirement['FileName'].'"><img src="../../img/view.svg" alt="View"></a>
+                    </td>
+                ';
+                $found = true;
+                }
+            }
+            if(!$found){
+                echo '  <td></td>
+                        <td></td>
+                        <td></td>
+                ';
+            }
+            echo '</tr>';
+        }
+    ?>
+        </table>  
+            <input type="submit" value="Update">
+        </form>
         </div>  
     </div>
     </main>
