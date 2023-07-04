@@ -52,7 +52,7 @@ if(isset($_GET['message'])){
     $documents = array(
         'Barangay Clearance for business',
         'DTI Certificate of Registration',
-        'On the Place of Business <img class="info" src="../../img/info.svg" alt="Info">',
+        'On the Place of Business',
         'Community Tax Certificate',
         'Certificate of Zoning Compliance',
         'Business Inspection Clearance',
@@ -282,8 +282,13 @@ $mysqli->close();
                 <?php 
         
         foreach($documents as $documentName){
-            echo '  <tr>
-                        <td>'.$documentName.'</td>';
+            if($documentName === "On the Place of Business"){
+                echo '  <tr>
+                <td>'.$documentName.'<img class="info" src="../../img/info.svg" alt="Info"></td>';
+            }else{
+                echo '  <tr>
+                <td>'.$documentName.'</td>';
+            }
             $found = false;
             foreach($requirements as $requirement){
                 if($requirement['Name'] === $documentName){
