@@ -59,28 +59,55 @@ if(user_owner){
 
 const user_business = document.querySelectorAll('table#users td:nth-child(3) div.data');
 if(user_business){
-  user_business.forEach(status => {
+  user_business.forEach((status, i) => {
+    console.log(user_owner[i]);
     if(status.innerText === "Created"){
       status.className = "data green";
+      status.addEventListener('click', () => {
+        let id = status.parentNode.parentNode.firstElementChild.textContent;
+        window.location.href = "edit_business.php?id=" + encodeURIComponent(id);
+      });
     }else{
       status.className = "data gray";
+      if(user_owner[i].innerText ==="Created"){
+        status.addEventListener('click', () => {
+          let id = status.parentNode.parentNode.firstElementChild.textContent;
+          window.location.href = "edit_business.php?id=" + encodeURIComponent(id);
+        });
+      }else{
+        status.style.cursor = 'auto';
+        status.style.filter = 'none';
+      }
     }
-    status.addEventListener('click', () => {
-      let id = status.parentNode.parentNode.firstElementChild.textContent;
-      window.location.href = "edit_business.php?id=" + encodeURIComponent(id);
-    });
   });
 };
 
 const user_documents = document.querySelectorAll('table#users td:nth-child(4) div.data');
 if(user_documents){
-  user_documents.forEach(status => {
+  user_documents.forEach((status, i) => {
     if(status.innerText === "Complete"){
       status.className = "data green";
+      status.addEventListener('click', () => {
+        let id = status.parentNode.parentNode.firstElementChild.textContent;
+        window.location.href = "documents.php?id=" + encodeURIComponent(id);
+      });
     }else if(status.innerText === "Incomplete"){
       status.className = "data orange";
+      status.addEventListener('click', () => {
+        let id = status.parentNode.parentNode.firstElementChild.textContent;
+        window.location.href = "documents.php?id=" + encodeURIComponent(id);
+      });
     }else{
       status.className = "data gray";
+      if(user_business[i].innerText ==="Created"){
+        status.addEventListener('click', () => {
+          let id = status.parentNode.parentNode.firstElementChild.textContent;
+          window.location.href = "documents.php?id=" + encodeURIComponent(id);
+        });
+      }else{
+        status.style.cursor = 'auto';
+        status.style.filter = 'none';
+      }
     }
   });
 };
