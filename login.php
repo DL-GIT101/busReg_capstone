@@ -70,11 +70,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
             header("location: user/Owner/edit_profile.php");
         }
     }else if($role === "Admin"){
-        if(hasAdminProfile($UserID) === true){
-            header("location: admin/dashboard.php");
-        }else{
-            header("location: admin/edit_profile.php");
-        }
+        header("location: admin/dashboard.php");
         exit;
     }
 
