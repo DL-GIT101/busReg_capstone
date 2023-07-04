@@ -42,6 +42,21 @@ if(isset($_GET['user'])){
 $userDirectory = '../user/upload/' . $user_id;
 $error = "";
 
+if($_SESSION["AdminRole"] !== "Superadmin"){
+    $message = '<modal>
+                    <div class="content warning">
+                        <p class="title">Delete Data</p>
+                        <p class="sentence">Only Superadmin can delete data</p>
+                        <div class="button-group">
+                            <button class="close">Close</button>
+                        </div>
+                    </div>
+                </modal>
+            ';
+        header('location: '.$link.'?message='. urlencode($message));
+    exit;
+}
+
 if(checkPermit($user_id) === "None"){
 
     if ($stmt = $mysqli->prepare($sql)) {
