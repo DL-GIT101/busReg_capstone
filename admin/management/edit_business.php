@@ -16,8 +16,17 @@ if(isset($_GET['id'])){
     $user_id = $_SESSION['user_id'];
 }else{
     header("location: users.php");
+    exit;
 }
 $user_id = validate($_SESSION['user_id']);
+
+if(hasOwnerProfile($user_id) === false){
+    $modal_display = "";
+    $modal_status = "warning";
+    $modal_title = "Owner Profile not Found";
+    $modal_message = "Create a Owner Profile first before creating Business Profile";
+    $modal_button = '<a href="users.php">OK</a>';
+}
 $ownerID = hasOwnerProfile($user_id);
 
 $sql = "SELECT * FROM Business WHERE OwnerID = ?";
