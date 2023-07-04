@@ -18,7 +18,15 @@ $modal_display = "hidden";
 
 $owners = array(); 
 
-$sql_user = "SELECT Business.BusinessID, Business.Name, Business.Activity, COUNT(CASE WHEN Requirement.Status = 'Approved' THEN 1 ELSE NULL END) AS Approved, Permit.PermitID FROM Business LEFT JOIN Requirement ON Business.BusinessID = Requirement.BusinessID LEFT JOIN Permit ON Business.BusinessID = Permit.BusinessID GROUP BY Business.BusinessID ORDER BY Business.BusinessID DESC;";
+$sql_user = "SELECT Business.BusinessID, Business.Name, Business.Activity, 
+COUNT(CASE WHEN Requirement.Status = 'Approved' THEN 1 ELSE NULL END) AS Approved, 
+Permit.PermitID
+FROM Business
+LEFT JOIN Requirement ON Business.BusinessID = Requirement.BusinessID
+LEFT JOIN Permit ON Business.BusinessID = Permit.BusinessID
+GROUP BY Business.BusinessID
+HAVING COUNT(Requirement.BusinessID) = 11
+ORDER BY Business.BusinessID DESC;";
 
 if ($result = $mysqli->query($sql_user)) {
     if ($result->num_rows > 0) {
@@ -122,7 +130,6 @@ $mysqli->close();
                         <th>Activity</th>
                         <th>Approved</th>
                         <th>Permit</th>
-                        <th>Review</th>
                     </tr>
                     <?php 
                     foreach ($owners as &$owner) {
@@ -132,7 +139,6 @@ $mysqli->close();
                                     <td>'.$owner['Activity'].'</td>
                                     <td><div class="data">'.$owner['Approved'].'</div></td>
                                     <td><div class="data">'.$owner['Permit'].'</div></td>
-                                    <td><img src="../../img/review.svg" alt="Review"></td>
                                 </tr>';
                 }
                     ?>
