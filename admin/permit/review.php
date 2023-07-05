@@ -119,6 +119,7 @@ $sql_owner = "SELECT * FROM Owner WHERE OwnerID = ?";
             array_push($uploadRequirementsName,$row['Name']);
                 
                $requirement = array(
+                'RequirementID' => $row['RequirementID'],
                 'Name' => $row['Name'],
                 'FileName' => $row['FileName'],
                 'Status' => $row['Status'],
@@ -171,6 +172,84 @@ $sql_owner = "SELECT * FROM Owner WHERE OwnerID = ?";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    if(checkPermit($businessID) === "None"){
+    $updated = 0;
+    $error = false;
+    foreach ($requirements as $i => $requirement) {
+        $select_status = validate($_POST['fileStatus_'.$i]);
+        $select_review = validate(($_POST['review_'.$i]));
+
+        if($select_status === "Denied"){
+          if(empty($select_review)){
+            $error = true;
+          }
+        }else{
+            $select_review = null;
+        }
+
+        if($error === false){
+            $sql = "UPDATE Requirement SET Status = ?, Review = ?, ReviewedBy = ? WHERE RequirementID = ?";
+
+            if($stmt = $mysqli->prepare($sql)){
+                $stmt->bind_param("ssss", $param_status, $param_review, $param_ReviewdBy, $param_RequirementID);
+
+                $param_status = $select_status;
+                $param_review = $select_review;
+                if($select_status === "Uploaded"){
+                    $param_ReviewdBy = null;
+                }else{
+                    $param_ReviewdBy = $_SESSION['AdminID'];
+                }
+                $param_RequirementID = $requirement['RequirementID'];
+
+                if($stmt->execute()){
+                    $updated++;
+                }else{
+                    $updated--;
+                }
+                $stmt->close();
+            }else{
+                $updated--;
+            }
+        }
+    }
+
+    if($updated === 11){
+        $modal_display = "";
+        $modal_status = "success";
+        $modal_title = "Requirements Review Updated";
+        $modal_message = "All updated";
+        $modal_button = '<a href="review.php">OK</a>';
+    }else if($updated > 0 ){
+        $modal_display = "";
+        $modal_status = "warning";
+        $modal_title = "Requirements Review Updated";
+        $modal_message = "Some review did not update <br>";
+        $modal_message .= "Select Review message for denied requirements";
+        $modal_button = '<a href="review.php">OK</a>';
+    }else{
+        $modal_display = "";
+        $modal_status = "error";
+        $modal_title = "Requirements Review Updated";
+        $modal_message = "No review has been updated";
+        $modal_button = '<a href="review.php">OK</a>';
+    }
+
+}else if(checkPermit($businessID) === "Issued"){
+
+    $modal_display = "";
+    $modal_status = "warning";
+    $modal_title = "Owner Profile cannot be updated";
+    $modal_message = "The permit has already been issued";
+    $modal_button = '<a href="users.php">OK</a>';
+
+}else{
+    $modal_display = "";
+    $modal_status = "error";
+    $modal_title = "Business Permit Error";
+    $modal_message = "Try again Later";
+    $modal_button = '<a href="users.php">OK</a>';
+}  
 
 }
 
@@ -329,7 +408,9 @@ $mysqli->close();
             echo '      </select>         
                     </td>
                     <td>
-                        <select id="review_'.$i.'" name="review_'.$i.'" class="review">';
+                        <select id="review_'.$i.'" name="review_'.$i.'" class="review">
+                        <option value="" disabled selected>Select Review...</option>
+                        ';
                         foreach($review as $message){
             echo "          <option value='$message' " . ($requirement['Review'] === $message ? "selected" : "") . ">$message</option>";
                         }
