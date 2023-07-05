@@ -114,26 +114,14 @@ if(user_documents){
 
 const user_permit = document.querySelectorAll('table#users td:nth-child(5) div.data');
 if(user_permit){
-  user_permit.forEach((status, i) => {
+  user_permit.forEach((status) => {
+        status.style.cursor = 'auto';
+        status.style.filter = 'none';
       if(status.innerText === "Issued"){
-        status.className = "data green";
-        status.addEventListener('click', () => {
-          let id = status.parentNode.parentNode.firstElementChild.textContent;
-          window.location.href = "../permit/msme.php?id=" + encodeURIComponent(id);
-      });
+          status.className = "data green";
       }else{
-        status.className = "data gray";
-        if(user_documents[i].innerText ==="Complete"){
-          status.addEventListener('click', () => {
-            let id = status.parentNode.parentNode.firstElementChild.textContent;
-            window.location.href = "../permit/msme.php?id=" + encodeURIComponent(id);
-          });
-        }else{
-          status.style.cursor = 'auto';
-          status.style.filter = 'none';
-        }
+          status.className = "data gray";
       }
-      
   });
 };
 
