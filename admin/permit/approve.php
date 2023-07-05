@@ -1,137 +1,218 @@
-<?php
+<?php 
 session_start();
 require_once "../../php/connection.php";
 require_once "../../php/functions.php";
 
-if(checkRole($_SESSION["role"]) !== "admin"){
+if($_SESSION["role"] !== "Admin"){
     header("location: ../../index.php");
     exit;
 }
 
 if(isset($_GET['id'])){
-    $user_id = $_SESSION['user_id'] =  urldecode($_GET['id']);
-}else if(isset($_SESSION['user_id'])){
-    $user_id = $_SESSION['user_id'];
+    $businessID = $_SESSION['businessID'] =  urldecode($_GET['id']);
+}else if(isset($_SESSION['businessID'])){
+    $businessID = $_SESSION['businessID'];
 }else{
     header("location: msme.php");
     exit;
 }
+$businessID = validate($businessID);
 
 $modal_display = "hidden";
 
-$sql = "SELECT * FROM user_profile WHERE user_id = ?";
+$sql_business = "SELECT * FROM Business WHERE BusinessID = ?";
 
-    if($stmt = $mysqli->prepare($sql)){
-        $stmt->bind_param("s",$param_id);
+    if($stmt_business = $mysqli->prepare($sql_business)){
+        $stmt_business->bind_param("s",$param_id);
 
-        $param_id = $user_id;
+        $param_id = $businessID;
 
-        if($stmt->execute()){
-            $result = $stmt->get_result();
+        if($stmt_business->execute()){
+            $result = $stmt_business->get_result();
 
             if($result->num_rows === 1){
+
                 $row = $result->fetch_array(MYSQLI_ASSOC);
+                $logo = $row["Logo"];
+                $bus_name = $row["Name"];
+                $logo = $row["Logo"];
+                if($row["Logo"] == null){
+                    $logo = null;
+                }else{
+                    $logo = "../../user/Business/upload/".$businessID."/".$row["Logo"];
+                }
+                $barangay_b = $row["Barangay"];
+                $ownerID = $row['OwnerID'];
 
-                $business_name = $row["business_name"];
-                $name = $row["first_name"]." ".$row["middle_name"]." ".$row["last_name"]." ".$row["suffix"];
-                $business_activity = $row["activity"];
-                $gender = $row['gender'];
-                $contact = $row['contact_number'];
-                $address = $row["address_1"]." ".$row["address_2"];
-
+            }else {
+                $bus_name = "Not yet created";
             }
         }else{
-            echo "Oops! Something went wrong. Please try again later";
+            $modal_display = "";
+            $modal_status = "error";
+            $modal_title = "Business Profile Information Error";
+            $modal_message = "Profile cannot be retrieve";
+            $modal_button = '<a href="msme.php">OK</a>';
         }
-        $stmt->close();
+        $stmt_business->close();
     }
 
-    $sql2 = "SELECT * FROM new_documents WHERE user_id = ?";
-   
-    if($stmt2 = $mysqli->prepare($sql2)){
-        
-        $stmt2->bind_param("s",$param_id);
-        
-        $param_id = $user_id;
-       
-        if($stmt2->execute()){
-            $result = $stmt2->get_result();
-            if($result->num_rows === 1){
-               $row = $result->fetch_array(MYSQLI_ASSOC);
+    $sql_owner = "SELECT * FROM Owner WHERE OwnerID = ?";
 
-                $serialized_status_fetch = $row["status"];
-                $status_fetch = unserialize($serialized_status_fetch);     
-                $approvedReq = 0;
-                foreach($status_fetch as $status){
-                    if($status === "Approved"){
-                        $approvedReq++;
-                    }
-                }
-            }
-        }else {
-            echo "error retrieving data";
-        }
-    $stmt2->close();
-    }
-    
-    $sql3 = "SELECT * FROM permit WHERE user_id = ?";
+    if($stmt_owner = $mysqli->prepare($sql_owner)){
+        $stmt_owner->bind_param("s",$param_id);
 
-    if($stmt3 = $mysqli->prepare($sql3)){
-        $stmt3->bind_param("s",$param_id);
+        $param_id = $ownerID;
 
-        $param_id = $user_id;
-
-        if($stmt3->execute()){
-            $result = $stmt3->get_result();
+        if($stmt_owner->execute()){
+            $result = $stmt_owner->get_result();
 
             if($result->num_rows == 1){
-                $row = $result->fetch_array(MYSQLI_ASSOC);
 
-                $permit_status = $row['status'];
-                
-            }else {
-                $permit_status = "None";
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+                $fname = $row["FirstName"];
+                $lname = $row["LastName"];
+                $suffix = $row["Suffix"];
+                $name = $fname." ".$lname." ".$suffix;
             }
         }else{
-            echo "Oops! Something went wrong. Please try again later";
+
+            $modal_display = "";
+            $modal_status = "error";
+            $modal_title = "Owner Profile Information Error";
+            $modal_message = "Profile cannot be retrieve";
+            $modal_button = '<a href="msme.php">OK</a>';
         }
-        $stmt3->close();
+        $stmt_owner->close();
+    }
+
+    $sql_requirements = "SELECT COUNT(CASE WHEN Status = 'Approved' THEN 1 ELSE NULL END) AS Approved FROM `Requirement` WHERE BusinessID = ?;";
+
+    if($stmt_requirements = $mysqli->prepare($sql_requirements)){
+        $stmt_requirements->bind_param("s",$param_id);
+
+        $param_id = $businessID;
+
+        if($stmt_requirements->execute()){
+            $result = $stmt_requirements->get_result();
+
+            if($result->num_rows == 1){
+
+                $row = $result->fetch_array(MYSQLI_ASSOC);
+                $approved = $row['Approved'];
+
+                if($approved !== 11){
+                    $modal_display = "";
+                    $modal_status = "error";
+                    $modal_title = "Requirement Approved";
+                    $modal_message = "Not All Requirements are approved";
+                    $modal_button = '<a href="review.php">OK</a>';
+                }
+            }
+        }else{
+
+            $modal_display = "";
+            $modal_status = "error";
+            $modal_title = "Requirement Info Error";
+            $modal_message = "Requirements cannot be retrieve";
+            $modal_button = '<a href="msme.php">OK</a>';
+        }
+        $stmt_requirements->close();
+    }
+
+    $sql_permit = "SELECT * FROM Permit WHERE BusinessID = ?";
+
+    if($stmt_permit = $mysqli->prepare($sql_permit)){
+        $stmt_permit->bind_param("s",$param_id);
+
+        $param_id = $businessID;
+
+        if($stmt_permit->execute()){
+            $result = $stmt_permit->get_result();
+
+            if($result->num_rows === 1){
+                $permit = "Issued";
+            }else{
+                $permit = "None";
+            }
+        }else{
+            $modal_display = "";
+            $modal_status = "error";
+            $modal_title = "Permit Error";
+            $modal_message = "Permit cannot be retrieve";
+            $modal_button = '<a href="msme.php">OK</a>';
+        }
+        $stmt_permit->close();
     }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if($approvedReq === 11){
+    if($approved === 11){
 
-        $sql4 = "INSERT INTO permit (user_id, status) VALUES (?,?)";
+        $sql_id = "SELECT PermitID as maxID FROM Permit ORDER BY PermitID DESC LIMIT 1";
 
-        if($stmt4 = $mysqli->prepare($sql4)){
-            $stmt->bind_param("ss", $param_id, $param_Status);
+            if($stmt_id = $mysqli->prepare($sql_id)) {
 
-            $param_id = $user_id;
-            $param_Status = "Approved";
+                if($stmt_id->execute()){  
 
-            if($stmt4->execute()){
+                    $stmt_id->bind_result($maxID);
+
+                    if($stmt_id->fetch()) {
+                        $lastID = $maxID;
+                    }
+                }
+            $stmt_id->close();
+            }
+            $currentYear = date('Y');
+            if(!empty($lastID)) {
+                $year = substr($lastID, 2, 4);
+                $countDash = substr($lastID, 7);
+                $count = str_replace("-","",$countDash);
+
+                if($year === $currentYear) {
+                    $count += 1;
+                }else {
+                    $count = 0;
+                }
+            }else {
+                $count = 0;
+            }
+
+            $count = str_pad($count, 6, '0', STR_PAD_LEFT);
+            $countDash = substr_replace($count, "-", 3, 0);
+            $permitID = "P-" . $currentYear . "-" . $countDash;
+
+        $sql_permit = "INSERT INTO Permit (PermitID, BusinessID, Type, IssuedBy) VALUES (?, ?, ?, ?)";
+
+        if($stmt_permit = $mysqli->prepare($sql_permit)){
+            $stmt_permit->bind_param("ssss", $param_PermitID, $param_BusinessID, $param_Type, $param_IssuedBy);
+
+            $param_PermitID = $permitID;
+            $param_BusinessID = $businessID;
+            $param_Type = "New";
+            $param_IssuedBy = $_SESSION['AdminID'];
+
+            if($stmt_permit->execute()){
                 $modal_display = "";
                 $modal_status = "success";
-                $modal_title = "Permit has been Approved";
-                $modal_message = "Status can now be seen";
-                $modal_button = '<a href="review.php">OK</a>';
+                $modal_title = "Permit has been Issued";
+                $modal_button = '<a href="approve.php">OK</a>';
             }else{
                 $modal_display = "";
                 $modal_status = "error";
-                $modal_title = "Approving Permit Error";
+                $modal_title = "Issuing Permit Error";
                 $modal_message = "Try again later";
                 $modal_button = '<a href="review.php">OK</a>';
             }
         }
 
-        $stmt4->close();
+        $stmt_permit->close();
     }else{
         $modal_display = "";
         $modal_status = "error";
-        $modal_title = "Incomplete Documents";
+        $modal_title = "Incomplete Approved Requirements";
         $modal_message = "All documents must be approved";
-        $modal_button = '<button class="close">OK</button>';
+        $modal_button = '<a href="review.php">OK</a>';
     }
 }
 
@@ -202,37 +283,33 @@ $mysqli->close();
         <div class="container">
             <section>
                 <subsection class="space-between">
-                    <p class="sentence">Business Profile</p>
-                    <div class="text-center">
-                        <p class="title"><?= $business_name ?></p>
-                        <p class="sentence"><?= $business_activity ?></p> 
+                    <p class="sentence">Business</p>
+                    <div class="logo"> 
+                        <img src="<?= $logo ?>" alt="Business Logo">
                     </div>
-                    <p class="sentence text-center"><?= $address ?></p>
+                    <p class="title text-center"><?= $bus_name ?></p>
+                    <p class="sentence text-center"><?= $barangay_b ?></p>
                 </subsection>
-                <subsection class="space-between">
-                <p class="sentence">Business Owner</p> 
+                <subsection>
+                <p class="sentence">Owner</p> 
                 <p class="title text-center"><?= $name ?></p> 
-                    <div class="text-center">
-                        <p class="sentence"><?= $gender ?></p> 
-                        <p class="sentence"><?= $contact ?></p>
-                    </div>
+                </subsection>
+                <subsection>
+                <p class="sentence">Delete Permit</p> 
+                    <a class="action delete" href="../management/edit_business.php?id=<?= $userID ?>"><img src="../../img/delete.svg" alt="Delete"></a>
                 </subsection>
             </section>
             <section class="map-container">
-                <subsection class="space-around">
-                    <p class="sentence-title">Approved Documents</p> 
-                    <div class="info title approved"><?= $approvedReq ?>/12</div>
-
-                    <p class="sentence-title">Business Permit Status</p> 
-                    <div class="info title" id="permit-status"><?= $permit_status ?></div>
-                </subsection>
-                <subsection>
-                        <p class="title">Business Permit</p>
+                <subsection class="space-between">
+                        <p class="title">Issuing Business Permit</p>
                         <p class="whole-paragraph">As the admin, it is crucial to carefully consider the reviewed documents and their compliance with the necessary requirements. Once approved, the business permit will be granted, and it will signify that the reviewed documents have met the necessary criteria for permit issuance. Please ensure you have thoroughly assessed the documents and are confident in your decision to proceed with the approval.</p>
-                        form
                         <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                             <input type="submit" class="approve" value="Approve">
                         </form>
+                </subsection>
+                <subsection>
+                <p class="sentence">Permit</p> 
+                    <div class="info title" id="permit-status"><?= $permit ?></div>
                 </subsection>
             </section>
         </div>
