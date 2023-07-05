@@ -34,7 +34,7 @@ if ($result = $mysqli->query($sql_user)) {
 
             if($row['Approved'] == 11){
                 $approved = "Complete";
-            }else if($row['Uploaded'] > 0){
+            }else if($row['Approved'] > 0){
                 $approved = "Incomplete";
             }else{
                 $approved = "None";
