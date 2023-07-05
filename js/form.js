@@ -24,53 +24,24 @@ if(error_msg && inputs){
   };
 };
   
-const review_selects = document.querySelectorAll('form table select.review');
-const denied_message = document.querySelectorAll('form table select.denied-message');
-const denied_error = document.querySelectorAll('form table div.denied-error');
+const file_Status = document.querySelectorAll('form table select.fileStatus');
+const review = document.querySelectorAll('form table select.review');
+const review_error = document.querySelectorAll('form table div.error-msg');
 
-if(review_selects && denied_message){
-  review_selects.forEach((select, index) => {
+if(file_Status && review){
+  file_Status.forEach((status, i) => {
+        if(status.value !== "Denied"){
+            review[i].style.display = "none";
+        };
 
-    let denied_select = denied_message[index];
-    
-    if(select.value == "Uploaded"){
-      select.classList.add('uploaded');
-    }else if(select.value == "Pending"){
-      select.classList.add('pending');
-    }else if(select.value == "Denied"){
-      select.classList.add('denied');
-      denied_select.style.display = "block";
-    }else if(select.value == "Approved"){
-      select.classList.add('approved');
-    }
-
-      
-
-      select.addEventListener('change', () => {
-
-        let selectedOption = select.options[select.selectedIndex];
-        denied_select.removeAttribute('style');
-        select.className = "review";
-
-        denied_error[index].textContent = "";
-        select.classList.remove('error_input');
-
-        if(selectedOption.value == "Uploaded"){
-          select.classList.add('uploaded');
-        }else if(selectedOption.value == "Pending"){
-          select.classList.add('pending');
-        }else if(selectedOption.value == "Denied"){
-          select.classList.add('denied');
-          denied_select.style.display = "block";
-        }else if(selectedOption.value == "Approved"){
-          select.classList.add('approved');
-        }
-      });
-  });
-
-  denied_error.forEach((message, index) => {
-    if (message.textContent.trim().length > 0) {
-      review_selects[index].classList.add('error_input');
-    }
-  });
+        status.addEventListener('change', () => {
+          let selectedOption = status.options[status.selectedIndex];
+          if(selectedOption.value !== "Denied"){
+            review[i].style.display = "none";
+          }else if(selectedOption.value == "Denied"){
+            review[i].style.display = "block";
+          };
+        });
+    });
+ 
 };
