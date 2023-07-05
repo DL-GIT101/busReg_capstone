@@ -14,6 +14,7 @@ if(isset($_GET['id'])){
     $businessID = $_SESSION['businessID'];
 }else{
     header("location: msme.php");
+    exit;
 }
 $businessID = validate($businessID);
 $modal_display = "hidden";
@@ -169,6 +170,11 @@ $sql_owner = "SELECT * FROM Owner WHERE OwnerID = ?";
         'Approved',
         'Denied'
     );
+
+    if(count($requirements) !== 11){
+        header("location: msme.php");
+        exit;
+    }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
