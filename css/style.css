@@ -229,6 +229,7 @@ form input[type=submit]{
 form input[type=submit].approve{
     background-color:rgb(25,135,84);
     color: rgb(245, 245, 247);
+    margin-top: 20px;
 }
 
 form a {
