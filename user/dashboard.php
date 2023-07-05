@@ -66,7 +66,7 @@ $sql = "SELECT * FROM Business WHERE BusinessID = ?";
                 if($row["IssuedPermit"] == null){
                     $permit_status = "None";
                 }else{
-                    $permit_status = "Approved";
+                    $permit_status = "Issued";
                 }
                 $bus_name = $row["Name"];
                 $logo = $row["Logo"];
