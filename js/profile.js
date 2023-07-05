@@ -1,7 +1,7 @@
 const permit_status = document.querySelector('#permit-status');
 if(permit_status){
     switch (permit_status.innerText) {
-        case "Approved":
+        case "Issued":
             permit_status.style.backgroundColor = "rgb(25,135,84)";
             permit_status.style.color = "rgb(245, 245, 247)";
             break;
