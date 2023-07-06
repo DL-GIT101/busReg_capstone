@@ -148,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt_id->close();
             }
             $currentYear = date('Y');
-            if($lastID !== null) {
+            if(!empty($lastID)) {
                 $year = substr($lastID, 2, 4);
                 $countDash = substr($lastID, 7);
                 $count = str_replace("-","",$countDash);
