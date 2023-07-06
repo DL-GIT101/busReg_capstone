@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $uploadReqName = validate($_POST["uploadReqName"]);
 
-    $allowTypes = array('jpg', 'jpeg', 'png', 'pdf');
+    $allowTypes = array('jpg', 'jpeg', 'pdf');
     $targetDir = "../../user/Business/upload/".$businessID."/";
     $fileName = basename($_FILES['uploadReq']['name']);
     $targetFilePath = $targetDir. $fileName;
@@ -183,7 +183,7 @@ if(!empty($_FILES['uploadReq']['name'])){
                     $errors['uploadReq'] = 'File size should be 2MB or less.';
                 }
             } else {
-                $errors['uploadReq'] = 'Only JPG, JPEG, PNG and PDF files are allowed.';;
+                $errors['uploadReq'] = 'Only JPG, JPEG and PDF files are allowed.';;
             } 
         } else {
             $errors['uploadReq'] = 'Delete first the uploaded file';
