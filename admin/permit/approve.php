@@ -8,6 +8,11 @@ if($_SESSION["role"] !== "Admin"){
     exit;
 }
 
+if(isset($_GET['message'])){
+    $modal_get = urldecode($_GET['message']);
+    echo $modal_get;
+}
+
 if(isset($_GET['id'])){
     $businessID = $_SESSION['businessID'] =  urldecode($_GET['id']);
 }else if(isset($_SESSION['businessID'])){
@@ -131,7 +136,9 @@ $sql_business = "SELECT * FROM Business WHERE BusinessID = ?";
             $result = $stmt_permit->get_result();
 
             if($result->num_rows === 1){
+                $row = $result->fetch_assoc();
                 $permit = "Issued";
+                $permitID = $row['PermitID'];
             }else{
                 $permit = "None";
             }
@@ -296,12 +303,12 @@ $mysqli->close();
                 </subsection>
                 <subsection>
                 <p class="sentence">Delete Permit</p> 
-                    <a class="action delete" href="../management/edit_business.php?id=<?= $userID ?>"><img src="../../img/delete.svg" alt="Delete"></a>
+                    <a class="action delete"><img src="../../img/delete.svg" alt="Delete"></a>
                 </subsection>
             </section>
             <section class="map-container">
                 <subsection class="space-between">
-                        <p class="title">Issuing Business Permit</p>
+                        <p id="page" class="title">Issuing Business Permit</p>
                         <p class="whole-paragraph">As the admin, it is crucial to carefully consider the reviewed documents and their compliance with the necessary requirements. Once approved, the business permit will be granted, and it will signify that the reviewed documents have met the necessary criteria for permit issuance. Please ensure you have thoroughly assessed the documents and are confident in your decision to proceed with the approval.</p>
                         <form autocomplete="off" method="post" action="<?= htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                             <input type="submit" class="approve" value="Approve">
@@ -309,7 +316,8 @@ $mysqli->close();
                 </subsection>
                 <subsection>
                 <p class="sentence">Permit</p> 
-                    <div class="info title" id="permit-status"><?= $permit ?></div>
+                <p id="permitID" class="title text-center"><?= $permitID ?></p> 
+                <div class="info title" id="permit-status"><?= $permit ?></div>
                 </subsection>
             </section>
         </div>
