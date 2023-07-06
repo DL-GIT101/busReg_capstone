@@ -146,10 +146,14 @@ if(msme_documents){
 const msme_permit = document.querySelectorAll('table#msme td:nth-child(5) div.data');
 if(msme_permit){
   msme_permit.forEach(status => {
-    status.style.pointerEvents = 'none';
-    if(status.innerText === "Approved"){
+    if(status.innerText === "Issued"){
       status.className = "data green";
+      status.addEventListener('click', () => {
+        let id = status.parentNode.parentNode.firstElementChild.textContent;
+        window.location.href = "approve.php?id=" + encodeURIComponent(id);
+      });
     }else{
+      status.style.pointerEvents = 'none';
       status.className = "data gray";
     }
   });
