@@ -73,7 +73,7 @@ if(info_btn){
     });
 };
 
-const delete_user = document.querySelectorAll('div.action.delete');
+const delete_user = document.querySelectorAll('div.action.delete,a.action.delete');
 const admin_page = document.querySelector('#page');
 
 if(delete_user){
@@ -125,6 +125,16 @@ if(delete_user){
         sentence.innerHTML = '<p class="sentence">Are you sure you want to delete this account? <br> This action cannot be undone</p>';
 
         link.href = "../../php/userDelete.php?admin=" + encodeURIComponent(id);
+
+      }else if(admin_page.innerText === "Issuing Business Permit"){
+        let permitID = document.querySelector('#permitID');
+        let id = permitID.innerText;
+
+        title.innerText = "Delete Permit";
+
+        sentence.innerHTML = '<p class="sentence">Are you sure you want to delete this permit? <br> This action cannot be undone</p>';
+
+        link.href = "../../php/userDelete.php?permit=" + encodeURIComponent(id);
 
       }
 
