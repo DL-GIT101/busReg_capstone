@@ -13,6 +13,10 @@ if(isset($_GET['message'])){
     echo $modal_get;
 }
 
+unset($_SESSION['user_id']);
+unset($_SESSION['OwnerID']);
+unset($_SESSION['BusinessID']);
+
 $modal_display = "hidden";
 
 $owners = array(); 
