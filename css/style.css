@@ -127,7 +127,7 @@ nav .button-group > ul > li > a {
 }
 
 nav .button-group > ul > li.current {
-    border-bottom: 1px solid rgb(245, 245, 247);
+    border-bottom: 2px solid rgb(255, 204, 0);
 }
 
 nav .button-group > ul > li > a:hover {
