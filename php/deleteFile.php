@@ -77,7 +77,7 @@ if(checkPermit($id) === "None"){
     $message = '<modal>
                     <div class="content warning">
                         <p class="title">Document cannot be deleted</p>
-                        <p class="sentence">The permit has already been approved</p>
+                        <p class="sentence">The permit has already been Issued</p>
                         <div class="button-group">
                                     <button class="close">Close</button>    
                                 </div>   
