@@ -10,37 +10,60 @@ if($_SESSION["role"] !== "Admin"){
 
 if(isset($_GET['user'])){
 
-    $user_id = urldecode($_GET['user']);
+    $id = urldecode($_GET['user']);
     $sql = "DELETE FROM User WHERE UserID = ?";
     $page = "management";
     $link = "../admin/management/users.php";
-}else if(isset($_GET['profile'])){
+    $ownerID = hasOwnerProfile($id);
+    $businessID = hasBusinessProfile($ownerID);
 
-    $user_id = validate($_GET['profile']);
-    $sql = "DELETE user_profile, new_documents
-        FROM user_profile
-        LEFT JOIN new_documents ON user_profile.user_id = new_documents.user_id
-        WHERE user_profile.user_id = ?";
-    $page = "profile";
-    $link = "../admin/management/users.php";
+   if(checkPermit($businessID) === "Issued"){
+        $message = '<modal>
+                        <div class="content warning">
+                            <p class="title">User cannot be deleted</p>
+                            <p class="sentence">The permit has already been issued</p>
+                            <div class="button-group">
+                                <button class="close">Close</button>
+                            </div>
+                        </div>
+                    </modal>
+        ';
+        header('location: '.$link.'?message='. urlencode($message));
+        exit;
+    }else if(checkPermit($businessID) === "Error") {
+        $message = '<modal>
+                    <div class="content error">
+                        <p class="title">Something went wrong</p>
+                        <p class="sentence">Try again later</p>
+                        <div class="button-group">
+                            <button class="close">Close</button>
+                        </div>
+                    </div>
+                </modal>
+                ';
+        header('location: '.$link.'?message='. urlencode($message));
+        exit;
+    }
+    
 }else if(isset($_GET['admin'])){
 
-    $user_id = validate($_GET['admin']);
+    $id = validate($_GET['admin']);
     $sql = "DELETE FROM User WHERE UserID = ?";
     $page = "admin";
     $link = "../admin/Superadmin/admins.php";
+
 }else if(isset($_GET['permit'])){
 
     $id = validate($_GET['permit']);
     $sql = "DELETE FROM Permit WHERE PermitID = ?";
     $page = "permit";
     $link = "../admin/permit/approve.php";
+
 }else{
     $link = "../admin/dashboard.php";
 }
 
-
-$error = "";
+$error = false;
 
 if($_SESSION["AdminRole"] !== "Superadmin"){
     $message = '<modal>
@@ -57,59 +80,30 @@ if($_SESSION["AdminRole"] !== "Superadmin"){
     exit;
 }
 
-if(checkPermit($id) === "None"){
+if ($stmt = $mysqli->prepare($sql)) {
 
-    if ($stmt = $mysqli->prepare($sql)) {
+    $stmt->bind_param("s", $param_id);
+    $param_id = $id;
 
-        $stmt->bind_param("s", $param_id);
-        $param_id = $id;
+    if ($stmt->execute()) {
 
-        if ($stmt->execute()) {
-        
-            deleteDirectory($id,$page);
+        if($page === "management"){
 
-            if($page === "management"){
+            deleteDirectory($businessID,$page);
+            $title = "User has been deleted";
+    
+        }else if($page === "admin"){
+            
+            $title = "The admin account has been deleted";
 
-                $title = "User has been deleted";
-        
-            }else if($page === "profile") {
-                
-                $title = "Profile has been deleted";
-        
-            }else if($page === "admin"){
-                
-                $title = "The admin account has been deleted";
-
-            }else if($page === "permit"){
-                
-                $title = "The Permit has been deleted";
-            }
-        
-            $message = '<modal>
-                            <div class="content success">
-                                <p class="title">'.$title.'</p>
-                                <div class="button-group">
-                                    <button class="close">Close</button>
-                                </div>
-                            </div>
-                        </modal>
-            ';
-            header('location: '.$link.'?message='. urlencode($message));
-        } else {
-            $error = true;
+        }else if($page === "permit"){
+            
+            $title = "The Permit has been deleted";
         }
-    }else {
-        $error = true;
-    }
-
-    $stmt->close();
-
-    if($error === true){
     
         $message = '<modal>
-                        <div class="content error">
-                            <p class="title">Something went wrong</p>
-                            <p class="sentence">Try again later</p>
+                        <div class="content success">
+                            <p class="title">'.$title.'</p>
                             <div class="button-group">
                                 <button class="close">Close</button>
                             </div>
@@ -117,24 +111,21 @@ if(checkPermit($id) === "None"){
                     </modal>
         ';
         header('location: '.$link.'?message='. urlencode($message));
+    } else {
+        $error = true;
     }
-$mysqli->close(); 
-}else if(checkPermit($id) === "Issued"){
+}else {
+    $error = true;
+}
 
-    if($page === "management"){
+$stmt->close();
 
-        $title = "User cannot be deleted";
-
-    }else if($page === "profile") {
-
-        $title = "Profile cannot be deleted";
-
-    }
+if($error === true){
 
     $message = '<modal>
-                    <div class="content warning">
-                        <p class="title">'.$title.'</p>
-                        <p class="sentence">The permit has already been approved</p>
+                    <div class="content error">
+                        <p class="title">Something went wrong</p>
+                        <p class="sentence">Try again later</p>
                         <div class="button-group">
                             <button class="close">Close</button>
                         </div>
@@ -142,22 +133,13 @@ $mysqli->close();
                 </modal>
     ';
     header('location: '.$link.'?message='. urlencode($message));
-}else {
-    $message = '<modal>
-                <div class="content error">
-                    <p class="title">Something went wrong</p>
-                    <p class="sentence">Try again later</p>
-                    <div class="button-group">
-                        <button class="close">Close</button>
-                    </div>
-                </div>
-            </modal>
-            ';
-header('location: '.$link.'?message='. urlencode($message));
+    exit;
 }
 
+$mysqli->close(); 
+
 function deleteDirectory($id,$page) {
-    $directory = '../user/upload/' . $id;
+    $directory = '../user/Business/upload/' . $id;
 
     if (!is_dir($directory)) {
         return;
