@@ -3,7 +3,7 @@ const navLogo = document.querySelector('nav .logo');
 const filePath = window.location.pathname;
 const directoryPath = filePath.substring(0, filePath.lastIndexOf('/'));
 const pathLevels = directoryPath.split('/').length - 1;
-
+//const pathLevels = directoryPath.split('/').length; for hosting
 navLogo.addEventListener('click', () => {
     
     if(pathLevels === 1){
