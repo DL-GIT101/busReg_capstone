@@ -53,8 +53,6 @@ if ($result = $mysqli->query($sql_user)) {
             );
         $owners[] = $owner;
         }
-    } else {
-        echo "No users found with the role of Owner.";
     }
     $result->free();
 }
