@@ -35,11 +35,17 @@ if(isset($_GET['user'])){
     $sql = "DELETE FROM User WHERE UserID = ?";
     $page = "admin";
     $link = "../admin/Superadmin/admins.php";
+}else if(isset($_GET['permit'])){
+
+    $id = validate($_GET['permit']);
+    $sql = "DELETE FROM Permit WHERE PermitID = ?";
+    $page = "permit";
+    $link = "../admin/permit/approve.php";
 }else{
     $link = "../admin/dashboard.php";
 }
 
-$userDirectory = '../user/upload/' . $user_id;
+
 $error = "";
 
 if($_SESSION["AdminRole"] !== "Superadmin"){
@@ -57,16 +63,16 @@ if($_SESSION["AdminRole"] !== "Superadmin"){
     exit;
 }
 
-if(checkPermit($user_id) === "None"){
+if(checkPermit($id) === "None"){
 
     if ($stmt = $mysqli->prepare($sql)) {
 
         $stmt->bind_param("s", $param_id);
-        $param_id = $user_id;
+        $param_id = $id;
 
         if ($stmt->execute()) {
         
-            deleteDirectory($userDirectory,$page);
+            deleteDirectory($id,$page);
 
             if($page === "management"){
 
@@ -83,6 +89,10 @@ if(checkPermit($user_id) === "None"){
             }else if($page === "admin"){
                 
                 $title = "The admin account has been deleted";
+
+            }else if($page === "permit"){
+                
+                $title = "The Permit has been deleted";
             }
         
             $message = '<modal>
@@ -96,15 +106,15 @@ if(checkPermit($user_id) === "None"){
             ';
             header('location: '.$link.'?message='. urlencode($message));
         } else {
-            $error = "yes";
+            $error = true;
         }
     }else {
-        $error = "yes";
+        $error = true;
     }
 
     $stmt->close();
 
-    if($error === "yes"){
+    if($error === true){
     
         $message = '<modal>
                         <div class="content error">
@@ -119,7 +129,7 @@ if(checkPermit($user_id) === "None"){
         header('location: '.$link.'?message='. urlencode($message));
     }
 $mysqli->close(); 
-}else if(checkPermit($user_id) === "Approved"){
+}else if(checkPermit($id) === "Issued"){
 
     if($page === "management"){
 
@@ -160,7 +170,9 @@ $mysqli->close();
 header('location: '.$link.'?message='. urlencode($message));
 }
 
-function deleteDirectory($directory,$page) {
+function deleteDirectory($id,$page) {
+    $directory = '../user/upload/' . $id;
+
     if (!is_dir($directory)) {
         return;
     }
