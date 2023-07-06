@@ -35,11 +35,6 @@ $sql_business = "SELECT * FROM Business WHERE BusinessID = ?";
 
                 $row = $result->fetch_array(MYSQLI_ASSOC);
                 $logo = $row["Logo"];
-                if($row["IssuedPermit"] == null){
-                    $permit_status = "None";
-                }else{
-                    $permit_status = "Issued";
-                }
                 $bus_name = $row["Name"];
                 $logo = $row["Logo"];
                 if($row["Logo"] == null){
@@ -102,16 +97,16 @@ $sql_owner = "SELECT * FROM Owner WHERE OwnerID = ?";
         $stmt_owner->close();
     }
 
-    $sql = "SELECT * FROM Requirement WHERE BusinessID = ?";
+    $sql_req = "SELECT * FROM Requirement WHERE BusinessID = ?";
    
-    if($stmt = $mysqli->prepare($sql)){
+    if($stmt_req = $mysqli->prepare($sql_req)){
         
-        $stmt->bind_param("s",$param_id);
+        $stmt_req->bind_param("s",$param_id);
         
         $param_id = $businessID;
        
-        if($stmt->execute()){
-            $result = $stmt->get_result();
+        if($stmt_req->execute()){
+            $result = $stmt_req->get_result();
             $requirements = array();
             $uploadRequirementsName = array();
 
@@ -136,8 +131,10 @@ $sql_owner = "SELECT * FROM Owner WHERE OwnerID = ?";
             $modal_message = "Requirements cannot be retrieve";
             $modal_button = '<a href="msme.php">OK</a>';
         }
-        $stmt->close();
+        $stmt_req->close();
     }
+
+    $permit_status = checkPermit($businessID);
 
     $documents = array(
         'Barangay Clearance for business',
