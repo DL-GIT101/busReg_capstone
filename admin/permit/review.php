@@ -38,9 +38,10 @@ $sql_business = "SELECT * FROM Business WHERE BusinessID = ?";
                 $bus_name = $row["Name"];
                 $logo = $row["Logo"];
                 if($row["Logo"] == null){
+                    $logo_displayed = "../../img/No_image_available.svg";
                     $logo = null;
                 }else{
-                    $logo = "../../user/Business/upload/".$businessID."/".$row["Logo"];
+                    $logo_displayed = $logo = "../../user/Business/upload/".$businessID."/".$row["Logo"];
                 }
                 $activity = $row["Activity"];
                 $contact_b = substr($row["ContactNumber"],3);
@@ -335,7 +336,7 @@ $mysqli->close();
                 <subsection class="space-between">
                     <p class="title">Business Profile</p>
                     <div class="logo"> 
-                        <img src="<?= $logo ?>" alt="Business Logo">
+                        <img src="<?= $logo_displayed ?>" alt="Business Logo">
                     </div>
                     <div class="text-center">
                         <p class="title"><?= $bus_name ?></p>
