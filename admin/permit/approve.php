@@ -43,8 +43,9 @@ $sql_business = "SELECT * FROM Business WHERE BusinessID = ?";
                 $logo = $row["Logo"];
                 if($row["Logo"] == null){
                     $logo = null;
+                    $logo_displayed = "../../img/No_image_available.svg";
                 }else{
-                    $logo = "../../user/Business/upload/".$businessID."/".$row["Logo"];
+                    $logo_displayed = $logo = "../../user/Business/upload/".$businessID."/".$row["Logo"];
                 }
                 $barangay_b = $row["Barangay"];
                 $ownerID = $row['OwnerID'];
@@ -292,7 +293,7 @@ $mysqli->close();
                 <subsection class="space-between">
                     <p class="sentence">Business</p>
                     <div class="logo"> 
-                        <img src="<?= $logo ?>" alt="Business Logo">
+                        <img src="<?= $logo_displayed ?>" alt="Business Logo">
                     </div>
                     <p class="title text-center"><?= $bus_name ?></p>
                     <p class="sentence text-center"><?= $barangay_b ?></p>

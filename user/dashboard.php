@@ -72,8 +72,9 @@ $sql = "SELECT * FROM Business WHERE BusinessID = ?";
                 $logo = $row["Logo"];
                 if($row["Logo"] == null){
                     $logo = null;
+                    $logo_displayed = "../../img/No_image_available.svg";
                 }else{
-                    $logo = "Business/upload/".$_SESSION['BusinessID']."/".$row["Logo"];
+                    $logo_displayed = $logo = "Business/upload/".$_SESSION['BusinessID']."/".$row["Logo"];
                 }
                 $activity = $row["Activity"];
                 $contact_b = substr($row["ContactNumber"],3);
@@ -139,7 +140,7 @@ $sql = "SELECT * FROM Business WHERE BusinessID = ?";
                 <subsection class="space-between">
                     <p class="title">Business Profile</p>
                     <div class="logo"> 
-                        <img src="<?= $logo ?>" alt="Business Logo">
+                        <img src="<?= $logo_displayed ?>" alt="Business Logo">
                     </div>
                     <div class="text-center">
                         <p class="title"><?= $bus_name ?></p>
