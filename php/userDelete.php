@@ -23,12 +23,6 @@ if(isset($_GET['user'])){
         WHERE user_profile.user_id = ?";
     $page = "profile";
     $link = "../admin/management/users.php";
-}else if(isset($_GET['documents'])){
-
-    $user_id = validate($_GET['documents']);
-    $sql = "DELETE FROM new_documents WHERE user_id = ?";
-    $page = "documents";
-    $link = "../admin/management/users.php";
 }else if(isset($_GET['admin'])){
 
     $user_id = validate($_GET['admin']);
@@ -82,10 +76,6 @@ if(checkPermit($id) === "None"){
                 
                 $title = "Profile has been deleted";
         
-            } else if($page === "documents"){
-                
-                $title = "All Docuements has been deleted";
-
             }else if($page === "admin"){
                 
                 $title = "The admin account has been deleted";
@@ -138,10 +128,6 @@ $mysqli->close();
     }else if($page === "profile") {
 
         $title = "Profile cannot be deleted";
-
-    } else if($page === "documents"){
-
-        $title = "Documents cannot be deleted";
 
     }
 
