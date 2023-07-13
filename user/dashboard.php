@@ -47,7 +47,7 @@ $sql3 = "SELECT * FROM Owner WHERE OwnerID = ?";
         $stmt3->close();
     }
 
-$logo = "../img/No_image_available.svg";
+$logo_displayed = "../img/No_image_available.svg";
 
 $sql = "SELECT * FROM Business WHERE BusinessID = ?";
 
@@ -72,7 +72,6 @@ $sql = "SELECT * FROM Business WHERE BusinessID = ?";
                 $logo = $row["Logo"];
                 if($row["Logo"] == null){
                     $logo = null;
-                    $logo_displayed = "../img/No_image_available.svg";
                 }else{
                     $logo_displayed = $logo = "Business/upload/".$_SESSION['BusinessID']."/".$row["Logo"];
                 }
