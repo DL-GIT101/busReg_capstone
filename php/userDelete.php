@@ -52,6 +52,21 @@ if(isset($_GET['user'])){
     $page = "admin";
     $link = "../admin/Superadmin/admins.php";
 
+    if($id === "U-2023-000-000"){
+        $message = '<modal>
+                        <div class="content warning">
+                            <p class="title">Deleting Superadmin</p>
+                            <p class="sentence">Cannot delete Superadmin</p>
+                            <div class="button-group">
+                                <button class="close">Close</button>
+                            </div>
+                        </div>
+                    </modal>
+                ';
+                header('location: '.$link.'?message='. urlencode($message));
+                exit;
+    }
+
 }else if(isset($_GET['permit'])){
 
     $id = validate($_GET['permit']);
