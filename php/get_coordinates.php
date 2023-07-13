@@ -1,13 +1,19 @@
 <?php 
 require_once "connection.php";
-$sql = "SELECT Name, Longitude, Latitude FROM Business";
+$sql = "SELECT Name, Activity, ContactNumber, Longitude, Latitude FROM Business";
 if ($stmt = $mysqli->prepare($sql)) {
     if ($stmt->execute()) {
-        $stmt->bind_result($name,$longitude, $latitude);
+        $stmt->bind_result($name,$activity, $contact, $longitude, $latitude);
 
         $coordinates = array();
         while ($stmt->fetch()) {
-            $coordinates[] = array('name' => $name, 'longitude' => $longitude, 'latitude' => $latitude);
+            $coordinates[] = 
+            array(
+                'name' => $name,
+                'activity' => $activity,
+                'contact' => $contact,    
+                'longitude' => $longitude, 
+                'latitude' => $latitude);
         }
         $coordinatesJson = json_encode($coordinates);
         echo $coordinatesJson;

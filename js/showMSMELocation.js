@@ -10,14 +10,16 @@ xhr.onload = function () {
     if (xhr.status === 200) {
     let coordinates = JSON.parse(xhr.responseText);
 
-        for (let i = 0; i < coordinates.length; i++) {
-            let latitude = coordinates[i].latitude;
-            let longitude = coordinates[i].longitude;
-            let name = coordinates[i].name;
+        coordinates.forEach(business => {
+            let latitude = business.latitude;
+            let longitude = business.longitude;
+            let name = business.name;
+            let activity = business.activity;
+            let contact = business.contact;
             let location = L.latLng(latitude, longitude);
             let marker = L.marker(location).addTo(map);
-            marker.bindPopup(name);
-        }
+            marker.bindPopup(name + '</br>' + activity + '</br>' + contact);
+        });
     }  
 };
 xhr.send();
