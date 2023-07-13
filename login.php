@@ -167,6 +167,11 @@ $mysqli->close();
                 <a href="user/register.php">Don't have an account? Click Here</a>
             </form>
 
+            <div>
+                <p class="title text-center">Admin Credentials</p>
+                <p class="sentence">admin@tarlac.city</p>
+                <p class="sentence">Adminpass1!</p>
+            </div>
         </div>
     </main>
 </body>
